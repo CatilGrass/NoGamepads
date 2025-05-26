@@ -1,0 +1,29 @@
+
+============ Crate core Dependencies ============
+
+(MIT OR Apache-2.0) AND Unicode-3.0 (1): unicode-ident
+0BSD OR Apache-2.0 OR MIT (1): adler2
+Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT (3): linux-raw-sys, rustix, wasi
+Apache-2.0 OR MIT (99): addr2line, android-tzdata, android_system_properties, anstream, anstyle, anstyle-parse, anstyle-query, anstyle-wincon, autocfg, backtrace, bitflags, block-buffer, bumpalo, cc, cfg-if, chrono, clap, clap_builder, clap_derive, clap_lex, clearscreen, colorchoice, core-foundation-sys, cpufeatures, crypto-common, digest, either, env_home, env_logger, errno, fnv, gimli, heck, hermit-abi, hex, humantime, iana-time-zone, iana-time-zone-haiku, is_terminal_polyfill, js-sys, libc, lock_api, log, minimal-lexical, num-traits, object, once_cell, once_cell_polyfill, parking_lot, parking_lot_core, pin-project-lite, proc-macro2, quote, rand, rand_core, regex, regex-automata, regex-syntax, rustc-demangle, rustversion, scopeguard, serde, serde_derive, sha1, shell-words, shlex, signal-hook-registry, siphasher, smallvec, socket2, syn, thiserror, thiserror-impl, typenum, unty, utf8parse, version_check, wasm-bindgen, wasm-bindgen-backend, wasm-bindgen-macro, wasm-bindgen-macro-support, wasm-bindgen-shared, windows-core, windows-implement, windows-interface, windows-link, windows-result, windows-strings, windows-sys, windows-sys, windows-targets, windows_aarch64_gnullvm, windows_aarch64_msvc, windows_i686_gnu, windows_i686_gnullvm, windows_i686_msvc, windows_x86_64_gnu, windows_x86_64_gnullvm, windows_x86_64_msvc
+Apache-2.0 OR MIT OR Zlib (1): miniz_oxide
+LGPL-2 (1): nogamepads-core
+MIT (20): bincode, bincode_derive, bytes, cfg_aliases, generic-array, is-terminal, mio, nix, nom, phf, phf_codegen, phf_generator, phf_shared, redox_syscall, strsim, tokio, tokio-macros, virtue, which, winsafe
+MIT OR Unlicense (4): aho-corasick, memchr, termcolor, winapi-util
+WTFPL (1): terminfo
+
+============ Crate console Dependencies ============
+
+(MIT OR Apache-2.0) AND Unicode-3.0 (1): unicode-ident
+0BSD OR Apache-2.0 OR MIT (1): adler2
+Apache-2.0 (2): rpassword, rtoolbox
+Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT (5): linux-raw-sys, rustix, wasi, wasi, wit-bindgen-rt
+Apache-2.0 OR BSD-2-Clause OR MIT (2): zerocopy, zerocopy-derive
+Apache-2.0 OR BSL-1.0 (1): ryu
+Apache-2.0 OR LGPL-2.1-or-later OR MIT (1): r-efi
+Apache-2.0 OR MIT (120): addr2line, android-tzdata, android_system_properties, anstream, anstyle, anstyle-parse, anstyle-query, anstyle-wincon, autocfg, backtrace, bitflags, block-buffer, bumpalo, cc, cfg-if, chrono, clap, clap_builder, clap_derive, clap_lex, clearscreen, colorchoice, core-foundation-sys, cpufeatures, crypto-common, digest, dirs-next, dirs-sys-next, either, encode_unicode, env_home, env_logger, equivalent, errno, fnv, getrandom, getrandom, gimli, hashbrown, heck, hermit-abi, hex, humantime, iana-time-zone, iana-time-zone-haiku, indexmap, is_terminal_polyfill, itoa, js-sys, lazy_static, libc, lock_api, log, minimal-lexical, num-traits, object, once_cell, parking_lot, parking_lot_core, pin-project-lite, ppv-lite86, proc-macro2, quote, rand, rand, rand_chacha, rand_core, rand_core, regex, regex-automata, regex-syntax, rustc-demangle, rustversion, scopeguard, serde, serde_derive, serde_yaml, sha1, shell-words, shlex, signal-hook-registry, siphasher, smallvec, socket2, syn, term, thiserror, thiserror, thiserror-impl, thiserror-impl, typenum, unicode-width, unty, utf8parse, version_check, wasm-bindgen, wasm-bindgen-backend, wasm-bindgen-macro, wasm-bindgen-macro-support, wasm-bindgen-shared, winapi, winapi-i686-pc-windows-gnu, winapi-x86_64-pc-windows-gnu, windows-core, windows-implement, windows-interface, windows-link, windows-result, windows-strings, windows-sys, windows-sys, windows-targets, windows_aarch64_gnullvm, windows_aarch64_msvc, windows_i686_gnu, windows_i686_gnullvm, windows_i686_msvc, windows_x86_64_gnu, windows_x86_64_gnullvm, windows_x86_64_msvc
+Apache-2.0 OR MIT OR Zlib (1): miniz_oxide
+BSD-3-Clause (1): prettytable-rs
+LGPL-2 (2): nogamepads-console, nogamepads-core
+MIT (23): bincode, bincode_derive, bytes, cfg_aliases, generic-array, is-terminal, libredox, mio, nix, nom, phf, phf_codegen, phf_generator, phf_shared, redox_syscall, redox_users, strsim, tokio, tokio-macros, unsafe-libyaml, virtue, which, winsafe
+MIT OR Unlicense (6): aho-corasick, csv, csv-core, memchr, termcolor, winapi-util
+WTFPL (1): terminfo

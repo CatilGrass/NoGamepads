@@ -1,0 +1,18 @@
+[package]
+name = "nogamepads-console"
+description = "This crate provides a set of tools for simulating and deploying the client and server of the NoGamepads library."
+
+homepage = "https://github.com/CatilGrass/NoGamepads"
+repository = "https://github.com/CatilGrass/NoGamepads"
+
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+nogamepads-core = { path = "../core" }
+clap = { version = "4.5.38", features = ["derive"] }
+rand = { version = "0.9.1", features = [] }
+rpassword = "7.4.0"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_yaml = "0.9.34"
+prettytable-rs = "0.10.0"

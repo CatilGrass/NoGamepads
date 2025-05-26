@@ -1,0 +1,35 @@
+[package]
+name = "nogamepads"
+authors = [ "CatilGrass" ]
+description = "Connect everyone's phones to the game! A mobile device control solution for local multiplayer gaming, featuring an in-game interface, controller client, and support for universal devices."
+license = "LGPL-2"
+
+homepage = "https://github.com/CatilGrass/NoGamepads"
+repository = "https://github.com/CatilGrass/NoGamepads"
+readme = "README.md"
+
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+members = [
+    "core",
+    "console",
+    "core_c"
+]
+
+[dependencies]
+env_logger = "0.10.2"
+shell-words = "1.1.0"
+clap = { version = "4.5.38", features = ["derive"] }
+tokio = { version = "1.45.0", features = ["full"] }
+chrono = "0.4"
+log = "0.4.27"
+
+[profile.release]
+strip = true
+debug = false
+
+[profile.dev]
+strip = false
+debug = true

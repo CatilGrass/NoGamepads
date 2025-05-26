@@ -1,0 +1,6 @@
+// 控制台部分
+nogpadc.exe : .\bin\nogpadc.exe
+nogpads.exe : .\bin\nogpads.exe
+
+// Dll部分
+nogamepads_c.dll : .\bridge\libs\nogamepads_c.dll
