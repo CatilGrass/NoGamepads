@@ -1,4 +1,5 @@
 pub mod nogamepads_client {
+    use std::collections::VecDeque;
     use crate::pad_data::pad_messages::nogamepads_message_transfer::{read_msg, send_msg};
     use crate::pad_data::pad_messages::nogamepads_messages::{ConnectionCallbackMessage, ConnectionErrorType, ConnectionMessage, ControlMessage, GameMessage, LeaveReason};
     use crate::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
@@ -13,15 +14,16 @@ pub mod nogamepads_client {
     use tokio::io::{AsyncReadExt, AsyncWriteExt, ReadHalf, WriteHalf};
     use tokio::net::TcpStream;
     use tokio::{io, spawn};
-    use nogamepads::debug_console::debug_console::read_cli;
-    use nogamepads::logger::logger_build;
+    use nogamepads::console_utils::debug_console::read_cli;
+    use nogamepads::convert_utils::convert_deque_to_vec;
+    use nogamepads::logger_utils::logger_build;
     use crate::pad_io::client_debug_cli::{process_debug_cmd, Pcc};
     use crate::DEFAULT_PORT;
     use crate::pad_data::game_profile::game_profile::GameProfile;
     use crate::pad_data::pad_messages::nogamepads_message_encoder::NgpdMessageEncoder;
 
-    type WriteList = Arc<Mutex<Vec<ControlMessage>>>;
-    type ReadList = Arc<Mutex<Vec<GameMessage>>>;
+    type WriteList = Arc<Mutex<VecDeque<ControlMessage>>>;
+    type ReadList = Arc<Mutex<VecDeque<GameMessage>>>;
 
     pub struct PadClient {
 
@@ -108,20 +110,16 @@ pub mod nogamepads_client {
 
 
         pub fn put_msg(&self, msg: ControlMessage) {
-            {
-                let mut guard = self.write_list.lock().unwrap();
-                guard.push(msg);
-            }
+            let mut guard = self.write_list.lock().unwrap();
+            guard.push_back(msg);
         }
 
         pub fn pop_a_msg(&self) -> Option<GameMessage> {
-            {
-                let mut guard = self.read_list.lock().unwrap();
-                if ! guard.is_empty() {
-                    Some(guard.remove(0))
-                } else {
-                    None
-                }
+            let mut guard = self.read_list.lock().unwrap();
+            if !guard.is_empty() {
+                guard.pop_front()
+            } else {
+                None
             }
         }
 
@@ -132,7 +130,7 @@ pub mod nogamepads_client {
         pub fn list_received(&self) -> Vec<GameMessage> {
             match self.read_list.lock() {
                 Ok(guard) => {
-                    guard.to_vec()
+                    convert_deque_to_vec(&guard.to_owned())
                 }
                 Err(_) => { Vec::new() }
             }
@@ -143,7 +141,7 @@ pub mod nogamepads_client {
     impl PadClient {
 
         pub fn connect(self) {
-
+            
             self.exit.store(false, SeqCst);
 
             // 构建 Logger
@@ -238,7 +236,7 @@ pub mod nogamepads_client {
             }
         }
 
-        async fn check_server_profile (self: &Arc<Self>, buffer: &mut [u8], addr_str: String) -> Option<GameProfile> {
+        async fn check_server_profile(self: &Arc<Self>, buffer: &mut [u8], addr_str: String) -> Option<GameProfile> {
             match TcpStream::connect(&addr_str).await {
                 Ok(mut stream) => {
                     send_msg(&mut stream, ConnectionMessage::RequestProfile).await;
@@ -363,7 +361,7 @@ pub mod nogamepads_client {
                                         }
                                         _ => {
                                             info!("{:?}", &msg);
-                                            guard.push(msg);
+                                            guard.push_back(msg);
                                         }
                                     }
                                 }
@@ -388,9 +386,10 @@ pub mod nogamepads_client {
                     match lock {
                         Ok(mut guard) => {
                             if ! guard.is_empty() {
-                                msg = Some(guard.remove(0));
+                                msg = guard.pop_front();
+                            } else {
+                                msg = None;
                             }
-                            else { msg = None; }
                         }
                         Err(_) => {
                             msg = None;

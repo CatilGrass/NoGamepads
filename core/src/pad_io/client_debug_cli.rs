@@ -2,6 +2,7 @@ use crate::pad_io::client::nogamepads_client::PadClient;
 use crate::pad_data::pad_messages::nogamepads_messages::{ControlMessage, GameMessage};
 use clap::{Args, Parser, Subcommand};
 use std::sync::Arc;
+use log::info;
 
 /// NoGamePads Client - Cli
 #[derive(Parser, Debug)]
@@ -68,15 +69,15 @@ pub fn process_debug_cmd (cmd: Pcc, client: Arc<PadClient>) {
         Commands::Received(args) => {
             if args.list {
                 for msg in client.list_received() {
-                    println!("{:?}", msg);
+                    info!("{:?}", msg);
                 }
             } else {
-                println!("Total {} messsage(s)!", client.list_received().iter().count());
+                info!("Total {} messsage(s)!", client.list_received().iter().count());
             }
         }
 
         Commands::Pop(_args) => {
-            println!("{:?}", client.pop_msg_or(GameMessage::Err));
+            info!("{:?}", client.pop_msg_or(GameMessage::Err));
         }
 
         Commands::Msg(args) => {

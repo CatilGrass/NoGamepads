@@ -4,6 +4,7 @@ use crate::pad_io::server::nogamepads_server::PadServer;
 use clap::{Args, Parser, Subcommand};
 use std::ops::{Index};
 use std::sync::{Arc, MutexGuard, PoisonError};
+use log::{error, info};
 use crate::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
 
 /// NoGamePads Server - Cli
@@ -98,7 +99,7 @@ pub fn process_debug_cmd (cmd: Psc, server: Arc<PadServer>) {
         }
 
         Commands::Stop => {
-            server.stop_listening();
+            server.stop_server();
         }
 
         Commands::List => {
@@ -114,21 +115,21 @@ pub fn process_debug_cmd (cmd: Psc, server: Arc<PadServer>) {
             let player = players.index(args.player.clamp(0, players.iter().count() -1));
             if args.list {
                 for msg in server.list_received(player) {
-                    println!("{:?}", msg);
+                    info!("{:?}", msg);
                 }
             } else {
-                println!("Total {} messsage(s)!", server.list_received(player).iter().count());
+                info!("Total {} messsage(s)!", server.list_received(player).iter().count());
             }
         }
 
         Commands::Pop(args) => {
             match get_player_by_index(&server, args.index) {
                 None => {
-                    eprintln!("Pup message failed : Player index \"{}\" not found!", args.index);
+                    error!("Pup message failed : Player index \"{}\" not found!", args.index);
                 }
                 Some(player) => {
                     let message = server.pop_msg_or(&player, ControlMessage::Err);
-                    println!("{:?}", message);
+                    info!("{:?}", message);
                 }
             }
         }
@@ -166,7 +167,7 @@ pub fn process_debug_cmd (cmd: Psc, server: Arc<PadServer>) {
 fn put_to_list(server: Arc<PadServer>, player_index: usize, message: GameMessage) {
     match get_player_by_index(&server, player_index) {
         None => {
-            eprintln!("Put message failed : Player index \"{}\" not found!", player_index);
+            error!("Put message failed : Player index \"{}\" not found!", player_index);
         }
         Some(player) => {
             server.put_msg_to(message, &player);
@@ -197,8 +198,7 @@ fn print_player_list(list: Result<Vec<PlayerInfo>, PoisonError<MutexGuard<HashMa
     let mut i = 0;
     for player in list {
         let n = player.customize.nickname;
-        print!("({}){} ", i, n);
+        info!("({}){} ", i, n);
         i += 1;
-        println!();
     }
 }

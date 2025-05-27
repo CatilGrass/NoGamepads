@@ -150,14 +150,14 @@ fn main () {
                     .put_profile(config.profile)
                     .enable_console()
                     .build()
-                    .start_listening();
+                    .start_server();
             } else {
                 println!("Server started!");
                 PadServer::default()
                     .addr(IpAddr::from(Ipv4Addr::new(127, 0, 0, 1)), config.port)
                     .put_profile(config.profile)
                     .build()
-                    .start_listening();
+                    .start_server();
             }
         }
     }

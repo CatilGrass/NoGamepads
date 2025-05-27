@@ -1,7 +1,7 @@
-use std::net::{IpAddr, Ipv4Addr};
-use nogamepads_core::DEFAULT_PORT;
 use nogamepads_core::pad_data::game_profile::game_profile::GameProfile;
 use nogamepads_core::pad_io::server::nogamepads_server::PadServer;
+use nogamepads_core::DEFAULT_PORT;
+use std::net::{IpAddr, Ipv4Addr};
 
 fn main() {
 
@@ -23,8 +23,9 @@ fn main() {
                 .to_owned()
         )
         .enable_console()
+        // .quiet()
         .build();
 
     // 运行服务端
-    server.start_listening();
+    server.start_server();
 }

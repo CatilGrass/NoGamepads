@@ -15,8 +15,9 @@ pub mod nogamepads_server {
     use tokio::net::{TcpListener, TcpStream};
     use tokio::{io, spawn};
     use tokio::runtime::Runtime;
-    use nogamepads::debug_console::debug_console::read_cli;
-    use nogamepads::logger::logger_build;
+    use nogamepads::console_utils::debug_console::read_cli;
+    use nogamepads::convert_utils::convert_deque_to_vec;
+    use nogamepads::logger_utils::logger_build;
     use crate::DEFAULT_PORT;
     use crate::pad_data::game_profile::game_profile::GameProfile;
     use crate::pad_data::pad_messages::nogamepads_messages::ConnectionErrorType::{ContainSamePlayer, GameLocked, PlayerBanned, WhatTheHell};
@@ -219,7 +220,7 @@ pub mod nogamepads_server {
                     match guard.get_key_value(player.account.player_hash.as_str()) {
                         None => { Vec::new() }
                         Some(result) => {
-                            Self::convert_deque_to_vec(result.1)
+                            convert_deque_to_vec(result.1)
                         }
                     }
                 }
@@ -301,27 +302,18 @@ pub mod nogamepads_server {
                 Err(err) => Err(err)
             }
         }
-
-        fn convert_deque_to_vec (deque: &VecDeque<ControlMessage>) -> Vec<ControlMessage> {
-            let vec_deque_ref = deque;
-            let mut vec = Vec::new();
-            for item in vec_deque_ref {
-                vec.push(item.clone())
-            }
-            vec
-        }
     }
 
     // 服务端状态控制
     #[allow(dead_code)]
     impl PadServer {
 
-        pub fn stop_listening(&self) {
+        pub fn stop_server(&self) {
             self.put_msg_to_all(&Leave(ServerClosed));
             self.stop.store(true, SeqCst);
         }
 
-        pub fn start_listening(self: Arc<Self>) {
+        pub fn start_server(self: Arc<Self>) {
 
             // 构建 Logger
             if ! self.quiet {
@@ -476,6 +468,7 @@ pub mod nogamepads_server {
                             self.set_player_online(&info, true);
 
                             // 启动控制循环
+                            
                             spawn(Self::long_connection(Arc::clone(&self), stream, info));
                         },
                         _ => {
@@ -541,6 +534,7 @@ pub mod nogamepads_server {
                                         .entry(player_hash.clone())
                                         .or_insert_with(VecDeque::new)
                                         .push_back(msg);
+                                    
                                 }
                                 Err(_) => {
                                 }
@@ -549,6 +543,7 @@ pub mod nogamepads_server {
                     }
                     Err(e) => {
                         warn!("Error reading from stream: {}", e);
+                        
                         self.set_player_online(&player_info, false);
 
                         // 放入一条错误信息到队列，使 write_task 及时发现该玩家离开
@@ -594,6 +589,7 @@ pub mod nogamepads_server {
                     let msg = msg.unwrap();
                     match &writer.write_all(NgpdMessageEncoder::en(&msg).as_slice()).await {
                         Ok(_) => {
+                            
                             info!("Sent {:?} to {}", msg, &player_info.account.id);
                         }
                         Err(error) => {
@@ -616,6 +612,7 @@ pub mod nogamepads_server {
                 // 退出程序的监听
                 if self.stop.load(SeqCst) {
                     tokio::time::sleep(Duration::from_secs(1)).await;
+                    
                     info!("Main thread exited.");
                     exit(0);
                 }
