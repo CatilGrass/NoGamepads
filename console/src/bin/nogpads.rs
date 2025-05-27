@@ -1,5 +1,5 @@
 use clap::{arg, Args, Parser, Subcommand};
-use nogamepads_core::pad_io::server::nogamepads_server::{PadServer};
+use nogamepads_core::pad_service::server::nogamepads_server::{PadServer};
 use nogamepads_core::DEFAULT_PORT;
 use serde::{Deserialize, Serialize};
 use std::env::current_dir;

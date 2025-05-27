@@ -1,4 +1,4 @@
-use crate::pad_io::client::nogamepads_client::PadClient;
+use crate::pad_service::client::nogamepads_client::PadClient;
 use crate::pad_data::pad_messages::nogamepads_messages::{ControlMessage, GameMessage};
 use clap::{Args, Parser, Subcommand};
 use std::sync::Arc;

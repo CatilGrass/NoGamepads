@@ -17,7 +17,7 @@ pub mod nogamepads_client {
     use nogamepads::console_utils::debug_console::read_cli;
     use nogamepads::convert_utils::convert_deque_to_vec;
     use nogamepads::logger_utils::logger_build;
-    use crate::pad_io::client_debug_cli::{process_debug_cmd, Pcc};
+    use crate::pad_service::client_debug_cli::{process_debug_cmd, Pcc};
     use crate::DEFAULT_PORT;
     use crate::pad_data::game_profile::game_profile::GameProfile;
     use crate::pad_data::pad_messages::nogamepads_message_encoder::NgpdMessageEncoder;
@@ -157,7 +157,7 @@ pub mod nogamepads_client {
 
             // 部署环境
             let runtime = tokio::runtime::Builder::new_multi_thread()
-                .thread_name("nogpad-pad_io")
+                .thread_name("nogpad-pad_service")
                 .thread_stack_size(32 * 1024 * 1024)
                 .enable_time()
                 .enable_io()

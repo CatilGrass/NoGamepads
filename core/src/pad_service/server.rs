@@ -24,7 +24,7 @@ pub mod nogamepads_server {
     use crate::pad_data::pad_messages::nogamepads_messages::GameMessage::Leave;
     use crate::pad_data::pad_messages::nogamepads_messages::LeaveReason::ServerClosed;
     use crate::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
-    use crate::pad_io::server_debug_cli::{process_debug_cmd, Psc};
+    use crate::pad_service::server_debug_cli::{process_debug_cmd, Psc};
 
     type PlayerMap = Arc<Mutex<HashMap<String, PlayerInfo>>>;
     type WriteList = Arc<Mutex<HashMap<String, VecDeque<GameMessage>>>>;
@@ -490,7 +490,7 @@ pub mod nogamepads_server {
                             warn!("Received an error message from {}.", addr.to_string());
                         }
                         Err(_) => {
-                            warn!("Received an error message from unknown pad_io.");
+                            warn!("Received an error message from unknown pad_service.");
                         }
                     }
                 }
@@ -502,7 +502,7 @@ pub mod nogamepads_server {
                             warn!("Received unknown connection message from {}.", addr.to_string());
                         }
                         Err(_) => {
-                            warn!("Received unknown connection message from unknown pad_io.");
+                            warn!("Received unknown connection message from unknown pad_service.");
                         }
                     }
                 }

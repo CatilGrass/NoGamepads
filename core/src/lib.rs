@@ -1,7 +1,7 @@
 use bincode::config;
 use bincode::config::Configuration;
 
-pub mod pad_io;
+pub mod pad_service;
 pub mod pad_data;
 
 pub const DEFAULT_PORT : u16 = 5989;

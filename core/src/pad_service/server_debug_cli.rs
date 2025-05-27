@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::pad_data::pad_messages::nogamepads_messages::{ControlMessage, GameMessage};
-use crate::pad_io::server::nogamepads_server::PadServer;
+use crate::pad_service::server::nogamepads_server::PadServer;
 use clap::{Args, Parser, Subcommand};
 use std::ops::{Index};
 use std::sync::{Arc, MutexGuard, PoisonError};

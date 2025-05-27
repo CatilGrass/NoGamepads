@@ -1,5 +1,5 @@
 use nogamepads_core::pad_data::game_profile::game_profile::GameProfile;
-use nogamepads_core::pad_io::server::nogamepads_server::PadServer;
+use nogamepads_core::pad_service::server::nogamepads_server::PadServer;
 use nogamepads_core::DEFAULT_PORT;
 use std::net::{IpAddr, Ipv4Addr};
 

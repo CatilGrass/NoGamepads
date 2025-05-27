@@ -1,7 +1,7 @@
 use crate::AccountCommands::{Add, Customize, List, Remove};
 use crate::Commands::{Account, Connect};
 use clap::{Args, Parser, Subcommand};
-use nogamepads_core::pad_io::client::nogamepads_client::PadClient;
+use nogamepads_core::pad_service::client::nogamepads_client::PadClient;
 use nogamepads_core::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
 use nogamepads_core::DEFAULT_PORT;
 use prettytable::{row, Table};
