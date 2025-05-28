@@ -1,12 +1,12 @@
 use crate::data_c::common::KeyData;
-use crate::{c_char_to_string_safe, string_to_c_char_safe};
+use crate::{str_c_to_rs, str_rs_to_c};
 use nogamepads_lib_rs::pad_data::pad_messages::nogamepads_messages::ControlMessage;
 use std::ffi::{c_char, c_void};
 use std::ptr::null_mut;
 
 #[repr(C)]
 #[allow(unused_imports)]
-pub struct CtrlMsgC {
+pub struct ControlMessageC {
     tag: CtrlMsgCTag,
     data: CtrlMsgCUnion
 }
@@ -51,11 +51,11 @@ pub struct StrData {
     str: *const c_char
 }
 
-impl From<CtrlMsgC> for ControlMessage {
-    fn from(msg_c: CtrlMsgC) -> Self {
+impl From<ControlMessageC> for ControlMessage {
+    fn from(msg_c: ControlMessageC) -> Self {
         match msg_c.tag {
             CtrlMsgCTag::Msg => unsafe {
-                let str = c_char_to_string_safe(msg_c.data.str.str);
+                let str = str_c_to_rs(msg_c.data.str.str);
                 if str.is_some() {
                     ControlMessage::Msg(str.unwrap())
                 } else {
@@ -86,19 +86,19 @@ impl From<CtrlMsgC> for ControlMessage {
     }
 }
 
-impl From<ControlMessage> for CtrlMsgC {
+impl From<ControlMessage> for ControlMessageC {
     fn from(msg_rs: ControlMessage) -> Self {
         match msg_rs {
             ControlMessage::Msg(str_msg) => {
-                CtrlMsgC {
+                ControlMessageC {
                     tag: CtrlMsgCTag::Msg,
                     data: CtrlMsgCUnion {
-                        str: StrData { str: string_to_c_char_safe(str_msg).1 },
+                        str: StrData { str: str_rs_to_c(str_msg).1 },
                     }
                 }
             }
             ControlMessage::Pressed(key) => {
-                CtrlMsgC {
+                ControlMessageC {
                     tag: CtrlMsgCTag::Pressed,
                     data: CtrlMsgCUnion {
                         key: KeyData { key },
@@ -106,7 +106,7 @@ impl From<ControlMessage> for CtrlMsgC {
                 }
             }
             ControlMessage::Released(key) => {
-                CtrlMsgC {
+                ControlMessageC {
                     tag: CtrlMsgCTag::Released,
                     data: CtrlMsgCUnion {
                         key: KeyData { key },
@@ -114,7 +114,7 @@ impl From<ControlMessage> for CtrlMsgC {
                 }
             }
             ControlMessage::Axis(key, ax) => {
-                CtrlMsgC {
+                ControlMessageC {
                     tag: CtrlMsgCTag::Axis,
                     data: CtrlMsgCUnion {
                         axis: AxisData { key, ax }
@@ -122,7 +122,7 @@ impl From<ControlMessage> for CtrlMsgC {
                 }
             }
             ControlMessage::Dir(key, (x, y)) => {
-                CtrlMsgC {
+                ControlMessageC {
                     tag: CtrlMsgCTag::Dir,
                     data: CtrlMsgCUnion {
                         dir: DirData { key, x, y }
@@ -130,7 +130,7 @@ impl From<ControlMessage> for CtrlMsgC {
                 }
             }
             ControlMessage::Exit => {
-                CtrlMsgC {
+                ControlMessageC {
                     tag: CtrlMsgCTag::Exit,
                     data: CtrlMsgCUnion {
                         nul: null_mut(),
@@ -138,7 +138,7 @@ impl From<ControlMessage> for CtrlMsgC {
                 }
             }
             ControlMessage::Err => {
-                CtrlMsgC {
+                ControlMessageC {
                     tag: CtrlMsgCTag::Err,
                     data: CtrlMsgCUnion {
                         nul: null_mut(),

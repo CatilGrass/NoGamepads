@@ -92,8 +92,9 @@ pub mod nogamepads_client {
             }
         }
 
-        pub fn enable_console(&mut self) {
+        pub fn enable_console(&mut self) -> &mut PadClient {
             self.enable_console = true;
+            self
         }
 
         pub fn quiet(&mut self) -> &mut PadClient {
@@ -101,8 +102,27 @@ pub mod nogamepads_client {
             self
         }
 
-        pub fn bind_player(&mut self, player: PlayerInfo) {
+        pub fn bind_player(&mut self, player: PlayerInfo) -> &mut PadClient {
             self.bind_player = player;
+            self
+        }
+
+        pub fn clone_addr(&self) -> (IpAddr, u16) {
+            (self.target_address, self.target_port)
+        }
+
+        pub fn is_quiet(&self) -> bool {
+            self.quiet
+        }
+
+        pub fn is_enable_console(&self) -> bool {
+            self.enable_console
+        }
+
+        pub fn unbind_player(&mut self) -> PlayerInfo {
+            let player = self.bind_player.clone();
+            self.bind_player = PlayerInfo::new();
+            player
         }
     }
 

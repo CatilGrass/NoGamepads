@@ -35,6 +35,32 @@ enum class LeaveReasonData {
   YouAreBanned,
 };
 
+struct GameProfileC {
+  const char *game_name;
+  const char *game_description;
+  const char *organization;
+  const char *version;
+  const char *website;
+  const char *email;
+};
+
+struct PlayerInfoC {
+  const char *account_id;
+  const char *account_hash;
+  const char *customize_nickname;
+  int32_t customize_color_hue;
+  double customize_color_saturation;
+  double customize_color_value;
+};
+
+struct PadClientC {
+  const char *target_address;
+  uint16_t target_port;
+  PlayerInfoC bind_player;
+  bool enable_console;
+  bool quiet;
+};
+
 struct KeyData {
   uint8_t key;
 };
@@ -62,7 +88,7 @@ union CtrlMsgCUnion {
   StrData str;
 };
 
-struct CtrlMsgC {
+struct ControlMessageC {
   CtrlMsgCTag tag;
   CtrlMsgCUnion data;
 };
@@ -73,62 +99,64 @@ union GameMsgCUnion {
   LeaveReasonData reason;
 };
 
-struct GameMsgC {
+struct GameMessageC {
   GameMsgCTag tag;
   GameMsgCUnion data;
 };
 
 struct PlayerList {
-  PlayerInfo *players;
+  PlayerInfoC *players;
   uintptr_t len;
   uintptr_t capacity;
 };
 
 extern "C" {
 
-GameProfile *init_game_profile();
+GameProfileC init_game_profile();
 
-void set_game_profile_name(GameProfile *game_profile, const char *value);
+GameProfileC set_game_profile_name(GameProfileC game_profile, const char *value);
 
-void set_game_profile_description(GameProfile *game_profile, const char *value);
+GameProfileC set_game_profile_description(GameProfileC game_profile, const char *value);
 
-void set_game_profile_organization(GameProfile *game_profile, const char *value);
+GameProfileC set_game_profile_organization(GameProfileC game_profile, const char *value);
 
-void set_game_profile_version(GameProfile *game_profile, const char *value);
+GameProfileC set_game_profile_version(GameProfileC game_profile, const char *value);
 
-void set_game_profile_website(GameProfile *game_profile, const char *value);
+GameProfileC set_game_profile_website(GameProfileC game_profile, const char *value);
 
-void set_game_profile_email(GameProfile *game_profile, const char *value);
+GameProfileC set_game_profile_email(GameProfileC game_profile, const char *value);
 
-PlayerInfo *init_player_info();
+PlayerInfoC init_player_info();
 
-void set_player_info_account(PlayerInfo *info, const char *id, const char *password);
+PlayerInfoC set_player_info_account(PlayerInfoC info, const char *id, const char *password);
 
-void set_player_info_color(PlayerInfo *info, int32_t h, double s, double v);
+PlayerInfoC set_player_info_color(PlayerInfoC info, int32_t h, double s, double v);
 
-void set_player_info_nickname(PlayerInfo *info, const char *nickname);
+PlayerInfoC set_player_info_nickname(PlayerInfoC info, const char *nickname);
 
 uint16_t get_default_port();
 
-PadClient *init_client(const char *address);
+PadClientC init_client(const char *address);
 
-PadClient *init_client_with_port(const char *address, uint16_t port);
+PadClientC init_client_with_port(const char *address, uint16_t port);
 
-void set_client_quiet(PadClient *client);
+PadClientC set_client_quiet(PadClientC client);
 
-void enable_client_console(PadClient *client);
+PadClientC enable_client_console(PadClientC client);
 
-void bind_player_to_client(PadClient *client, PlayerInfo *info);
+PadClientC bind_player_to_client(PadClientC client, PlayerInfoC info);
+
+PadClient *complete(PadClientC client);
 
 void connect_client_to_server(PadClient *client);
 
 void exit_client_from_server(const PadClient *client);
 
-void put_a_msg_to_server(const PadClient *client, CtrlMsgC msg);
+void put_a_msg_to_server(const PadClient *client, ControlMessageC msg);
 
-GameMsgC pop_a_msg_from_server(const PadClient *client);
+GameMessageC pop_a_msg_from_server(const PadClient *client);
 
-GameMsgC pop_msg_from_server_or(const PadClient *client, GameMsgC or);
+GameMessageC pop_msg_from_server_or(const PadClient *client, GameMessageC or);
 
 PadServer *init_server(const char *address);
 
@@ -138,7 +166,7 @@ void set_server_quiet(PadServer *server);
 
 void enable_server_console(PadServer *server);
 
-void bind_profile_to_server(PadServer *server, GameProfile *profile);
+void bind_profile_to_server(PadServer *server, const GameProfileC *profile);
 
 void start_server(PadServer *server);
 
@@ -150,23 +178,25 @@ void unlock_game_on_server(PadServer *server);
 
 bool is_server_game_locked(PadServer *server);
 
-void put_a_msg_to_player(PadServer *server, GameMsgC msg, const PlayerInfo *player);
+void put_a_msg_to_player(PadServer *server, GameMessageC msg, const PlayerInfoC *player);
 
-void put_msg_to_all_players(PadServer *server, GameMsgC msg);
+void put_msg_to_all_players(PadServer *server, GameMessageC msg);
 
-CtrlMsgC pop_a_msg_from_player(PadServer *server, const PlayerInfo *player);
+ControlMessageC pop_a_msg_from_player(PadServer *server, const PlayerInfoC *player);
 
-CtrlMsgC pop_msg_from_player_or(PadServer *server, const PlayerInfo *player, CtrlMsgC or);
+ControlMessageC pop_msg_from_player_or(PadServer *server,
+                                       const PlayerInfoC *player,
+                                       ControlMessageC or);
 
-bool is_player_online(PadServer *server, const PlayerInfo *player);
+bool is_player_online(PadServer *server, const PlayerInfoC *player);
 
-bool is_player_banned(PadServer *server, const PlayerInfo *player);
+bool is_player_banned(PadServer *server, const PlayerInfoC *player);
 
-void kick_player(PadServer *server, const PlayerInfo *player);
+void kick_player(PadServer *server, const PlayerInfoC *player);
 
-void ban_player(PadServer *server, const PlayerInfo *player);
+void ban_player(PadServer *server, const PlayerInfoC *player);
 
-void pardon_player(PadServer *server, const PlayerInfo *player);
+void pardon_player(PadServer *server, const PlayerInfoC *player);
 
 PlayerList list_online_players(PadServer *server);
 

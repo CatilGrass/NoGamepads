@@ -1,8 +1,8 @@
-use nogamepads_lib_rs::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
+use crate::data_c::player_info_c::PlayerInfoC;
 
 #[repr(C)]
 pub struct PlayerList {
-    pub(crate) players: *mut PlayerInfo,
+    pub(crate) players: *mut PlayerInfoC,
     pub(crate) len: usize,
     pub(crate) capacity: usize,
 }

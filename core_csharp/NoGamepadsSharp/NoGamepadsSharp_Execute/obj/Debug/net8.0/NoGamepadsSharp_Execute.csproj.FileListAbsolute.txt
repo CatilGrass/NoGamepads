@@ -1,0 +1,15 @@
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\bin\Debug\net8.0\NoGamepadsSharp_Execute.exe
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\bin\Debug\net8.0\NoGamepadsSharp_Execute.deps.json
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\bin\Debug\net8.0\NoGamepadsSharp_Execute.runtimeconfig.json
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\bin\Debug\net8.0\NoGamepadsSharp_Execute.dll
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\bin\Debug\net8.0\NoGamepadsSharp_Execute.pdb
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.GeneratedMSBuildEditorConfig.editorconfig
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.AssemblyInfoInputs.cache
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.AssemblyInfo.cs
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.csproj.CoreCompileInputs.cache
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.sourcelink.json
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.dll
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\refint\NoGamepadsSharp_Execute.dll
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.pdb
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\NoGamepadsSharp_Execute.genruntimeconfig.cache
+D:\TINP\NoGamepads\core_csharp\NoGamepadsSharp\NoGamepadsSharp_Execute\obj\Debug\net8.0\ref\NoGamepadsSharp_Execute.dll

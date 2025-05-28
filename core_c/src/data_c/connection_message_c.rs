@@ -7,7 +7,7 @@ use nogamepads_lib_rs::pad_data::pad_player_info::nogamepads_player_info::Player
 
 #[repr(C)]
 #[allow(unused_imports)]
-pub struct ConnMsgC {
+pub struct ConnectionMessageC {
     tag: ConnMsgCTag,
     data: ConnMsgCUnion
 }
@@ -25,8 +25,8 @@ pub union ConnMsgCUnion {
     info: ManuallyDrop<PlayerInfo>
 }
 
-impl From<ConnMsgC> for ConnectionMessage {
-    fn from(mut value: ConnMsgC) -> Self {
+impl From<ConnectionMessageC> for ConnectionMessage {
+    fn from(mut value: ConnectionMessageC) -> Self {
         match value.tag {
             Connection => unsafe {
                 let info = ManuallyDrop::take(&mut value.data.info);
@@ -51,41 +51,41 @@ impl From<ConnMsgC> for ConnectionMessage {
     }
 }
 
-impl From<ConnectionMessage> for ConnMsgC {
+impl From<ConnectionMessage> for ConnectionMessageC {
     fn from(value: ConnectionMessage) -> Self {
         match value {
             ConnectionMessage::Connection(info) => {
-                ConnMsgC {
+                ConnectionMessageC {
                     tag: Connection,
                     data: ConnMsgCUnion { info: ManuallyDrop::new(info) }
                 }
             }
             ConnectionMessage::RequestProfile => {
-                ConnMsgC {
+                ConnectionMessageC {
                     tag: RequestProfile,
                     data: ConnMsgCUnion { nul: null_mut() }
                 }
             }
             ConnectionMessage::RequestLayoutConfigure => {
-                ConnMsgC {
+                ConnectionMessageC {
                     tag: RequestLayoutConfigure,
                     data: ConnMsgCUnion { nul: null_mut() }
                 }
             }
             ConnectionMessage::RequestSkinPackage => {
-                ConnMsgC {
+                ConnectionMessageC {
                     tag: RequestSkinPackage,
                     data: ConnMsgCUnion { nul: null_mut() }
                 }
             }
             ConnectionMessage::Ready => {
-                ConnMsgC {
+                ConnectionMessageC {
                     tag: Ready,
                     data: ConnMsgCUnion { nul: null_mut() }
                 }
             }
             ConnectionMessage::Err => {
-                ConnMsgC {
+                ConnectionMessageC {
                     tag: ConnMsgCTag::Err,
                     data: ConnMsgCUnion { nul: null_mut() }
                 }

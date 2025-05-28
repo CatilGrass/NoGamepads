@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NoGamepadsSharp_Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a244311d5c9c42b33a49f3cafa7f20017d10305")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7bf8e1f24f95d87e1a30765b1904473cf75b435b")]
 [assembly: System.Reflection.AssemblyProductAttribute("NoGamepadsSharp_Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NoGamepadsSharp_Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

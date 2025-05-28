@@ -3,13 +3,13 @@ use std::ffi::{c_char, CStr, CString};
 pub mod data_c;
 pub mod service_c;
 
-pub fn string_to_c_char_safe(s: String) -> (CString, *const c_char) {
+pub fn str_rs_to_c(s: String) -> (CString, *const c_char) {
     let c_string = CString::new(s).expect("");
     let ptr = c_string.as_ptr();
     (c_string, ptr)
 }
 
-pub fn c_char_to_string_safe(ptr: *const c_char) -> Option<String> {
+pub fn str_c_to_rs(ptr: *const c_char) -> Option<String> {
     if ptr.is_null() {
         return None;
     }

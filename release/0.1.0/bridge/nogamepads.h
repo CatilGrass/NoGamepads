@@ -30,6 +30,32 @@ typedef enum LeaveReasonData {
   YouAreBanned,
 } LeaveReasonData;
 
+typedef struct GameProfileC {
+  const char *game_name;
+  const char *game_description;
+  const char *organization;
+  const char *version;
+  const char *website;
+  const char *email;
+} GameProfileC;
+
+typedef struct PlayerInfoC {
+  const char *account_id;
+  const char *account_hash;
+  const char *customize_nickname;
+  int32_t customize_color_hue;
+  double customize_color_saturation;
+  double customize_color_value;
+} PlayerInfoC;
+
+typedef struct PadClientC {
+  const char *target_address;
+  uint16_t target_port;
+  struct PlayerInfoC bind_player;
+  bool enable_console;
+  bool quiet;
+} PadClientC;
+
 typedef struct KeyData {
   uint8_t key;
 } KeyData;
@@ -57,10 +83,10 @@ typedef union CtrlMsgCUnion {
   struct StrData str;
 } CtrlMsgCUnion;
 
-typedef struct CtrlMsgC {
+typedef struct ControlMessageC {
   enum CtrlMsgCTag tag;
   union CtrlMsgCUnion data;
-} CtrlMsgC;
+} ControlMessageC;
 
 typedef union GameMsgCUnion {
   void *nul;
@@ -68,60 +94,66 @@ typedef union GameMsgCUnion {
   enum LeaveReasonData reason;
 } GameMsgCUnion;
 
-typedef struct GameMsgC {
+typedef struct GameMessageC {
   enum GameMsgCTag tag;
   union GameMsgCUnion data;
-} GameMsgC;
+} GameMessageC;
 
 typedef struct PlayerList {
-  PlayerInfo *players;
+  struct PlayerInfoC *players;
   uintptr_t len;
   uintptr_t capacity;
 } PlayerList;
 
-GameProfile *init_game_profile(void);
+struct GameProfileC init_game_profile(void);
 
-void set_game_profile_name(GameProfile *game_profile, const char *value);
+struct GameProfileC set_game_profile_name(struct GameProfileC game_profile, const char *value);
 
-void set_game_profile_description(GameProfile *game_profile, const char *value);
+struct GameProfileC set_game_profile_description(struct GameProfileC game_profile,
+                                                 const char *value);
 
-void set_game_profile_organization(GameProfile *game_profile, const char *value);
+struct GameProfileC set_game_profile_organization(struct GameProfileC game_profile,
+                                                  const char *value);
 
-void set_game_profile_version(GameProfile *game_profile, const char *value);
+struct GameProfileC set_game_profile_version(struct GameProfileC game_profile, const char *value);
 
-void set_game_profile_website(GameProfile *game_profile, const char *value);
+struct GameProfileC set_game_profile_website(struct GameProfileC game_profile, const char *value);
 
-void set_game_profile_email(GameProfile *game_profile, const char *value);
+struct GameProfileC set_game_profile_email(struct GameProfileC game_profile, const char *value);
 
-PlayerInfo *init_player_info(void);
+struct PlayerInfoC init_player_info(void);
 
-void set_player_info_account(PlayerInfo *info, const char *id, const char *password);
+struct PlayerInfoC set_player_info_account(struct PlayerInfoC info,
+                                           const char *id,
+                                           const char *password);
 
-void set_player_info_color(PlayerInfo *info, int32_t h, double s, double v);
+struct PlayerInfoC set_player_info_color(struct PlayerInfoC info, int32_t h, double s, double v);
 
-void set_player_info_nickname(PlayerInfo *info, const char *nickname);
+struct PlayerInfoC set_player_info_nickname(struct PlayerInfoC info, const char *nickname);
 
 uint16_t get_default_port(void);
 
-PadClient *init_client(const char *address);
+struct PadClientC init_client(const char *address);
 
-PadClient *init_client_with_port(const char *address, uint16_t port);
+struct PadClientC init_client_with_port(const char *address, uint16_t port);
 
-void set_client_quiet(PadClient *client);
+struct PadClientC set_client_quiet(struct PadClientC client);
 
-void enable_client_console(PadClient *client);
+struct PadClientC enable_client_console(struct PadClientC client);
 
-void bind_player_to_client(PadClient *client, PlayerInfo *info);
+struct PadClientC bind_player_to_client(struct PadClientC client, struct PlayerInfoC info);
+
+PadClient *complete(struct PadClientC client);
 
 void connect_client_to_server(PadClient *client);
 
 void exit_client_from_server(const PadClient *client);
 
-void put_a_msg_to_server(const PadClient *client, struct CtrlMsgC msg);
+void put_a_msg_to_server(const PadClient *client, struct ControlMessageC msg);
 
-struct GameMsgC pop_a_msg_from_server(const PadClient *client);
+struct GameMessageC pop_a_msg_from_server(const PadClient *client);
 
-struct GameMsgC pop_msg_from_server_or(const PadClient *client, struct GameMsgC or);
+struct GameMessageC pop_msg_from_server_or(const PadClient *client, struct GameMessageC or);
 
 PadServer *init_server(const char *address);
 
@@ -131,7 +163,7 @@ void set_server_quiet(PadServer *server);
 
 void enable_server_console(PadServer *server);
 
-void bind_profile_to_server(PadServer *server, GameProfile *profile);
+void bind_profile_to_server(PadServer *server, const struct GameProfileC *profile);
 
 void start_server(PadServer *server);
 
@@ -143,25 +175,27 @@ void unlock_game_on_server(PadServer *server);
 
 bool is_server_game_locked(PadServer *server);
 
-void put_a_msg_to_player(PadServer *server, struct GameMsgC msg, const PlayerInfo *player);
+void put_a_msg_to_player(PadServer *server,
+                         struct GameMessageC msg,
+                         const struct PlayerInfoC *player);
 
-void put_msg_to_all_players(PadServer *server, struct GameMsgC msg);
+void put_msg_to_all_players(PadServer *server, struct GameMessageC msg);
 
-struct CtrlMsgC pop_a_msg_from_player(PadServer *server, const PlayerInfo *player);
+struct ControlMessageC pop_a_msg_from_player(PadServer *server, const struct PlayerInfoC *player);
 
-struct CtrlMsgC pop_msg_from_player_or(PadServer *server,
-                                       const PlayerInfo *player,
-                                       struct CtrlMsgC or);
+struct ControlMessageC pop_msg_from_player_or(PadServer *server,
+                                              const struct PlayerInfoC *player,
+                                              struct ControlMessageC or);
 
-bool is_player_online(PadServer *server, const PlayerInfo *player);
+bool is_player_online(PadServer *server, const struct PlayerInfoC *player);
 
-bool is_player_banned(PadServer *server, const PlayerInfo *player);
+bool is_player_banned(PadServer *server, const struct PlayerInfoC *player);
 
-void kick_player(PadServer *server, const PlayerInfo *player);
+void kick_player(PadServer *server, const struct PlayerInfoC *player);
 
-void ban_player(PadServer *server, const PlayerInfo *player);
+void ban_player(PadServer *server, const struct PlayerInfoC *player);
 
-void pardon_player(PadServer *server, const PlayerInfo *player);
+void pardon_player(PadServer *server, const struct PlayerInfoC *player);
 
 struct PlayerList list_online_players(PadServer *server);
 

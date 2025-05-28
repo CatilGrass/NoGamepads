@@ -1,12 +1,12 @@
+use crate::data_c::game_profile_c::GameProfileC;
+use nogamepads_lib_rs::pad_data::pad_messages::nogamepads_messages::{ConnectionCallbackMessage, ConnectionErrorType};
 use std::ffi::c_void;
 use std::mem::ManuallyDrop;
 use std::ptr::null_mut;
-use nogamepads_lib_rs::pad_data::game_profile::game_profile::GameProfile;
-use nogamepads_lib_rs::pad_data::pad_messages::nogamepads_messages::{ConnectionCallbackMessage, ConnectionErrorType};
 
 #[repr(C)]
 #[allow(unused_imports)]
-pub struct ConnCallbackMsgC {
+pub struct ConnectionCallbackMessageC {
     tag: ConnCallbackMsgCTag,
     data: ConnCallbackMsgCUnion,
 }
@@ -21,7 +21,7 @@ pub enum ConnCallbackMsgCTag {
 #[allow(unused_imports)]
 pub union ConnCallbackMsgCUnion {
     nul: *mut c_void,
-    profile: ManuallyDrop<GameProfile>,
+    profile: ManuallyDrop<GameProfileC>,
     conn_err: ConnErrTypeC
 }
 
@@ -56,12 +56,12 @@ impl From<ConnectionErrorType> for ConnErrTypeC {
     }
 }
 
-impl From<ConnCallbackMsgC> for ConnectionCallbackMessage {
-    fn from(mut value: ConnCallbackMsgC) -> Self {
+impl From<ConnectionCallbackMessageC> for ConnectionCallbackMessage {
+    fn from(mut value: ConnectionCallbackMessageC) -> Self {
         match value.tag {
             ConnCallbackMsgCTag::Profile => unsafe {
                 let profile = ManuallyDrop::take(&mut value.data.profile);
-                ConnectionCallbackMessage::Profile(profile)
+                ConnectionCallbackMessage::Profile(profile.into())
             }
             ConnCallbackMsgCTag::Deny => unsafe {
                 ConnectionCallbackMessage::Deny(value.data.conn_err.into())
@@ -83,43 +83,43 @@ impl From<ConnCallbackMsgC> for ConnectionCallbackMessage {
     }
 }
 
-impl From<ConnectionCallbackMessage> for ConnCallbackMsgC {
+impl From<ConnectionCallbackMessage> for ConnectionCallbackMessageC {
     fn from(value: ConnectionCallbackMessage) -> Self {
         match value {
             ConnectionCallbackMessage::Profile(profile) => {
-                ConnCallbackMsgC {
+                ConnectionCallbackMessageC {
                     tag: ConnCallbackMsgCTag::Profile,
                     data: ConnCallbackMsgCUnion {
-                        profile: ManuallyDrop::new(profile)
+                        profile: ManuallyDrop::new(profile.into())
                     }
                 }
             }
             ConnectionCallbackMessage::Deny(conn_err) => {
-                ConnCallbackMsgC {
+                ConnectionCallbackMessageC {
                     tag: ConnCallbackMsgCTag::Deny,
                     data: ConnCallbackMsgCUnion { conn_err: conn_err.into() }
                 }
             }
             ConnectionCallbackMessage::Fail(conn_err) => {
-                ConnCallbackMsgC {
+                ConnectionCallbackMessageC {
                     tag: ConnCallbackMsgCTag::Fail,
                     data: ConnCallbackMsgCUnion { conn_err: conn_err.into() }
                 }
             }
             ConnectionCallbackMessage::Ok => {
-                ConnCallbackMsgC {
+                ConnectionCallbackMessageC {
                     tag: ConnCallbackMsgCTag::Ok,
                     data: ConnCallbackMsgCUnion { nul: null_mut() }
                 }
             }
             ConnectionCallbackMessage::Welcome => {
-                ConnCallbackMsgC {
+                ConnectionCallbackMessageC {
                     tag: ConnCallbackMsgCTag::Welcome,
                     data: ConnCallbackMsgCUnion { nul: null_mut() }
                 }
             }
             ConnectionCallbackMessage::Err => {
-                ConnCallbackMsgC {
+                ConnectionCallbackMessageC {
                     tag: ConnCallbackMsgCTag::Err,
                     data: ConnCallbackMsgCUnion { nul: null_mut() }
                 }

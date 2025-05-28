@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Release Project" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-    <option name="buildProfileId" value="dev" />
-    <option name="command" value="run --manifest-path .\release\Cargo.toml --bin release_project" />
+  <configuration default="false" name="Run Server Console" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+    <option name="command" value="run --package nogamepads-core --example start_server_console" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />
     <option name="emulateTerminal" value="true" />
@@ -14,7 +13,7 @@
     <option name="isRedirectInput" value="false" />
     <option name="redirectInputPath" value="" />
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Final Build" run_configuration_type="CargoCommandRunConfiguration" />
+      <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
     </method>
   </configuration>
 </component>

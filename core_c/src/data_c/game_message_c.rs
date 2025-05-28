@@ -5,7 +5,7 @@ use crate::data_c::common::KeyData;
 
 #[repr(C)]
 #[allow(unused_imports)]
-pub struct GameMsgC {
+pub struct GameMessageC {
     tag: GameMsgCTag,
     data: GameMsgCUnion
 }
@@ -54,8 +54,8 @@ impl From<LeaveReason> for LeaveReasonData {
     }
 }
 
-impl From<GameMsgC> for GameMessage {
-    fn from(msg: GameMsgC) -> Self {
+impl From<GameMessageC> for GameMessage {
+    fn from(msg: GameMessageC) -> Self {
         match msg.tag {
             GameMsgCTag::SkinEventTrigger => unsafe {
                 GameMessage::SkinEventTrigger(msg.data.key.key)
@@ -76,35 +76,35 @@ impl From<GameMsgC> for GameMessage {
     }
 }
 
-impl From<GameMessage> for GameMsgC {
+impl From<GameMessage> for GameMessageC {
     fn from(msg: GameMessage) -> Self {
         match msg {
             GameMessage::SkinEventTrigger(key) => {
-                GameMsgC {
+                GameMessageC {
                     tag: GameMsgCTag::SkinEventTrigger,
                     data: GameMsgCUnion { key: KeyData { key } }
                 }
             }
             GameMessage::DisableKey(key) => {
-                GameMsgC {
+                GameMessageC {
                     tag: GameMsgCTag::DisableKey,
                     data: GameMsgCUnion { key: KeyData { key } }
                 }
             }
             GameMessage::EnableKey(key) => {
-                GameMsgC {
+                GameMessageC {
                     tag: GameMsgCTag::EnableKey,
                     data: GameMsgCUnion { key: KeyData { key } }
                 }
             }
             GameMessage::Leave(reason) => {
-                GameMsgC {
+                GameMessageC {
                     tag: GameMsgCTag::Leave,
                     data: GameMsgCUnion { reason: reason.into() }
                 }
             }
             GameMessage::Err => {
-                GameMsgC {
+                GameMessageC {
                     tag: GameMsgCTag::Err,
                     data: GameMsgCUnion { nul: null_mut() }
                 }
