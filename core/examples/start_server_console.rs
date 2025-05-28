@@ -1,7 +1,7 @@
-use nogamepads_core::pad_data::game_profile::game_profile::GameProfile;
-use nogamepads_core::pad_service::server::nogamepads_server::PadServer;
-use nogamepads_core::DEFAULT_PORT;
 use std::net::{IpAddr, Ipv4Addr};
+use nogamepads_lib_rs::DEFAULT_PORT;
+use nogamepads_lib_rs::pad_data::game_profile::game_profile::GameProfile;
+use nogamepads_lib_rs::pad_service::server::nogamepads_server::PadServer;
 
 fn main() {
 

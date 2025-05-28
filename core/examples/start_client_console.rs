@@ -1,6 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr};
-use nogamepads_core::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
-use nogamepads_core::pad_service::client::nogamepads_client::PadClient;
+use nogamepads_lib_rs::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
+use nogamepads_lib_rs::pad_service::client::nogamepads_client::PadClient;
 
 const PASSWORD : &str = "password";
 
