@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/console/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core_c/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/release/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.cargo/shared" />
       <excludeFolder url="file://$MODULE_DIR$/core/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
