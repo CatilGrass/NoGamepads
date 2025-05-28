@@ -1,0 +1,9 @@
+[release.root]
+#./
+license = { raw = "./", target = "./", files = ["LICENSE-LGPL-2", "LICENSE-THIRD-PARTY"] }
+
+[release.deps]
+#./.cargo/shared/target/release/deps
+header = { raw = "./", target = "./bridge", files = ["nogamepads_cpp.h", "nogamepads.h"] }
+dll = { raw = "./", target = "./bridge", files = ["nogamepads_lib_c.dll"] }
+binaries = { raw = "./", target = "./bin", files = ["nogpadc.exe", "nogpads.exe"] }

@@ -7,6 +7,7 @@ pub mod nogamepads_player_info {
 
     pub const ACCOUNT_HASH_SALT : &str = "Mr.Weicao";
 
+    #[repr(C)]
     #[derive(Encode, Decode,
         Serialize, Deserialize,
         PartialEq, Debug)]

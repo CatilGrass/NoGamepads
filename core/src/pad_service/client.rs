@@ -25,6 +25,7 @@ pub mod nogamepads_client {
     type WriteList = Arc<Mutex<VecDeque<ControlMessage>>>;
     type ReadList = Arc<Mutex<VecDeque<GameMessage>>>;
 
+    #[repr(C)]
     pub struct PadClient {
 
         // --- 主要参数 ---
@@ -107,7 +108,6 @@ pub mod nogamepads_client {
 
     // 客户端消息管理
     impl PadClient {
-
 
         pub fn put_msg(&self, msg: ControlMessage) {
             let mut guard = self.write_list.lock().unwrap();

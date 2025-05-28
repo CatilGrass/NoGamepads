@@ -3,6 +3,7 @@ pub mod game_profile {
     use bincode::{Decode, Encode};
     use serde::{Deserialize, Serialize};
 
+    #[repr(C)]
     #[derive(Encode, Decode, Serialize, Deserialize, PartialEq, Debug)]
     pub struct GameProfile {
 

@@ -30,6 +30,7 @@ pub mod nogamepads_server {
     type WriteList = Arc<Mutex<HashMap<String, VecDeque<GameMessage>>>>;
     type ReadList = Arc<Mutex<HashMap<String, VecDeque<ControlMessage>>>>;
 
+    #[repr(C)]
     pub struct PadServer {
 
         // --- 主要参数 ---
@@ -237,7 +238,7 @@ pub mod nogamepads_server {
             guard.contains_key(&player.account.player_hash)
         }
 
-        pub fn set_player_online (&self, player: &PlayerInfo, online: bool) {
+        fn set_player_online (&self, player: &PlayerInfo, online: bool) {
             let online_current = self.is_player_online(player);
             if online_current && !online {
                 let mut guard = self.online_players.lock().unwrap();
@@ -374,15 +375,15 @@ pub mod nogamepads_server {
             }
         }
 
-        fn lock_game(&self) {
+        pub fn lock_game(&self) {
             self.game_locked.store(true, SeqCst);
         }
 
-        fn unlock_game(&self) {
+        pub fn unlock_game(&self) {
             self.game_locked.store(false, SeqCst);
         }
 
-        fn is_game_locked(&self) -> bool {
+        pub fn is_game_locked(&self) -> bool {
             self.game_locked.load(SeqCst)
         }
 

@@ -1,9 +1,6 @@
 use crate::AccountCommands::{Add, Customize, List, Remove};
 use crate::Commands::{Account, Connect};
 use clap::{Args, Parser, Subcommand};
-use nogamepads_core::pad_service::client::nogamepads_client::PadClient;
-use nogamepads_core::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
-use nogamepads_core::DEFAULT_PORT;
 use prettytable::{row, Table};
 use rand::Rng;
 use std::env::current_dir;
@@ -13,6 +10,9 @@ use std::net::{IpAddr, Ipv4Addr};
 use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
+use nogamepads_lib_rs::DEFAULT_PORT;
+use nogamepads_lib_rs::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
+use nogamepads_lib_rs::pad_service::client::nogamepads_client::PadClient;
 
 /// NoGamePads Console - Client Cli
 #[derive(Parser, Debug)]

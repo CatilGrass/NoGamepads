@@ -5,7 +5,6 @@ description = "This crate provides a set of tools for simulating and deploying t
 homepage = "https://github.com/CatilGrass/NoGamepads"
 repository = "https://github.com/CatilGrass/NoGamepads"
 
-version = "0.1.0"
 edition = "2024"
 
 [dependencies]

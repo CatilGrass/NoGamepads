@@ -1,13 +1,13 @@
 use clap::{arg, Args, Parser, Subcommand};
-use nogamepads_core::pad_service::server::nogamepads_server::{PadServer};
-use nogamepads_core::DEFAULT_PORT;
 use serde::{Deserialize, Serialize};
 use std::env::current_dir;
 use std::fs::{create_dir, File};
 use std::io::{BufReader, Write};
 use std::net::{IpAddr, Ipv4Addr};
 use std::path::PathBuf;
-use nogamepads_core::pad_data::game_profile::game_profile::GameProfile;
+use nogamepads_lib_rs::DEFAULT_PORT;
+use nogamepads_lib_rs::pad_data::game_profile::game_profile::GameProfile;
+use nogamepads_lib_rs::pad_service::server::nogamepads_server::PadServer;
 
 /// NoGamePads Console - Server Cli
 #[derive(Parser, Debug)]

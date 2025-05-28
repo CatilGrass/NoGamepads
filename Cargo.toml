@@ -15,7 +15,8 @@ edition = "2024"
 members = [
     "core",
     "console",
-    "core_c"
+    "core_c",
+    "release"
 ]
 
 [dependencies]
