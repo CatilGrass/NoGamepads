@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoGamepadsSharp_Core", "NoGamepadsSharp_Core\NoGamepadsSharp_Core.csproj", "{18F3ABA3-0B44-4BE2-8F81-624DD57AE5B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoGamepadsSharp_Execute", "NoGamepadsSharp_Execute\NoGamepadsSharp_Execute.csproj", "{88ECEC25-6071-4F1B-8C5F-C8A3C66D43A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18F3ABA3-0B44-4BE2-8F81-624DD57AE5B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F3ABA3-0B44-4BE2-8F81-624DD57AE5B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F3ABA3-0B44-4BE2-8F81-624DD57AE5B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F3ABA3-0B44-4BE2-8F81-624DD57AE5B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88ECEC25-6071-4F1B-8C5F-C8A3C66D43A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88ECEC25-6071-4F1B-8C5F-C8A3C66D43A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88ECEC25-6071-4F1B-8C5F-C8A3C66D43A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88ECEC25-6071-4F1B-8C5F-C8A3C66D43A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
