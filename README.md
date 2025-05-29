@@ -12,3 +12,16 @@
 
 ​	这是一个长期的项目，我们的目的是拓展游戏的操作方式，在线下和朋友联机的时候也不必被手柄数量所局促。为大多主流游戏引擎设计接口的目的也是希望更多的人参与到我们的项目！
 
+## 构建
+
+### 构建当前工作区
+
+```shell
+cargo build --workspace --release
+```
+
+### 发布当前项目
+
+```shell
+cargo run --manifest-path .\export\Cargo.toml --bin export_project
+```

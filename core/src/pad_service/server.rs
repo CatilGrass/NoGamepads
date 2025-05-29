@@ -5,21 +5,24 @@ pub mod nogamepads_server {
     use crate::pad_data::pad_messages::nogamepads_messages::{ConnectionCallbackMessage, ConnectionMessage, ControlMessage, GameMessage, LeaveReason};
     use log::{error, info, warn};
     use std::net::{IpAddr, Ipv4Addr, SocketAddr};
+    use std::ops::Deref;
     use std::process::exit;
     use std::sync::atomic::AtomicBool;
     use std::sync::atomic::Ordering::SeqCst;
     use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
     use std::time::Duration;
     use clap::CommandFactory;
+    use clearscreen::clear;
+    use prettytable::{Row, Table};
     use tokio::io::{AsyncReadExt, AsyncWriteExt, ReadHalf, WriteHalf};
     use tokio::net::{TcpListener, TcpStream};
-    use tokio::{io, spawn};
+    use tokio::{io, signal, spawn};
     use tokio::runtime::Runtime;
     use nogamepads::console_utils::debug_console::read_cli;
-    use nogamepads::convert_utils::convert_deque_to_vec;
     use nogamepads::logger_utils::logger_build;
     use crate::DEFAULT_PORT;
     use crate::pad_data::game_profile::game_profile::GameProfile;
+    use crate::pad_data::layout::layout_data::{LayoutKeyRegisters, LayoutKeyRuntimeData};
     use crate::pad_data::pad_messages::nogamepads_messages::ConnectionErrorType::{ContainSamePlayer, GameLocked, PlayerBanned, WhatTheHell};
     use crate::pad_data::pad_messages::nogamepads_messages::GameMessage::Leave;
     use crate::pad_data::pad_messages::nogamepads_messages::LeaveReason::ServerClosed;
@@ -28,7 +31,6 @@ pub mod nogamepads_server {
 
     type PlayerMap = Arc<Mutex<HashMap<String, PlayerInfo>>>;
     type WriteList = Arc<Mutex<HashMap<String, VecDeque<GameMessage>>>>;
-    type ReadList = Arc<Mutex<HashMap<String, VecDeque<ControlMessage>>>>;
 
     #[repr(C)]
     pub struct PadServer {
@@ -50,13 +52,17 @@ pub mod nogamepads_server {
         // 保持安静，不初始化 env_logger
         quiet: bool,
 
+        // 键位表
+        keys: LayoutKeyRegisters,
+
         // --- 运行时参数 ---
+
 
         // 发送信息列表
         write_list: WriteList,
 
-        // 读取信息列表
-        read_list: ReadList,
+        // 运行环境信息
+        control_data: Arc<Mutex<LayoutKeyRuntimeData>>,
 
         // 在线玩家
         online_players: PlayerMap,
@@ -69,6 +75,9 @@ pub mod nogamepads_server {
 
         // 是否停止服务器
         stop: AtomicBool,
+
+        // 调试模式 - 实时信息显示模式
+        monitor_view: AtomicBool,
     }
 
     impl Clone for PadServer {
@@ -79,13 +88,15 @@ pub mod nogamepads_server {
                 port: self.port.clone(),
                 enable_console: self.enable_console,
                 quiet: self.quiet,
+                keys: self.keys.clone(),
 
                 write_list: self.write_list.clone(),
-                read_list: self.read_list.clone(),
+                control_data: self.control_data.clone(),
                 online_players: self.online_players.clone(),
                 banned_players: self.banned_players.clone(),
                 game_locked: AtomicBool::new((&self.game_locked.load(SeqCst)).clone()),
                 stop: AtomicBool::new((&self.stop.load(SeqCst)).clone()),
+                monitor_view: AtomicBool::new((&self.monitor_view.load(SeqCst)).clone())
             }
         }
     }
@@ -98,13 +109,15 @@ pub mod nogamepads_server {
                 port: DEFAULT_PORT,
                 enable_console: false,
                 quiet: false,
+                keys: LayoutKeyRegisters::default(),
 
                 write_list: WriteList::default(),
-                read_list: ReadList::default(),
+                control_data: Arc::new(Mutex::new(LayoutKeyRuntimeData::default())),
                 online_players: PlayerMap::default(),
                 banned_players: PlayerMap::default(),
                 game_locked: AtomicBool::new(false),
                 stop: AtomicBool::new(false),
+                monitor_view: AtomicBool::new(false),
             }
         }
     }
@@ -151,10 +164,29 @@ pub mod nogamepads_server {
             self
         }
 
+        pub fn register_keys(&mut self, keys: LayoutKeyRegisters) -> &mut PadServer {
+            self.keys = keys;
+            self
+        }
+
+        pub fn register_button(&mut self, key: u8, name: &str) -> &mut PadServer {
+            self.keys.button_keys.insert(key, name.to_string());
+            self
+        }
+
+        pub fn register_axis(&mut self, key: u8, name: &str) -> &mut PadServer {
+            self.keys.axis_keys.insert(key, name.to_string());
+            self
+        }
+
+        pub fn register_direction(&mut self, key: u8, name: &str) -> &mut PadServer {
+            self.keys.direction_keys.insert(key, name.to_string());
+            self
+        }
+
         pub fn build(&self) -> Arc<PadServer> {
             Arc::new(self.clone())
         }
-
     }
 
     // 服务端消息管理
@@ -189,43 +221,50 @@ pub mod nogamepads_server {
             }
         }
 
-        pub fn pop_a_msg(&self, player: &PlayerInfo) -> Option<ControlMessage> {
-            match self.read_list.lock() {
+        pub fn pop_a_msg(&self) -> Option<(PlayerInfo, ControlMessage)> {
+            match self.control_data.lock() {
                 Ok(mut guard) => {
-                    match guard.get_mut(&player.account.player_hash) {
-                        None => { None }
-                        Some(queue) => {
-                            if ! queue.is_empty() {
-                                queue.pop_front()
-                            } else {
-                                guard.remove(&player.account.player_hash);
-                                None
-                            }
-                        }
-                    }
+                    guard.pop_control_event(self)
                 }
                 Err(_) => {
-                    error!("Cannot lock \"{:?}\" in read_list", player.account.player_hash);
+                    None
+                }
+            }
+        }
+    }
+
+    // 操控信息管理
+    impl PadServer {
+        pub fn get_player_direction(&self, player: &PlayerInfo, key: &u8) -> Option<(f64, f64)> {
+            match self.control_data.lock() {
+                Ok(guard) => {
+                    guard.get_direction(player, &key)
+                }
+                Err(_) => {
                     None
                 }
             }
         }
 
-        pub fn pop_msg_or(&self, player: &PlayerInfo, or: ControlMessage) -> ControlMessage {
-            self.pop_a_msg(player).unwrap_or(or)
+        pub fn get_player_axis(&self, player: &PlayerInfo, key: &u8) -> Option<f64> {
+            match self.control_data.lock() {
+                Ok(guard) => {
+                    guard.get_axis(player, &key)
+                }
+                Err(_) => {
+                    None
+                }
+            }
         }
 
-        pub fn list_received(&self, player: &PlayerInfo) -> Vec<ControlMessage> {
-            match self.read_list.lock() {
+        pub fn get_player_button_status(&self, player: &PlayerInfo, key: &u8) -> Option<bool> {
+            match self.control_data.lock() {
                 Ok(guard) => {
-                    match guard.get_key_value(player.account.player_hash.as_str()) {
-                        None => { Vec::new() }
-                        Some(result) => {
-                            convert_deque_to_vec(result.1)
-                        }
-                    }
+                    guard.get_button_status(player, &key)
                 }
-                Err(_) => { Vec::new() }
+                Err(_) => {
+                    None
+                }
             }
         }
     }
@@ -303,6 +342,15 @@ pub mod nogamepads_server {
                 Err(err) => Err(err)
             }
         }
+
+        pub fn find_online_player(&self, hash: String) -> Option<PlayerInfo> {
+            match self.online_players.lock() {
+                Ok(guard) => {
+                    guard.get(&hash).cloned()
+                }
+                Err(_) => None
+            }
+        }
     }
 
     // 服务端状态控制
@@ -360,6 +408,13 @@ pub mod nogamepads_server {
                     }
                 });
 
+                let ctrl_c_thread = spawn({
+                    let client = Arc::clone(&self);
+                    async move {
+                        Self::process_ctrl_c(client).await
+                    }
+                });
+
                 if debug {
                     let debug_cli = spawn({
                         let client = Arc::clone(&self);
@@ -368,9 +423,9 @@ pub mod nogamepads_server {
                         }
                     });
 
-                    let _ = tokio::join!(debug_cli, main_thread, background_thread);
+                    let _ = tokio::join!(ctrl_c_thread, debug_cli, main_thread, background_thread);
                 } else {
-                    let _ = tokio::join!(main_thread, background_thread);
+                    let _ = tokio::join!(ctrl_c_thread, main_thread, background_thread);
                 }
             }
         }
@@ -385,6 +440,14 @@ pub mod nogamepads_server {
 
         pub fn is_game_locked(&self) -> bool {
             self.game_locked.load(SeqCst)
+        }
+
+        pub fn enter_monitor(&self) {
+            self.monitor_view.store(true, SeqCst);
+        }
+
+        pub fn exit_monitor(&self) {
+            self.monitor_view.store(false, SeqCst);
         }
 
         async fn main_request_thread(self: Arc<Self>) {
@@ -527,18 +590,18 @@ pub mod nogamepads_server {
                     Ok(0) => break,
                     Ok(n) => {
                         let msg = ControlMessage::de(buf[0..n].to_vec());
-                        {
-                            match self.read_list.lock() {
-                                Ok(mut guard) => {
-                                    info!("{:?} from {}({})", &msg, player_info.customize.nickname, player_info.account.id);
-                                    guard
-                                        .entry(player_hash.clone())
-                                        .or_insert_with(VecDeque::new)
-                                        .push_back(msg);
-                                    
+                        match self.control_data.lock() {
+                            Ok(mut guard) => {
+                                info!("{:?} from {}({})", &msg, player_info.customize.nickname, player_info.account.id);
+                                let player_info = self.find_online_player(player_hash.clone());
+                                if player_info.is_some() {
+                                    let player_info = player_info.unwrap();
+                                    guard.insert_control(player_info, msg);
+                                } else {
+                                    warn!("Player \"{}\" not found!", player_hash);
                                 }
-                                Err(_) => {
-                                }
+                            }
+                            Err(_) => {
                             }
                         }
                     }
@@ -620,24 +683,136 @@ pub mod nogamepads_server {
             }
         }
 
+        async fn process_ctrl_c(self: Arc<Self>) {
+            loop {
+                signal::ctrl_c().await.unwrap();
+                if self.monitor_view.load(SeqCst) {
+                    self.exit_monitor();
+                } else {
+                    self.stop_server();
+                    info!("Stopping server...");
+                    break;
+                }
+            }
+        }
+
         async fn process_debug_cli(self: Arc<Self>) {
             loop {
                 if self.stop.load(SeqCst) {
                     info!("Debug console exited");
                     return;
                 }
-                tokio::time::sleep(Duration::from_secs_f64(0.2)).await;
-                let option: Option<Psc> = read_cli(
-                    format!("SERVER {}> ", self.address.to_string()).as_str(),
-                    "psc".to_string(),
-                    Psc::command()
-                ).await;
-                match option {
-                    None => {}
-                    Some(cmd) => {
-                        process_debug_cmd(cmd, Arc::clone(&self));
+
+                if ! self.monitor_view.load(SeqCst) {
+                    tokio::time::sleep(Duration::from_secs_f64(0.2)).await;
+
+                    // 控制台模式
+                    let option: Option<Psc> = read_cli(
+                        format!("SERVER {}> ", self.address.to_string()).as_str(),
+                        "psc".to_string(),
+                        Psc::command()
+                    ).await;
+                    match option {
+                        None => {}
+                        Some(cmd) => {
+                            process_debug_cmd(cmd, Arc::clone(&self));
+                        }
                     }
+                } else {
+                    tokio::time::sleep(Duration::from_secs_f64(0.2)).await;
+
+                    // 实时信息模式
+
+                    // 表头文本
+                    let mut header : Vec<String> = Vec::new();
+                    header.push("PLAYER \\ KEYS".to_string());
+                    self.all_keys(|key, name, i|{
+                        if i == 0 {
+                            header.push(format!("{}(btn:{})", name, key));
+                        } else if i == 1 {
+                            header.push(format!("{}(dir:{})", name, key));
+                        } else if i == 2 {
+                            header.push(format!("{}(ax:{})", name, key));
+                        }
+                    });
+
+                    let mut info_table = Table::new();
+
+                    // 添加表头
+                    info_table.add_row(Row::from_iter(header));
+
+                    // 玩家
+                    let players = &self.deref().online_players;
+                    match players.lock() {
+                        Ok(guard) => {
+                            for (_player_hash, player) in guard.iter() {
+
+                                // 行
+                                let mut line = Vec::new();
+                                line.push(player.account.id.to_string());
+                                self.all_keys(|key, _, i|{
+                                    if i == 0 {
+                                        // 按钮
+                                        let r = self.get_player_button_status(player, key);
+                                        if r.is_some() {
+                                            let r = r.unwrap();
+                                            if r {
+                                                line.push("TRUE".to_string());
+                                            } else {
+                                                line.push("FALSE".to_string());
+                                            }
+                                        } else {
+                                            line.push("UNKNOWN".to_string());
+                                        }
+
+                                    } else if i == 1 {
+                                        // 方向
+                                        let r = self.get_player_direction(player, key);
+                                        if r.is_some() {
+                                            let r = r.unwrap();
+                                            line.push(format!("{}, {}", r.0, r.1));
+                                        } else {
+                                            line.push("UNKNOWN".to_string());
+                                        }
+
+                                    } else if i == 2 {
+                                        // 轴向
+                                        let r = self.get_player_axis(player, key);
+                                        if r.is_some() {
+                                            let r = r.unwrap();
+                                            line.push(format!("{}", r));
+                                        } else {
+                                            line.push("UNKNOWN".to_string());
+                                        }
+                                    }
+                                });
+
+                                // 添加行文本
+                                info_table.add_row(Row::from_iter(line));
+                            }
+                        }
+                        Err(_) => {}
+                    }
+
+                    let result = info_table.to_string();
+                    let _ = clear();
+                    println!("[HELP] Ctrl + C to exit monitor.\n{}", result);
                 }
+            }
+        }
+
+        fn all_keys<F>(self: &Arc<Self>, mut f: F)
+        where F: FnMut(&u8, &String, i32){
+            let mut i = 0;
+            for iter in [
+                self.keys.button_keys.iter(),
+                self.keys.direction_keys.iter(),
+                self.keys.axis_keys.iter(),
+            ] {
+                for (key, name) in iter {
+                    f(key, name, i);
+                }
+                i += 1;
             }
         }
     }

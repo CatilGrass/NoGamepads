@@ -2,14 +2,14 @@ use std::net::{IpAddr, Ipv4Addr};
 use nogamepads_lib_rs::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
 use nogamepads_lib_rs::pad_service::client::nogamepads_client::PadClient;
 
-const PASSWORD : &str = "password";
-
 fn main() {
 
     // 构建玩家信息
     let mut player_info = PlayerInfo::new();
-    player_info.setup_account_info("juliet", PASSWORD);
-    player_info.set_nickname("Juliet_Smile");
+    player_info.setup_account_info(
+        env!("TEST_PLAYER_ACCOUNT"),
+        env!("TEST_PLAYER_PASSWORD"));
+    player_info.set_nickname(env!("TEST_PLAYER_NICKNAME"));
     player_info.set_customize_color_hsv(320, 0.5, 1.0); // PINK
 
     // 构建客户端

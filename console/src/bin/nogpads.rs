@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use clap::{arg, Args, Parser, Subcommand};
 use serde::{Deserialize, Serialize};
 use std::env::current_dir;
@@ -7,6 +8,7 @@ use std::net::{IpAddr, Ipv4Addr};
 use std::path::PathBuf;
 use nogamepads_lib_rs::DEFAULT_PORT;
 use nogamepads_lib_rs::pad_data::game_profile::game_profile::GameProfile;
+use nogamepads_lib_rs::pad_data::layout::layout_data::LayoutKeyRegisters;
 use nogamepads_lib_rs::pad_service::server::nogamepads_server::PadServer;
 
 /// NoGamePads Console - Server Cli
@@ -20,6 +22,15 @@ struct NoGamepadServerCli {
 /// 主要命令
 #[derive(Subcommand, Debug)]
 enum Commands {
+
+    #[command(subcommand, about = "Manage buttons")]
+    Button(ManageCommands),
+
+    #[command(subcommand, about = "Manage directions")]
+    Direction(ManageCommands),
+
+    #[command(subcommand, about = "Manage axes")]
+    Axis(ManageCommands),
 
     // 服务端配置
     #[command(about = "Configure the server")]
@@ -72,10 +83,47 @@ struct RunArgs {
     debug: bool,
 }
 
+/// 管理键
+#[derive(Subcommand, Debug)]
+enum ManageCommands {
+
+    #[command(about = "Add or rename a key")]
+    Add(AddKeyArgs),
+
+    #[command(about = "Remove a key")]
+    Remove(RemoveKeyArgs),
+
+    #[command(about = "List all")]
+    List
+}
+
+/// 添加键
+#[derive(Args, Debug)]
+struct AddKeyArgs{
+
+    // 添加的键
+    #[arg(value_name = "KEY")]
+    key: u8,
+
+    // 事件编号
+    #[arg(value_name = "NAME")]
+    name: String
+}
+
+/// 移除键
+#[derive(Args, Debug)]
+struct RemoveKeyArgs{
+
+    // 删除的键
+    #[arg(value_name = "KEY")]
+    key: u8,
+}
+
 /// 本地存储的配置信息
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 struct ServerConfig {
     port: u16,
+    registered_keys: LayoutKeyRegisters,
     profile: GameProfile,
 }
 
@@ -83,6 +131,7 @@ impl Default for ServerConfig {
     fn default() -> Self {
         ServerConfig {
             port: DEFAULT_PORT,
+            registered_keys: Default::default(),
             profile: GameProfile::default(),
         }
     }
@@ -107,12 +156,14 @@ fn main () {
 
     // 命令行
     let cli = NoGamepadServerCli::parse();
+
+    // 读取服务端配置
+    let mut config = read_config();
+
     match cli.command {
 
         // 服务端配置
         Commands::Config(args) => {
-            // 读取服务端配置
-            let mut config = read_config();
 
             // 端口信息配置：
             // 端口数值被限定在 0 - 65535，但是若端口参数为 0，则会被设置为默认端口
@@ -131,9 +182,6 @@ fn main () {
                 website,
                 email
             );
-
-            // 写入配置
-            write_config(config);
         },
 
         // 运行服务端
@@ -148,6 +196,7 @@ fn main () {
                 PadServer::default()
                     .addr(IpAddr::from(Ipv4Addr::new(127, 0, 0, 1)), config.port)
                     .put_profile(config.profile)
+                    .register_keys(config.registered_keys)
                     .enable_console()
                     .build()
                     .start_server();
@@ -156,70 +205,72 @@ fn main () {
                 PadServer::default()
                     .addr(IpAddr::from(Ipv4Addr::new(127, 0, 0, 1)), config.port)
                     .put_profile(config.profile)
+                    .register_keys(config.registered_keys)
                     .build()
                     .start_server();
+            }
+        }
+
+        Commands::Button(manage) => {
+            process_manage_command("btn", manage, &mut config.registered_keys.button_keys);
+        }
+
+        Commands::Direction(manage) => {
+            process_manage_command("dir", manage, &mut config.registered_keys.direction_keys);
+        }
+
+        Commands::Axis(manage) => {
+            process_manage_command("ax", manage, &mut config.registered_keys.axis_keys);
+        }
+    }
+
+    // 写入配置
+    write_config(config);
+}
+
+fn process_manage_command(prefix: &str, manage: ManageCommands, map: &mut HashMap<u8, String>) {
+    match manage {
+        ManageCommands::Add(args) => {
+            map.entry(args.key)
+                .or_insert_with(|| args.name.clone());
+            println!("Added(Renamed) key {}_{} : \"{}\".", prefix, args.key, args.name);
+        }
+        ManageCommands::Remove(args) => {
+            let removed = map.remove(&args.key);
+            if removed.is_some() {
+                println!("Removed key {}_{}.", prefix, removed.is_some())
+            } else {
+                println!("Removed key failed: Cannot found key {}", args.key);
+            }
+        }
+        ManageCommands::List => {
+            for button_key in map {
+                println!("{}_{} : \"{}\"", prefix, button_key.0, button_key.1)
             }
         }
     }
 }
 
-/// # 获得配置文件目录地址
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | -> | PathBuf | 地址 |
 #[allow(dead_code)]
 fn get_config_folder_path () -> PathBuf {
     current_dir().unwrap().join(".nogpads")
 }
 
-/// # 获得配置文件地址
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | -> | PathBuf | 地址 |
 #[allow(dead_code)]
 fn get_config_file_path () -> PathBuf {
     get_config_folder_path().join("config.yaml")
 }
 
-/// # 获得布局文件地址
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | -> | PathBuf | 地址 |
 #[allow(dead_code)]
 fn get_layout_file_path () -> PathBuf {
     get_config_folder_path().join("layout.yaml")
 }
 
-/// # 获得皮肤资源地址
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | -> | PathBuf | 地址 |
 #[allow(dead_code)]
 fn get_assets_package_path () -> PathBuf {
     get_config_folder_path().join("assets.zip")
 }
 
-/// # 读取配置信息
-///
-/// 读取 服务端控制台 的配置信息
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | -> | ServerConfig | 配置信息 |
 fn read_config () -> ServerConfig {
     let config_folder_path = get_config_folder_path();
     let config_file_path = get_config_file_path();
@@ -240,15 +291,6 @@ fn read_config () -> ServerConfig {
     }
 }
 
-/// # 写入配置信息
-///
-/// 将 服务端控制台 的配置信息写入本地
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | config | ServerConfig | 配置信息 |
 fn write_config (config: ServerConfig) {
     let config_file_path = get_config_file_path();
 

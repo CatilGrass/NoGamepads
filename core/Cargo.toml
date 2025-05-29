@@ -5,6 +5,7 @@ homepage = "https://github.com/CatilGrass/NoGamepads"
 repository = "https://github.com/CatilGrass/NoGamepads"
 readme = "../README.md"
 
+workspace = "../../NoGamepads"
 edition = "2024"
 
 [dependencies]
@@ -17,6 +18,7 @@ serde = { version = "1.0.219", features = ["derive"] }
 clap = { version = "4.5.38", features = ["derive"] }
 sha1 = "0.10.6"
 log = "0.4.27"
+prettytable-rs = "0.10.0"
 
 [lib]
 name = "nogamepads_lib_rs"

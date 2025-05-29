@@ -645,6 +645,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nogamepads-c"
+version = "0.0.0"
+dependencies = [
+ "cbindgen",
+ "nogamepads-core",
+]
+
+[[package]]
 name = "nogamepads-console"
 version = "0.0.0"
 dependencies = [
@@ -667,17 +675,18 @@ dependencies = [
  "hex",
  "log",
  "nogamepads",
+ "prettytable-rs",
  "serde",
  "sha1",
  "tokio",
 ]
 
 [[package]]
-name = "nogamepads_c"
+name = "nogamepads_export"
 version = "0.0.0"
 dependencies = [
- "cbindgen",
- "nogamepads-core",
+ "serde",
+ "toml 0.7.8",
 ]
 
 [[package]]
@@ -926,14 +935,6 @@ name = "regex-syntax"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
-
-[[package]]
-name = "release"
-version = "0.0.0"
-dependencies = [
- "serde",
- "toml 0.7.8",
-]
 
 [[package]]
 name = "rpassword"

@@ -6,14 +6,15 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/console/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/examples" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/core_c/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/release/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/bindings/c/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/export/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.cargo/shared" />
       <excludeFolder url="file://$MODULE_DIR$/core/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/console/target" />
       <excludeFolder url="file://$MODULE_DIR$/documents/cargo_doc" />
-      <excludeFolder url="file://$MODULE_DIR$/release/dev" />
+      <excludeFolder url="file://$MODULE_DIR$/export/0.1.0" />
+      <excludeFolder url="file://$MODULE_DIR$/export/dev" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

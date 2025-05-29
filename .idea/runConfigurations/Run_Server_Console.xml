@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Server Console" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+  <configuration default="false" name="Run Server Console" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Run">
     <option name="command" value="run --package nogamepads-core --example start_server_console" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />

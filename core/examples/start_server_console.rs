@@ -11,10 +11,11 @@ fn main() {
 
     // 构建服务端
     let server = PadServer::default()
-        .addr(
-        IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)),
-        DEFAULT_PORT
-        )
+
+        // 地址
+        .addr(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), DEFAULT_PORT)
+
+        // 配置信息
         .put_profile(
             GameProfile::default()
                 .game_name("My Multiplayer Game")
@@ -22,6 +23,14 @@ fn main() {
                 .version("0.1 alpha")
                 .to_owned()
         )
+
+        // 键位注册
+        .register_button(0, "Shoot")
+        .register_button(1, "Jump")
+        .register_direction(0, "Walk")
+        .register_axis(0, "View Yaw")
+
+        // 控制台
         .enable_console()
         // .quiet()
         .build();

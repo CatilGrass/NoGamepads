@@ -1,0 +1,15 @@
+[package]
+name = "nogamepads-c"
+
+workspace = "../../../NoGamepads"
+edition = "2024"
+
+[dependencies]
+nogamepads-core = { path = "../../core" }
+
+[build-dependencies]
+cbindgen = "0.29.0"
+
+[lib]
+name = "nogamepads_lib_c"
+crate-type = [ "cdylib", "staticlib"]

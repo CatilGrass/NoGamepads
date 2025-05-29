@@ -1,8 +1,7 @@
 use std::collections::HashMap;
-use crate::pad_data::pad_messages::nogamepads_messages::{ControlMessage, GameMessage};
+use crate::pad_data::pad_messages::nogamepads_messages::{GameMessage};
 use crate::pad_service::server::nogamepads_server::PadServer;
 use clap::{Args, Parser, Subcommand};
-use std::ops::{Index};
 use std::sync::{Arc, MutexGuard, PoisonError};
 use log::{error, info};
 use crate::pad_data::pad_player_info::nogamepads_player_info::PlayerInfo;
@@ -22,6 +21,9 @@ enum Commands {
     #[command(about = "Clean the screen")]
     Clear,
 
+    #[command(about = "Enter monitor")]
+    Monitor,
+
     // 关闭服务器
     #[command(about = "Close the server")]
     Stop,
@@ -34,13 +36,9 @@ enum Commands {
     #[command(about = "List all banned players")]
     Banned,
 
-    // 检查收到的消息
-    #[command(about = "Check received")]
-    Received(ReceivedArgs),
-
     // 取出一条消息
     #[command(about = "Pop a message")]
-    Pop(PlayerArgs),
+    Pop,
 
     // 踢出玩家
     #[command(about = "Kick a player")]
@@ -53,6 +51,14 @@ enum Commands {
     // 解封（赦免）玩家
     #[command(about = "Pardon a player")]
     Pardon(PlayerArgs),
+
+    // 锁定游戏
+    #[command(about = "Lock this game")]
+    Lock,
+
+    // 解锁游戏
+    #[command(about = "Unlock this game")]
+    Unlock,
 
     // 激活事件触发器
     #[command(about = "Send SkinEventTrigger")]
@@ -98,6 +104,10 @@ pub fn process_debug_cmd (cmd: Psc, server: Arc<PadServer>) {
             clearscreen::clear().expect("Failed to clear screen");
         }
 
+        Commands::Monitor => {
+            server.enter_monitor();
+        }
+
         Commands::Stop => {
             server.stop_server();
         }
@@ -110,27 +120,11 @@ pub fn process_debug_cmd (cmd: Psc, server: Arc<PadServer>) {
             print_player_list(server.list_players_banned());
         }
 
-        Commands::Received(args) => {
-            let players = server.list_players().unwrap_or(Vec::new());
-            let player = players.index(args.player.clamp(0, players.iter().count() -1));
-            if args.list {
-                for msg in server.list_received(player) {
-                    info!("{:?}", msg);
-                }
-            } else {
-                info!("Total {} messsage(s)!", server.list_received(player).iter().count());
-            }
-        }
-
-        Commands::Pop(args) => {
-            match get_player_by_index(&server, args.index) {
-                None => {
-                    error!("Pup message failed : Player index \"{}\" not found!", args.index);
-                }
-                Some(player) => {
-                    let message = server.pop_msg_or(&player, ControlMessage::Err);
-                    info!("{:?}", message);
-                }
+        Commands::Pop => {
+            let message = server.pop_a_msg();
+            if message.is_some() {
+                let (player, msg) = message.unwrap();
+                info!("{:?} from \"{}\"({})", msg, player.customize.nickname, player.account.id);
             }
         }
 
@@ -155,6 +149,20 @@ pub fn process_debug_cmd (cmd: Psc, server: Arc<PadServer>) {
             if player.is_some() {
                 let player = player.unwrap();
                 server.pardon_player(&player);
+            }
+        }
+
+        Commands::Lock => {
+            if ! server.is_game_locked() {
+                server.lock_game();
+                info!("Game locked");
+            }
+        }
+
+        Commands::Unlock => {
+            if server.is_game_locked() {
+                server.unlock_game();
+                info!("Game unlocked");
             }
         }
 

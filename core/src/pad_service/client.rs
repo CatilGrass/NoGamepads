@@ -21,6 +21,7 @@ pub mod nogamepads_client {
     use crate::DEFAULT_PORT;
     use crate::pad_data::game_profile::game_profile::GameProfile;
     use crate::pad_data::pad_messages::nogamepads_message_encoder::NgpdMessageEncoder;
+    use crate::pad_data::pad_messages::nogamepads_messages::ControlMessage::{Axis, Dir, Msg, Pressed, Released};
 
     type WriteList = Arc<Mutex<VecDeque<ControlMessage>>>;
     type ReadList = Arc<Mutex<VecDeque<GameMessage>>>;
@@ -128,6 +129,30 @@ pub mod nogamepads_client {
 
     // 客户端消息管理
     impl PadClient {
+
+        pub fn key_press(&self, key_id: u8) {
+            self.put_msg(Pressed(key_id));
+        }
+
+        pub fn key_release(&self, key_id: u8) {
+            self.put_msg(Released(key_id));
+        }
+
+        pub fn change_axis(&self, axis_id: u8, axis: f64) {
+            self.put_msg(Axis(axis_id, axis));
+        }
+
+        pub fn change_direction(&self, direction_id: u8, x: f64, y: f64) {
+            self.put_msg(Dir(direction_id, (x.clamp(0.0, 1.0), y.clamp(0.0, 1.0))));
+        }
+
+        pub fn say_str(&self, msg: &str) {
+            self.put_msg(Msg(msg.to_owned()));
+        }
+
+        pub fn say(&self, msg: String) {
+            self.put_msg(Msg(msg));
+        }
 
         pub fn put_msg(&self, msg: ControlMessage) {
             let mut guard = self.write_list.lock().unwrap();

@@ -15,9 +15,12 @@ edition = "2024"
 members = [
     "core",
     "console",
-    "core_c",
-    "release"
+    "bindings/c",
+    "export"
 ]
+
+[workspace.package]
+version = "0.1.0"
 
 [dependencies]
 env_logger = "0.10.2"
