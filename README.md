@@ -20,7 +20,7 @@
 cargo build --workspace --release
 ```
 
-### 发布当前项目
+### 打包当前项目
 
 ```shell
 cargo run --manifest-path .\export\Cargo.toml --bin export_project
