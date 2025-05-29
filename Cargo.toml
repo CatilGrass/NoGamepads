@@ -16,6 +16,7 @@ members = [
     "core",
     "console",
     "bindings/c",
+    "client",
     "export"
 ]
 

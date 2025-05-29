@@ -1,12 +1,7 @@
 [package]
 name = "nogamepads-core"
-
-homepage = "https://github.com/CatilGrass/NoGamepads"
-repository = "https://github.com/CatilGrass/NoGamepads"
-readme = "../README.md"
-
-workspace = "../../NoGamepads"
 edition = "2024"
+version.workspace = true
 
 [dependencies]
 nogamepads = { path = "../../NoGamepads" }

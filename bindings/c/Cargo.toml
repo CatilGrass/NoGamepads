@@ -1,8 +1,7 @@
 [package]
 name = "nogamepads-c"
-
-workspace = "../../../NoGamepads"
 edition = "2024"
+version.workspace = true
 
 [dependencies]
 nogamepads-core = { path = "../../core" }

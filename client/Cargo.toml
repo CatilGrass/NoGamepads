@@ -1,0 +1,11 @@
+[package]
+name = "nogamepads-client"
+edition = "2024"
+version.workspace = true
+
+[dependencies]
+nogamepads-core = { path = "../core" }
+
+bevy-tokio-tasks = "0.16.0"
+tokio = { version = "1.45.0", features = ["full"] }
+bevy = "0.16.0"

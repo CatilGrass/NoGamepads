@@ -1,5 +1,5 @@
 [package]
-name = "nogamepads_export"
+name = "nogamepads-export"
 authors = [ "CatilGrass" ]
 
 workspace = "../../NoGamepads"

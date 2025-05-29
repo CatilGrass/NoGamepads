@@ -24,6 +24,7 @@ pub struct ReleaseItem {
 }
 
 pub fn main() {
+    let version = env!("PROJECT_VERSION");
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_path_buf();
 
     let toml_config = root.join("./Config_Export.toml");
@@ -34,7 +35,7 @@ pub fn main() {
         root.join("export");
 
     let export_version_dir =
-        export_root.join(env!("PROJECT_VERSION"));
+        export_root.join(version);
 
     let target_dir =
         root.join(".cargo").join("shared").join("target").join("release").join("deps");

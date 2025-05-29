@@ -14,6 +14,7 @@ pub mod nogamepads_client {
     use tokio::io::{AsyncReadExt, AsyncWriteExt, ReadHalf, WriteHalf};
     use tokio::net::TcpStream;
     use tokio::{io, spawn};
+    use tokio::runtime::Runtime;
     use nogamepads::console_utils::debug_console::read_cli;
     use nogamepads::convert_utils::convert_deque_to_vec;
     use nogamepads::logger_utils::logger_build;
@@ -57,6 +58,22 @@ pub mod nogamepads_client {
 
         // 是否退出
         exit: AtomicBool,
+    }
+
+    impl Clone for PadClient {
+        fn clone(&self) -> Self {
+            PadClient {
+                enable_console: self.enable_console.clone(),
+                target_address: self.target_address.clone(),
+                target_port: self.target_port.clone(),
+                bind_player: self.bind_player.clone(),
+                quiet: self.quiet.clone(),
+
+                write_list: self.write_list.clone(),
+                read_list: self.read_list.clone(),
+                exit: AtomicBool::new(self.exit.load(SeqCst)),
+            }
+        }
     }
 
     impl Default for PadClient {
@@ -186,7 +203,11 @@ pub mod nogamepads_client {
     impl PadClient {
 
         pub fn connect(self) {
-            
+            self.connect_in_runtime(None);
+        }
+
+        pub fn connect_in_runtime(self, tokio_runtime: Option<Runtime>) {
+
             self.exit.store(false, SeqCst);
 
             // 构建 Logger
@@ -194,25 +215,35 @@ pub mod nogamepads_client {
                 logger_build();
             }
 
-            // 调试模式
-            let debug = self.enable_console;
-
-            // 客户端对象的 Arc
-            let arc_client = Arc::new(self);
-
-            // 部署环境
-            let runtime = tokio::runtime::Builder::new_multi_thread()
-                .thread_name("nogpad-pad_service")
-                .thread_stack_size(32 * 1024 * 1024)
-                .enable_time()
-                .enable_io()
-                .build()
-                .unwrap();
-
             info!("Starting \"NoGamepads Client\".");
 
             // 入口
-            let entry = async move {
+            let entry = self.get_connect_entry();
+
+            // 阻塞运行
+            if tokio_runtime.is_some() {
+                tokio_runtime.unwrap().block_on(entry);
+            } else {
+                let runtime = tokio::runtime::Builder::new_multi_thread()
+                    .thread_name("nogpad-pad_service")
+                    .thread_stack_size(32 * 1024 * 1024)
+                    .enable_time()
+                    .enable_io()
+                    .build()
+                    .unwrap();
+                runtime.block_on(entry);
+            }
+        }
+
+        pub fn get_connect_entry(self) -> impl Future<Output = ()> + Send + 'static  {
+
+            // 调试模式
+            let debug = self.enable_console;
+
+            // Arc
+            let arc_client = Arc::new(self);
+
+            async move {
                 let main_thread = spawn({
                     let client = Arc::clone(&arc_client);
                     async move {
@@ -238,10 +269,7 @@ pub mod nogamepads_client {
                 } else {
                     let _ = tokio::join!(main_thread, background_thread);
                 }
-            };
-
-            // 阻塞运行
-            runtime.block_on(entry);
+            }
         }
 
         pub fn exit_server(&self) {
