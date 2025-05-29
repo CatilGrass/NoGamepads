@@ -318,16 +318,6 @@ fn main() {
     }
 }
 
-/// # 处理输入的文本
-///
-/// 将输入的文本进行初步处理，以适合文件名称显示
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | input | String | 输入原始文本 |
-/// | -> | String | 处理后的结果 |
 fn process_inputted_text(input: String) -> String {
     // 截取前后文本，并转换为小写
     let s = input.trim().to_lowercase();
@@ -348,18 +338,6 @@ fn process_inputted_text(input: String) -> String {
         .collect()
 }
 
-/// # 将 HSV 数值转换为 HEX 颜色码字符串
-///
-/// 在显示玩家信息时，因 HSV 不如 RGB 直观，便转换为 HEX 字符串
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | h | i32 | 色相值 (0 - 360) |
-/// | s | f64 | 饱和度 (0 - 1) |
-/// | v | f64 | 明亮度 (0 - 1) |
-/// | -> | String | HEX 字符串 |
 fn hsv_to_hex(h: i32, s: f64, v: f64) -> String {
     let h = (h as f64).clamp(0.0, 360.0);
     let s = s.clamp(0.0, 1.0);
@@ -385,41 +363,14 @@ fn hsv_to_hex(h: i32, s: f64, v: f64) -> String {
     format!("#{:02X}{:02X}{:02X}", r, g, b)
 }
 
-/// # 获得配置文件目录地址
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | -> | PathBuf | 地址 |
 fn get_config_folder_path() -> PathBuf {
     current_dir().unwrap().join(".nogpadc")
 }
 
-/// # 获得账户配置文件地址
-///
-/// 输入指定的账户ID，获得其配置文件的目录
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | id | &str | 账户 ID |
-/// | -> | PathBuf | 地址 |
 fn get_account_config_path(id: &str) -> PathBuf {
     get_config_folder_path().join(format!("{}.{}", process_inputted_text(id.to_string()), EXTENSION_NAME))
 }
 
-/// # 判断账户是否存在
-///
-/// 输入指定的账户ID，获得其配置文件的目录
-///
-/// ## 参数 - Parameters
-///
-/// | Field  | Type                  | Description |
-/// | ------ | --------------------- | ----------- |
-/// | id | &str | 账户 ID |
-/// | -> | bool | 是否存在 |
 fn is_account_exist(id: &str) -> bool {
     let id = process_inputted_text(id.to_string());
     let path = get_config_folder_path();

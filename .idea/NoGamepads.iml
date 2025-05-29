@@ -13,8 +13,8 @@
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/console/target" />
       <excludeFolder url="file://$MODULE_DIR$/documents/cargo_doc" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
       <excludeFolder url="file://$MODULE_DIR$/export/0.1.0" />
-      <excludeFolder url="file://$MODULE_DIR$/export/dev" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

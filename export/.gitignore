@@ -3,3 +3,5 @@
 !Cargo.toml
 !src/
 !src/**
+!dev/
+!dev/**
