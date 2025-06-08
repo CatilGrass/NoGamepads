@@ -8,7 +8,8 @@ use crate::data::game::types::Players;
 use crate::data::message::enums::{JoinFailedMessage, ControlMessage, ExitReason, GameMessage};
 use crate::data::message::enums::JoinFailedMessage::{ContainIdenticalPlayer, GameLocked, PlayerBanned};
 use crate::data::message::enums::ControlMessage::{Axis, Dir, Msg, Pressed, Released};
-use crate::data::message::enums::GameMessage::LetExit;
+use crate::data::message::enums::ExitReason::{YouAreBanned, YouAreKicked};
+use crate::data::message::enums::GameMessage::{EventTrigger, LetExit};
 use crate::data::message::traits::MessageManager;
 use crate::data::player::structs::{Account, Player};
 use crate::service::service_types::ServiceType;
@@ -53,6 +54,28 @@ impl GameRuntime {
         }
     }
 
+    pub fn kick_player(&mut self, player: &Player, service_type: ServiceType) {
+        // Send a leave message to the pad_client and wait for it to actively disconnect
+        if self.data.is_account_online(&player.account) {
+            self.send((player.account.clone(), LetExit(YouAreKicked)), player.account.clone(), service_type);
+        }
+    }
+
+    pub fn ban_player(&mut self, player: &Player, service_type: ServiceType) {
+        if self.data.is_account_online(&player.account) {
+            self.send((player.account.clone(), LetExit(YouAreBanned)), player.account.clone(), service_type);
+            entry_mutex!(self.data.players_banned, |guard| {
+                guard.insert(player.account.clone(), player.clone());
+            });
+        }
+    }
+
+    pub fn pardon_player(&mut self, player: &Player) {
+        entry_mutex!(self.data.players_banned, |guard| {
+            guard.remove(&player.account);
+        });
+    }
+
     /// Check if the game is locked
     pub fn is_game_locked(&self) -> bool {
         self.data.locked.load(SeqCst)
@@ -79,6 +102,36 @@ impl GameRuntime {
         if !self.data.close.load(SeqCst) {
             self.data.close.store(true, SeqCst);
             info!("[Game Runtime] Game closed!");
+        }
+    }
+
+    /// Send a GameMessage to account
+    pub fn send_game_message(&mut self, account: &Account, message: GameMessage, service_type: ServiceType) {
+        self.send((account.clone(), message), account.clone(), service_type);
+    }
+
+    pub fn send_event(&mut self, account: &Account, event_trigger: u8, service_type: ServiceType) {
+        self.send_game_message(account, EventTrigger(event_trigger), service_type);
+    }
+
+    pub fn send_message(&mut self, account: &Account, message: String, service_type: ServiceType) {
+        self.send_game_message(account, GameMessage::Msg(message), service_type);
+    }
+
+    /// Pop an event message
+    pub fn pop_event(&mut self) -> Option<(Account, ControlMessage)> {
+        let pop = self.control.events.pop_front();
+        if pop.is_some() {
+            let (account, msg) = pop.unwrap();
+            if self.data.is_account_online(&account) {
+                trace!("[Control Runtime] Message: {:?} from \"{}\" ", &msg, account);
+                Some((account, msg))
+            } else {
+                warn!("[Control Runtime] Invalid message: Player \"{}\" is not online!", account);
+                None
+            }
+        } else {
+            None
         }
     }
 }
@@ -119,6 +172,7 @@ impl Default for GameRuntimeData {
             send: Default::default(),
             players_online: Players::default(),
             players_banned: Players::default(),
+            account_service_type: Default::default(),
 
             locked: AtomicBool::new(false),
             close: AtomicBool::new(false)
@@ -160,6 +214,12 @@ impl GameRuntimeData {
             });
 
             info!("[Game Runtime] Signed player \"{}\" is [ONLINE]!", player.account);
+
+            // Record service type
+            entry_mutex!(self.account_service_type, |guard| {
+                guard.entry(player.account.clone())
+                .or_insert_with(|| TCPConnection);
+            })
         }
     }
 
@@ -203,6 +263,15 @@ impl GameRuntimeData {
             }
         });
         false
+    }
+
+    /// Get service type of account
+    pub fn get_service_type(&self, account: &Account) -> Option<ServiceType> {
+        let mut result = None;
+        entry_mutex!(self.account_service_type, |guard| {
+            result = guard.get(account).cloned();
+        });
+        result
     }
 }
 
@@ -262,23 +331,6 @@ impl GameControlRuntime {
             _ => {
                 Err(msg)
             }
-        }
-    }
-
-    /// Pop an event message
-    pub fn pop_event(&mut self, game_runtime: &GameRuntime) -> Option<(Account, ControlMessage)> {
-        let pop = self.events.pop_front();
-        if pop.is_some() {
-            let (account, msg) = pop.unwrap();
-            if game_runtime.data.is_account_online(&account) {
-                trace!("[Control Runtime] Message: {:?} from \"{}\" ", &msg, account);
-                Some((account, msg))
-            } else {
-                warn!("[Control Runtime] Invalid message: Player \"{}\" is not online!", account);
-                None
-            }
-        } else {
-            None
         }
     }
 

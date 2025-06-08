@@ -10,11 +10,12 @@ use crate::service::service_types::ServiceType;
 #[derive(Default)]
 pub struct ControllerRuntime {
 
+    pub(crate) service_type: ServiceType,
     pub(crate) received: HashMap<(ServiceType, u8), VecDeque<GameMessage>>,
     pub(crate) send: HashMap<(ServiceType, u8), VecDeque<ControlMessage>>,
 
     pub(crate) player: Player,
 
     pub game_info: GameInfo,
-    pub close: AtomicBool
+    pub close: AtomicBool,
 }

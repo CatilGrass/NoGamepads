@@ -10,6 +10,7 @@ use crate::data::controller::runtime::structs::ControllerRuntime;
 use crate::data::message::enums::ConnectionMessage::{Join, RequestGameInfos};
 use crate::data::message::enums::ConnectionResponseMessage;
 use crate::service::service_runner::NoGamepadsService;
+use crate::service::service_types::ServiceType;
 use crate::service::tcp_network::pad_client::structs::PadClientNetwork;
 use crate::service::tcp_network::DEFAULT_PORT;
 use crate::service::tcp_network::utils::stream_utils::{read_msg, send_msg};
@@ -34,6 +35,10 @@ macro_rules! connect_once {
 impl PadClientNetwork {
 
     pub fn build(runtime: Arc<Mutex<ControllerRuntime>>) -> PadClientNetwork {
+        entry_mutex!(runtime, |guard| {
+            guard.service_type = ServiceType::TCPConnection;
+        });
+
         PadClientNetwork {
             addr: SocketAddr::from(([127, 0, 0, 1], DEFAULT_PORT)),
             runtime

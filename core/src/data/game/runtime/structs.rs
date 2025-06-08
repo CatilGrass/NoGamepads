@@ -1,5 +1,6 @@
 use std::collections::{HashMap, VecDeque};
 use std::sync::atomic::AtomicBool;
+use std::sync::Mutex;
 use crate::data::game::structs::GameControlData;
 use crate::data::game::types::{GameInfo, Players};
 use crate::data::message::enums::{ControlMessage, GameMessage};
@@ -25,6 +26,7 @@ pub struct GameRuntimeData {
 
     pub(crate) players_online: Players,
     pub(crate) players_banned: Players,
+    pub(crate) account_service_type: Mutex<HashMap<Account, ServiceType>>,
 
     pub locked: AtomicBool,
     pub close: AtomicBool,

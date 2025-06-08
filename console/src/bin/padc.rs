@@ -14,6 +14,8 @@ use std::process::exit;
 use std::str::FromStr;
 use std::sync::Arc;
 use log::LevelFilter;
+use tokio::signal::ctrl_c;
+use nogamepads::entry_mutex;
 use nogamepads::logger_utils::logger_build;
 use nogamepads_core::data::controller::cli::cli_command::{process_controller_cli, ControllerCli};
 use nogamepads_core::data::controller::structs::ControllerData;
@@ -450,6 +452,16 @@ fn connect(data: &mut LocalData, args: ConnectArgs) {
             logger_build(LevelFilter::Info);
         }
 
+        // Ctrl + C
+        let shutdown_runtime = Arc::clone(&runtime);
+        let shutdown = async move {
+            let _ = ctrl_c().await;
+            entry_mutex!(shutdown_runtime, |guard| {
+                guard.close();
+            });
+        };
+        services.push(Box::pin(shutdown));
+
         ServiceRunner::run(services);
     }
 }
@@ -509,6 +521,16 @@ fn listen(data: &mut LocalData, args: ListenArgs) {
     } else {
         logger_build(LevelFilter::Info);
     }
+
+    // Ctrl + C
+    let shutdown_runtime = Arc::clone(&runtime);
+    let shutdown = async move {
+        let _ = ctrl_c().await;
+        entry_mutex!(shutdown_runtime, |guard| {
+            guard.close_game();
+        });
+    };
+    services.push(Box::pin(shutdown));
 
     ServiceRunner::run(services);
 }
