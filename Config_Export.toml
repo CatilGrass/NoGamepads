@@ -6,4 +6,4 @@ license = { raw = "./", target = "./", files = ["LICENSE-LGPL-2", "LICENSE-THIRD
 [release.deps]
 header = { raw = "./", target = "./bridge", files = ["nogamepads_cpp.h", "nogamepads.h"] }
 dll = { raw = "./", target = "./bridge", files = ["nogamepads_lib_c.dll"] }
-binaries = { raw = "./", target = "./bin", files = ["nogpadc.exe", "nogpads.exe"] }
+binaries = { raw = "./", target = "./bin", files = ["padc.exe"] }

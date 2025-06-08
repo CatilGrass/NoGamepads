@@ -4,7 +4,7 @@ target-dir = "./.cargo/shared/target"
 [env]
 PROJECT_VERSION = { value = "0.1.0" }
 
-TEST_PLAYER_ACCOUNT = { value = "Juliet_Smile" }
-TEST_PLAYER_PASSWORD = { value = "juliet09881652@@__" }
+TEST_PLAYER_ACCOUNT = { value = "Ame.Na.LISA" }
+TEST_PLAYER_PASSWORD = { value = "amenalisa@@:P_QWQ" }
 
-TEST_PLAYER_NICKNAME = { value = "juliet" }
+TEST_PLAYER_NICKNAME = { value = "ame_na_lisa" }

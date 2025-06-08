@@ -15,7 +15,6 @@ edition = "2024"
 members = [
     "core",
     "console",
-    "bindings/c",
     "client",
     "export"
 ]

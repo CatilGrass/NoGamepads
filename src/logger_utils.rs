@@ -1,7 +1,7 @@
 use env_logger::Builder;
-use log::{info, LevelFilter};
+use log::LevelFilter;
 
-pub fn logger_build () {
+pub fn logger_build(level: LevelFilter) {
     Builder::new()
         .format(|buf, record| {
             use std::io::Write;
@@ -15,8 +15,6 @@ pub fn logger_build () {
                 record.args()
             )
         })
-        .filter(None, LevelFilter::Info)
+        .filter(None, level)
         .init();
-    info!("Logger Built.")
 }
-
