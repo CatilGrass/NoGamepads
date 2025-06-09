@@ -181,7 +181,8 @@ impl PadClientNetwork {
                         LetExit(reason) => {
                             info!("[TCP Client] [Runtime] Server let you exit: {:?}", reason);
                             entry_mutex!(self.runtime, |guard| {
-                                guard.send(ControlMessage::End, 0, ServiceType::TCPConnection);
+                                guard.send(ControlMessage::Exit, 0, TCPConnection);
+                                guard.send(ControlMessage::End, 0, TCPConnection);
                             });
                             break;
                         }
@@ -193,7 +194,7 @@ impl PadClientNetwork {
                             } else {
                                 warn!("[TCP Client] [Runtime] Too many error messages! Connection closed.");
                                 entry_mutex!(self.runtime, |guard| {
-                                    guard.send(ControlMessage::End, 0, ServiceType::TCPConnection);
+                                    guard.send(ControlMessage::End, 0, TCPConnection);
                                 });
                                 break;
                             }
@@ -205,7 +206,7 @@ impl PadClientNetwork {
                     // Process messages
                     entry_mutex!(self.runtime, |guard| {
                         trace!("[TCP Client] [Runtime] Received: {:?}", &message);
-                        guard.put_into_receive_list(message, 0, ServiceType::TCPConnection);
+                        guard.put_into_receive_list(message, 0, TCPConnection);
                     });
                 }
                 Err(err) => {
@@ -228,7 +229,8 @@ impl PadClientNetwork {
             if !closed {
                 entry_mutex!(self.runtime, |guard| {
                     if guard.close.load(SeqCst) {
-                        guard.send(ControlMessage::Exit, 0, ServiceType::TCPConnection);
+                        guard.send(ControlMessage::Exit, 0, TCPConnection);
+                        guard.send(ControlMessage::End, 0, TCPConnection);
                         closed = true;
                     }
                 });
@@ -236,7 +238,7 @@ impl PadClientNetwork {
 
             let mut message = None;
             entry_mutex!(self.runtime, |guard| {
-                message = guard.pop_from_send_list(0, ServiceType::TCPConnection);
+                message = guard.pop_from_send_list(0, TCPConnection);
             });
 
             if let Some(message) = message {
