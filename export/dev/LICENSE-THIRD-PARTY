@@ -11,6 +11,7 @@ This project uses third-party components with the following licenses:
 * bevy (original license: Apache-2.0 OR MIT)
 * chrono (original license: Apache-2.0 OR MIT)
 * clap (original license: Apache-2.0 OR MIT)
+* clap_complete (original license: Apache-2.0 OR MIT)
 * clearscreen (original license: Apache-2.0 OR MIT)
 * env_logger (original license: Apache-2.0 OR MIT)
 * hex (original license: Apache-2.0 OR MIT)
@@ -31,6 +32,7 @@ Copyright (c) 2013-2014 The Rust Project Developers.
 * tokio - Copyright (c) Tokio Contributors.
 * chrono - Copyright (c) 2014, Kang Seonghoon.
 * clap - Copyright (c) The clap Project Developer(s).
+* clap_complete - Copyright (c) 2015-2022 Kevin B. Knapp and Clap Contributors.
 * clearscreen - Copyright (c) The clearscreen Project Developer(s).
 * crossterm - Copyright (c) 2019 Timon.
 * env_logger - Copyright (c) The env_logger Project Developer(s).

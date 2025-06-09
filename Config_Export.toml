@@ -1,11 +1,9 @@
 #./
 [release.root]
 license = { raw = "./", target = "./", files = ["LICENSE-LGPL-2", "LICENSE-THIRD-PARTY"] }
+powershell_complete = { raw = "./.cargo/resources/scripts/", target = "./bin/completeion", files = ["install_completion_powershell.ps1"] }
 
 #./.cargo/shared/target/export/deps
 [release.deps]
-#header = { raw = "./", target = "./bridge", files = ["nogamepads_cpp.h", "nogamepads.h"] }
-#dll = { raw = "./", target = "./bridge", files = ["nogamepads_lib_c.dll"] }
-
 padc = { raw = "./", target = "./bin", files = ["padc.exe"] }
 

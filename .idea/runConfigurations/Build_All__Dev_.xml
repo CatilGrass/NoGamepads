@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build All (Dev)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Build (Dev)">
+  <configuration default="false" name="Build All (Dev)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Build (Dev)" activateToolWindowBeforeRun="false">
     <option name="buildProfileId" value="dev" />
     <option name="command" value="build --workspace" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />
     <option name="emulateTerminal" value="true" />
-    <option name="channel" value="STABLE" />
+    <option name="channel" value="DEFAULT" />
     <option name="requiredFeatures" value="true" />
     <option name="allFeatures" value="false" />
     <option name="withSudo" value="false" />

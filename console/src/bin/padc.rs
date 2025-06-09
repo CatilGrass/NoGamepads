@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env::current_dir;
 use std::fs::File;
+use std::io;
 use std::io::{BufReader, Write};
 use std::net::SocketAddr;
 use std::path::PathBuf;
@@ -15,6 +16,7 @@ use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::Ordering::SeqCst;
 use std::time::Duration;
+use clap_complete::{generate, Shell};
 use log::{info, LevelFilter};
 use tokio::select;
 use tokio::signal::ctrl_c;
@@ -31,14 +33,19 @@ use nogamepads_core::service::tcp_network::pad_client::structs::PadClientNetwork
 use nogamepads_core::service::tcp_network::pad_server::structs::PadServerNetwork;
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
-struct ConsoleCli {
+#[command(version, color = ColorChoice::Auto)]
+struct Padc {
     #[command(subcommand)]
     command: Commands,
 }
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+
+    GenerateCompletion {
+        #[arg(value_enum)]
+        shell: Shell,
+    },
 
     #[command(subcommand, about = "Manage accounts")]
     Account(AccountCommands),
@@ -257,10 +264,15 @@ struct LocalControllerData {
 }
 
 fn main () {
-    let cli = ConsoleCli::parse();
+    let cli = Padc::parse();
     let mut data = read();
 
     match cli.command {
+        Commands::GenerateCompletion {shell} => {
+            let mut cmd = Padc::command();
+            generate(shell, &mut cmd.clone(), "padc", &mut io::stdout());
+        }
+
         Commands::Account(cmds) => {
             match cmds {
                 AccountCommands::Add(args) => {

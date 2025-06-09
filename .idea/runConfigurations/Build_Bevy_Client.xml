@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build Bevy Client" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Build">
+  <configuration default="false" name="Build Bevy Client" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Build" activateToolWindowBeforeRun="false">
     <option name="command" value="build --manifest-path ./client/Cargo.toml --release --quiet" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />
