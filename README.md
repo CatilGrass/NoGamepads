@@ -14,14 +14,19 @@
 
 ## 构建
 
-### 构建当前工作区
+### 运行控制台
 
 ```shell
-cargo build --workspace --release
+cargo padc --help
 ```
 
-### 打包当前项目
+### 快速打包当前项目
 
 ```shell
-cargo run --manifest-path .\export\Cargo.toml --bin export_project
+# 调试当前项目
+cargo dev
+
+# 发布当前项目
+cargo export
 ```
+
