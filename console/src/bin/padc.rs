@@ -1,7 +1,7 @@
 use clap::{Args, CommandFactory, Parser, Subcommand};
 use nogamepads::string_utils::process_id_text;
 use nogamepads_console::utils::{confirm, read_password, read_password_and_confirm};
-use nogamepads_core::data::game::structs::GameData;
+use nogamepads_core::data::game::structs::{GameData, GameRuntimeDataArchive};
 use nogamepads_core::data::player::structs::Player;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -12,15 +12,18 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
-use std::sync::Arc;
-use log::LevelFilter;
+use std::sync::{Arc, Mutex};
+use std::sync::atomic::Ordering::SeqCst;
+use std::time::Duration;
+use log::{info, LevelFilter};
+use tokio::select;
 use tokio::signal::ctrl_c;
+use tokio::time::sleep;
 use nogamepads::entry_mutex;
 use nogamepads::logger_utils::logger_build;
 use nogamepads_core::data::controller::cli::cli_command::{process_controller_cli, ControllerCli};
 use nogamepads_core::data::controller::structs::ControllerData;
 use nogamepads_core::data::game::cli::cli_command::{process_game_cli, GameCli};
-use nogamepads_core::run_services;
 use nogamepads_core::service::cli_addition::runtime_consoles::RuntimeConsole;
 use nogamepads_core::service::service_runner::{NoGamepadsService, ServiceRunner};
 use nogamepads_core::service::tcp_network::DEFAULT_PORT;
@@ -209,7 +212,7 @@ struct ConnectArgs {
     debug: bool,
 }
 
-#[derive(Args, Debug)]
+#[derive(Args, Debug, Clone)]
 struct ListenArgs {
 
     #[arg(value_name = "Game")]
@@ -317,7 +320,7 @@ fn main () {
                     if game.is_none() {
                         eprintln!("Edit the game \"{}\" failed: game not found.", name.clone());
                     } else {
-                        let mut game = game.unwrap();
+                        let game = game.unwrap();
                         game.info(args.key.clone(), args.value.clone());
                         println!("Set the game info \"{}\" to \"{}\".", args.key, args.value);
                     }
@@ -355,7 +358,13 @@ fn main () {
         }
 
         Commands::Listen(args) => {
-            listen(&mut data, args);
+            let archive = listen(&mut data, args.clone());
+            if let Some(archive) = archive {
+                if let Some(game) = data.game_data.games.get_mut(&process_id_text(args.game)) {
+                    game.archive = archive;
+                    info!("Game data archived.");
+                }
+            }
         }
     }
 
@@ -437,9 +446,23 @@ fn connect(data: &mut LocalData, args: ConnectArgs) {
                 "ControllerCli".to_string(),
                 Arc::clone(&runtime),
                 |runtime, cmd| {
-                    process_controller_cli(runtime, cmd);
+                    process_controller_cli(runtime, cmd)
                 }
             ).build_entry());
+
+            // Ctrl + C
+            services.push(
+                build_ctrl_c_entry(
+                    Arc::clone(&runtime),
+                    |rt| {
+                        let mut close = false;
+                        entry_mutex!(rt, |guard| {
+                            close = guard.close.load(SeqCst);
+                        });
+                        close
+                    }
+                )
+            );
         }
 
         if args.gui {
@@ -452,21 +475,11 @@ fn connect(data: &mut LocalData, args: ConnectArgs) {
             logger_build(LevelFilter::Info);
         }
 
-        // Ctrl + C
-        let shutdown_runtime = Arc::clone(&runtime);
-        let shutdown = async move {
-            let _ = ctrl_c().await;
-            entry_mutex!(shutdown_runtime, |guard| {
-                guard.close();
-            });
-        };
-        services.push(Box::pin(shutdown));
-
         ServiceRunner::run(services);
     }
 }
 
-fn listen(data: &mut LocalData, args: ListenArgs) {
+fn listen(data: &mut LocalData, args: ListenArgs) -> Option<GameRuntimeDataArchive> {
     let id = process_id_text(args.game);
     let game = data.game_data.games.get(&id);
     if game.is_none() {
@@ -506,10 +519,23 @@ fn listen(data: &mut LocalData, args: ListenArgs) {
             "GameCli".to_string(),
             Arc::clone(&runtime),
             |runtime, cmd| {
-                process_game_cli(runtime, cmd);
+                process_game_cli(runtime, cmd)
             }
         ).build_entry());
-        println!("Setup Command Line!")
+        println!("Setup Command Line!");
+
+        services.push(
+            build_ctrl_c_entry(
+                Arc::clone(&runtime),
+                |rt| {
+                    let mut close = false;
+                    entry_mutex!(rt, |guard| {
+                        close = guard.data.close.load(SeqCst);
+                    });
+                    close
+                }
+            )
+        );
     }
 
     if args.gui {
@@ -522,17 +548,15 @@ fn listen(data: &mut LocalData, args: ListenArgs) {
         logger_build(LevelFilter::Info);
     }
 
-    // Ctrl + C
-    let shutdown_runtime = Arc::clone(&runtime);
-    let shutdown = async move {
-        let _ = ctrl_c().await;
-        entry_mutex!(shutdown_runtime, |guard| {
-            guard.close_game();
-        });
-    };
-    services.push(Box::pin(shutdown));
-
     ServiceRunner::run(services);
+
+    let mut archived_data: Option<GameRuntimeDataArchive> = None;
+    if let Ok(mutex) = Arc::try_unwrap(runtime) {
+        let rt = mutex.into_inner()
+            .unwrap_or_else(|poison_error| poison_error.into_inner());
+        archived_data = Some(GameRuntimeDataArchive::from(rt.data));
+    }
+    archived_data
 }
 
 fn add_player(data: &mut LocalData, account_args: String, password_args: Option<String>) {
@@ -614,12 +638,12 @@ fn edit_player(data: &mut LocalData, args: EditAccountArgs) {
 macro_rules! check_game {
     ($data:expr, $args:expr, |$game:ident| $code:block) => {
         let name = process_id_text($args.name);
-        let mut game = $data.game_data.games.get_mut(&name);
+        let game = $data.game_data.games.get_mut(&name);
         if game.is_none() {
             eprintln!("Edit the game \"{}\" failed: game not found.", name.clone());
             exit(1);
         } else {
-            let mut $game = game.unwrap();
+            let $game = game.unwrap();
             $code
         }
     };
@@ -703,4 +727,34 @@ fn hsv_to_hex(h: i32, s: f64, v: f64) -> String {
     let g = ((g + m) * 255.0).round() as u8;
     let b = ((b + m) * 255.0).round() as u8;
     format!("#{:02X}{:02X}{:02X}", r, g, b)
+}
+
+fn build_ctrl_c_entry<T: Send + 'static>(rt: Arc<Mutex<T>>, check_close: fn(rt: Arc<Mutex<T>>) -> bool) -> NoGamepadsService {
+    let shutdown = async move {
+        let mut count = 3;
+        loop {
+            if count < 0 {
+                exit(0);
+            }
+
+            select! {
+                _ = sleep(Duration::from_secs(1)) => {
+                    if check_close(rt.clone()) {
+                        break;
+                    }
+                }
+
+                _ = ctrl_c() => {
+                    if count >= 3 {
+                        info!("Please use the close command instead of Ctrl + C. ");
+                        info!("To forcibly close the process, press Ctrl + C {} times consecutively.", count);
+                    } else if count > 0 {
+                        info!("Press Ctrl + C {} times to force close.", count);
+                    }
+                    count -= 1;
+                }
+            }
+        }
+    };
+    Box::pin(shutdown)
 }
