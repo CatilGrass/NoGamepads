@@ -9,7 +9,6 @@ use tokio::runtime::Builder;
 fn main() {
     let mut app = App::new();
 
-    // 插件
     app.add_plugins(DefaultPlugins);
     app.add_plugins(TokioTasksPlugin {
         make_runtime: Box::new(|| {
@@ -18,9 +17,7 @@ fn main() {
         ..TokioTasksPlugin::default()
     });
 
-    // 自定义插件
     app.add_plugins(PadClientPlugin);
 
-    // 启动
     app.run();
 }
