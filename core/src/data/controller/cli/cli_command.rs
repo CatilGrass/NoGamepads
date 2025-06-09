@@ -1,13 +1,9 @@
-use std::process::exit;
 use std::sync::{Arc, Mutex};
 use clap::{Args, Parser, Subcommand};
 use clearscreen::clear;
 use log::info;
 use nogamepads::entry_mutex;
 use crate::data::controller::runtime::structs::ControllerRuntime;
-use crate::data::message::enums::ControlMessage;
-use crate::data::message::traits::MessageManager;
-use crate::service::service_types::ServiceType::TCPConnection;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -24,9 +20,6 @@ enum Commands {
 
     #[command(about = "Close the controller")]
     Close,
-
-    #[command(about = "Exit the console")]
-    Exit,
 
     #[command(about = "Send a message")]
     Message(MessageArgs),
@@ -71,7 +64,7 @@ struct DirectionArgs {
     y: f64
 }
 
-pub fn process_controller_cli(runtime: Arc<Mutex<ControllerRuntime>>, cmd: ControllerCli) {
+pub fn process_controller_cli(runtime: Arc<Mutex<ControllerRuntime>>, cmd: ControllerCli) -> bool {
 
     match cmd.command {
         Commands::Clear => {
@@ -82,40 +75,37 @@ pub fn process_controller_cli(runtime: Arc<Mutex<ControllerRuntime>>, cmd: Contr
             entry_mutex!(runtime, |guard| {
                 guard.close();
             });
-        }
-
-        Commands::Exit => {
-            exit(1);
+            return false;
         }
 
         Commands::Message(args) => {
             entry_mutex!(runtime, |guard| {
                 guard.message(args.message);
-            })
+            });
         }
 
         Commands::Press(args) => {
             entry_mutex!(runtime, |guard| {
                 guard.press_button(args.button_key);
-            })
+            });
         }
 
         Commands::Release(args) => {
             entry_mutex!(runtime, |guard| {
                 guard.release_button(args.button_key);
-            })
+            });
         }
 
         Commands::Axis(args) => {
             entry_mutex!(runtime, |guard| {
                 guard.change_axis(args.axis_key, args.axis_value);
-            })
+            });
         }
 
         Commands::Direction(args) => {
             entry_mutex!(runtime, |guard| {
                 guard.change_direction(args.dir_key, args.x, args.y);
-            })
+            });
         }
 
         Commands::Pop => {
@@ -125,7 +115,7 @@ pub fn process_controller_cli(runtime: Arc<Mutex<ControllerRuntime>>, cmd: Contr
                 } else {
                     info!("None!");
                 }
-            })
+            });
         }
 
         Commands::PopAll => {
@@ -133,7 +123,8 @@ pub fn process_controller_cli(runtime: Arc<Mutex<ControllerRuntime>>, cmd: Contr
                 while let Some(msg) = guard.pop() {
                     info!("Pop: {:?}", msg);
                 }
-            })
+            });
         }
     }
+    true
 }

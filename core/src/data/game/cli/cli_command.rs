@@ -1,11 +1,9 @@
-use std::process::exit;
 use std::sync::{Arc, Mutex};
 use clap::{Args, Parser, Subcommand};
 use clearscreen::clear;
 use log::{info, warn};
 use nogamepads::entry_mutex;
 use crate::data::game::runtime::structs::GameRuntime;
-use crate::data::message::traits::MessageManager;
 use crate::data::player::structs::Player;
 
 #[derive(Parser, Debug)]
@@ -27,9 +25,6 @@ enum Commands {
 
     #[command(about = "Close the game")]
     Close,
-
-    #[command(about = "Exit the console")]
-    Exit,
 
     OnlineList,
 
@@ -67,33 +62,29 @@ struct SendMessageArgs {
     msg: String
 }
 
-pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
+pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) -> bool {
     match cmd.command {
         Commands::Clear => {
             clear().expect("Failed to clear screen");
-
         }
 
         Commands::LockGame => {
             entry_mutex!(runtime, |guard| {
                 guard.lock_game();
-            })
+            });
         }
 
         Commands::UnlockGame => {
             entry_mutex!(runtime, |guard| {
                 guard.unlock_game();
-            })
+            });
         }
 
         Commands::Close => {
             entry_mutex!(runtime, |guard| {
                 guard.close_game();
-            })
-        }
-
-        Commands::Exit => {
-            exit(1);
+            });
+            return false;
         }
 
         Commands::OnlineList => {
@@ -103,7 +94,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                     info!("{}.{}", i, account.id);
                     i += 1;
                 }
-            })
+            });
         }
 
         Commands::BannedList => {
@@ -113,7 +104,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                     info!("{}.{}", i, account.id);
                     i += 1;
                 }
-            })
+            });
         }
 
         Commands::Ban(args) => {
@@ -126,7 +117,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                 } else {
                     warn!("Account number {} not found", args.index);
                 }
-            })
+            });
         }
 
         Commands::Pardon(args) => {
@@ -137,7 +128,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                 } else {
                     warn!("Account number {} not found", args.index);
                 }
-            })
+            });
         }
 
         Commands::Kick(args) => {
@@ -150,7 +141,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                 } else {
                     warn!("Account number {} not found", args.index);
                 }
-            })
+            });
         }
 
         Commands::Event(args) => {
@@ -163,7 +154,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                 } else {
                     warn!("Account number {} not found", args.index);
                 }
-            })
+            });
         }
 
         Commands::Message(args) => {
@@ -176,7 +167,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                 } else {
                     warn!("Account number {} not found", args.index);
                 }
-            })
+            });
         }
 
         Commands::Pop => {
@@ -186,7 +177,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                 } else {
                     info!("None")
                 }
-            })
+            });
         }
 
         Commands::PopAll => {
@@ -194,7 +185,8 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) {
                 while let Some((account, message)) = guard.pop_event() {
                     info!("{}: {:?}", account.id, message);
                 }
-            })
+            });
         }
     }
+    true
 }
