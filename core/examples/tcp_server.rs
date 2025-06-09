@@ -35,7 +35,7 @@ fn main () {
         "gamecli".to_string(),
         Arc::clone(&runtime),
         |runtime, cmd: GameCli| {
-            process_game_cli(runtime, cmd);
+            process_game_cli(runtime, cmd)
         }
     ).build_entry();
 

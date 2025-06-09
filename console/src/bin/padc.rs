@@ -1,4 +1,4 @@
-use clap::{Args, CommandFactory, Parser, Subcommand};
+use clap::{Args, ColorChoice, CommandFactory, Parser, Subcommand};
 use nogamepads::string_utils::process_id_text;
 use nogamepads_console::utils::{confirm, read_password, read_password_and_confirm};
 use nogamepads_core::data::game::structs::{GameData, GameRuntimeDataArchive};
@@ -23,6 +23,7 @@ use tokio::signal::ctrl_c;
 use tokio::time::sleep;
 use nogamepads::entry_mutex;
 use nogamepads::logger_utils::logger_build;
+use nogamepads_console::gui::controller_app::MyApp;
 use nogamepads_core::data::controller::cli::cli_command::{process_controller_cli, ControllerCli};
 use nogamepads_core::data::controller::structs::ControllerData;
 use nogamepads_core::data::game::cli::cli_command::{process_game_cli, GameCli};
@@ -265,11 +266,12 @@ struct LocalControllerData {
 
 fn main () {
     let cli = Padc::parse();
+
     let mut data = read();
 
     match cli.command {
         Commands::GenerateCompletion {shell} => {
-            let mut cmd = Padc::command();
+            let cmd = Padc::command();
             generate(shell, &mut cmd.clone(), "padc", &mut io::stdout());
         }
 

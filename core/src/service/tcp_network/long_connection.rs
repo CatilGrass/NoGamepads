@@ -211,6 +211,9 @@ impl PadClientNetwork {
                 }
                 Err(err) => {
                     error!("[TCP Client] [Runtime] Reader encountered an error: {}", err);
+                    entry_mutex!(self.runtime, |guard| {
+                        guard.send(ControlMessage::End, 0, TCPConnection);
+                    });
                     break;
                 }
             }

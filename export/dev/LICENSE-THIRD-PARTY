@@ -13,6 +13,8 @@ This project uses third-party components with the following licenses:
 * clap (original license: Apache-2.0 OR MIT)
 * clap_complete (original license: Apache-2.0 OR MIT)
 * clearscreen (original license: Apache-2.0 OR MIT)
+* egui (original license: Apache-2.0 OR MIT)
+* eframe (original license: Apache-2.0 OR MIT)
 * env_logger (original license: Apache-2.0 OR MIT)
 * hex (original license: Apache-2.0 OR MIT)
 * log (original license: Apache-2.0 OR MIT)
@@ -34,6 +36,8 @@ Copyright (c) 2013-2014 The Rust Project Developers.
 * clap - Copyright (c) The clap Project Developer(s).
 * clap_complete - Copyright (c) 2015-2022 Kevin B. Knapp and Clap Contributors.
 * clearscreen - Copyright (c) The clearscreen Project Developer(s).
+* egui - Copyright (c) The egui Project Developer(s).
+* eframe - Copyright (c) The eframe Project Developer(s).
 * crossterm - Copyright (c) 2019 Timon.
 * env_logger - Copyright (c) The env_logger Project Developer(s).
 * hex - Copyright (c) 2015-2020 The rust-hex Developers.
