@@ -198,10 +198,10 @@ impl GameRuntimeData {
             let key = (service_type, player.account.clone());
             let get_received = self.received.get_mut(&key);
             let get_send = self.send.get_mut(&key);
-            if let Some(mut list) = get_received {
+            if let Some(list) = get_received {
                 list.clear();
             }
-            if let Some(mut list) = get_send {
+            if let Some(list) = get_send {
                 list.clear();
             }
 

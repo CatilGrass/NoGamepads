@@ -4,6 +4,7 @@ use nogamepads::logger_utils::logger_build;
 use nogamepads_core::data::controller::structs::ControllerData;
 use nogamepads_core::data::player::structs::Player;
 use nogamepads_core::service::tcp_network::pad_client::structs::PadClientNetwork;
+use nogamepads_core::service::tcp_network::utils::tokio_utils::build_tokio_runtime;
 
 fn main () {
     logger_build(Trace);
@@ -21,5 +22,7 @@ fn main () {
     let runtime = controller.runtime();
 
     let client = PadClientNetwork::build(Arc::clone(&runtime));
-    client.connect();
+    // client.connect();
+    // or
+    build_tokio_runtime("Tokio Runtime".to_string()).block_on(client.build_entry())
 }

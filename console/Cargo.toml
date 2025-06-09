@@ -8,10 +8,8 @@ version.workspace = true
 nogamepads = { path = "../../NoGamepads" }
 nogamepads-core = { path = "../core" }
 clap = { version = "4.5.38", features = ["derive"] }
-rand = { version = "0.9.1", features = [] }
 serde = { version = "1.0.219", features = ["derive"] }
 serde_yaml = "0.9.34"
-prettytable-rs = "0.10.0"
 tokio = { version = "1.45.0", features = ["full"] }
 crossterm = "0.29.0"
 log = "0.4.27"

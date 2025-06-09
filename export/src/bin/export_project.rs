@@ -3,7 +3,8 @@ use std::path::PathBuf;
 
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::fs;
+use std::{env, fs};
+use nogamepads::file_system_utils::open_in_explorer;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -24,7 +25,8 @@ pub struct ReleaseItem {
 }
 
 pub fn main() {
-    let version = env!("PROJECT_VERSION");
+    let args: Vec<String> = env::args().collect();
+    let version = if let Some(v) = args.get(1) { v.to_string() } else { env!("PROJECT_VERSION").to_string() };
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_path_buf();
 
     let toml_config = root.join("./Config_Export.toml");
@@ -35,10 +37,12 @@ pub fn main() {
         root.join("export");
 
     let export_version_dir =
-        export_root.join(version);
+        export_root.join(&version);
+
+    let branch = if version.eq("dev") { "debug" } else { "release" };
 
     let target_dir =
-        root.join(".cargo").join("shared").join("target").join("release").join("deps");
+        root.join(".cargo").join("shared").join("target").join(branch).join("deps");
 
     // 清理目录
     let _ = remove_dir_all(&export_version_dir);
@@ -55,6 +59,10 @@ pub fn main() {
         let raw_path = target_dir.join(data.1.raw);
         let target_path = export_version_dir.join(data.1.target);
         copy_files(&raw_path, &target_path, data.1.files);
+    }
+
+    if let Ok(()) = open_in_explorer(export_version_dir) {
+        println!("DONE");
     }
 }
 

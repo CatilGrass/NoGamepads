@@ -1,6 +1,7 @@
 use crate::service::cli_addition::utils::read_cli;
 use clap::{Command, FromArgMatches};
 use std::sync::{Arc, Mutex};
+use log::info;
 use tokio::{join, spawn};
 use crate::service::service_runner::NoGamepadsService;
 
@@ -9,14 +10,14 @@ where Cmd: FromArgMatches {
     command: Command,
     prefix: String,
     service: Arc<Mutex<PadService>>,
-    process_command: fn(Arc<Mutex<PadService>>, Cmd),
+    process_command: fn(Arc<Mutex<PadService>>, Cmd) -> bool,
 }
 
 impl<PadService: Send + 'static, Cmd: FromArgMatches + 'static> RuntimeConsole<PadService, Cmd> {
     pub fn build(command: Command,
                  prefix: String,
                  service: Arc<Mutex<PadService>>,
-                 process_command: fn(Arc<Mutex<PadService>>, Cmd),
+                 process_command: fn(Arc<Mutex<PadService>>, Cmd) -> bool,
     ) -> RuntimeConsole<PadService, Cmd> {
         RuntimeConsole { command, prefix, service, process_command }
     }
@@ -52,9 +53,12 @@ impl<PadService: Send + 'static, Cmd: FromArgMatches + 'static> RuntimeConsole<P
             match option {
                 None => {}
                 Some(cmd) => {
-                    (self.process_command)(Arc::clone(&self.service), cmd);
+                    if !(self.process_command)(Arc::clone(&self.service), cmd) {
+                        break;
+                    }
                 }
             }
         }
+        info!("[Console] Shutdown.")
     }
 }
