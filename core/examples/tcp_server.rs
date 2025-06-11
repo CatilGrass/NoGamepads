@@ -1,6 +1,6 @@
 use clap::CommandFactory;
 use nogamepads::logger_utils::logger_build;
-use nogamepads_core::data::game::cli::cli_command::{process_game_cli, GameCli};
+use nogamepads_core::data::game::game_cli::{process_game_cli, GameCli};
 use nogamepads_core::data::game::structs::{GameData, GameRuntimeDataArchive};
 use nogamepads_core::run_services;
 use nogamepads_core::service::cli_addition::runtime_consoles::RuntimeConsole;

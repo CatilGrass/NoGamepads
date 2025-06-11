@@ -22,7 +22,6 @@ fn main () {
     let runtime = controller.runtime();
 
     let client = PadClientNetwork::build(Arc::clone(&runtime));
-    // client.connect();
-    // or
+
     build_tokio_runtime("Tokio Runtime".to_string()).block_on(client.build_entry())
 }

@@ -1,8 +1,6 @@
 use clap::{Args, ColorChoice, CommandFactory, Parser, Subcommand};
 use nogamepads::string_utils::process_id_text;
 use nogamepads_console::utils::{confirm, read_password, read_password_and_confirm};
-use nogamepads_core::data::game::structs::{GameData, GameRuntimeDataArchive};
-use nogamepads_core::data::player::structs::Player;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env::current_dir;
@@ -23,14 +21,16 @@ use tokio::signal::ctrl_c;
 use tokio::time::sleep;
 use nogamepads::entry_mutex;
 use nogamepads::logger_utils::logger_build;
-use nogamepads_core::data::controller::cli::cli_command::{process_controller_cli, ControllerCli};
-use nogamepads_core::data::controller::structs::ControllerData;
-use nogamepads_core::data::game::cli::cli_command::{process_game_cli, GameCli};
+use nogamepads_core::data::controller::controller_cli::{process_controller_cli, ControllerCli};
+use nogamepads_core::data::controller::controller_data::ControllerData;
+use nogamepads_core::data::game::game_cli::{process_game_cli, GameCli};
+use nogamepads_core::data::game::game_data::{GameData, GameRuntimeDataArchive};
+use nogamepads_core::data::player::player_data::Player;
 use nogamepads_core::service::cli_addition::runtime_consoles::RuntimeConsole;
 use nogamepads_core::service::service_runner::{NoGamepadsService, ServiceRunner};
 use nogamepads_core::service::tcp_network::DEFAULT_PORT;
-use nogamepads_core::service::tcp_network::pad_client::structs::PadClientNetwork;
-use nogamepads_core::service::tcp_network::pad_server::structs::PadServerNetwork;
+use nogamepads_core::service::tcp_network::pad_client::pad_client_service::PadClientNetwork;
+use nogamepads_core::service::tcp_network::pad_server::pad_server_service::PadServerNetwork;
 use nogamepads_core::service::tcp_network::utils::tokio_utils::build_tokio_runtime;
 
 #[derive(Parser, Debug)]

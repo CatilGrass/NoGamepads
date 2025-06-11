@@ -4,10 +4,10 @@ use bevy::log::info;
 use bevy::prelude::{App, Commands, Component, IntoScheduleConfigs, KeyCode, Plugin, PreStartup, Query, ResMut, Startup, Update};
 use bevy_tokio_tasks::TokioTasksRuntime;
 use nogamepads::entry_mutex;
-use nogamepads_core::data::controller::runtime::structs::ControllerRuntime;
-use nogamepads_core::data::controller::structs::ControllerData;
-use nogamepads_core::data::player::structs::Player;
-use nogamepads_core::service::tcp_network::pad_client::structs::PadClientNetwork;
+use nogamepads_core::data::controller::controller_data::ControllerData;
+use nogamepads_core::data::controller::controller_runtime::ControllerRuntime;
+use nogamepads_core::data::player::player_data::Player;
+use nogamepads_core::service::tcp_network::pad_client::pad_client_service::PadClientNetwork;
 
 #[derive(Component)]
 struct ClientComponent {

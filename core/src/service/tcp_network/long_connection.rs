@@ -1,6 +1,3 @@
-use crate::data::player::structs::Player;
-use crate::service::tcp_network::pad_client::structs::PadClientNetwork;
-use crate::service::tcp_network::pad_server::structs::PadServerNetwork;
 use std::sync::Arc;
 use std::sync::atomic::Ordering::SeqCst;
 use log::{error, info, trace, warn};
@@ -9,12 +6,15 @@ use tokio::net::tcp::{OwnedReadHalf, OwnedWriteHalf};
 use tokio::net::TcpStream;
 use tokio::spawn;
 use nogamepads::entry_mutex;
-use crate::data::message::enums::{ControlMessage, GameMessage};
-use crate::data::message::enums::ExitReason::GameOver;
-use crate::data::message::enums::GameMessage::{End, LetExit};
+use crate::data::message::message_enums::{ControlMessage, GameMessage};
+use crate::data::message::message_enums::ExitReason::GameOver;
+use crate::data::message::message_enums::GameMessage::{End, LetExit};
 use crate::data::message::traits::{MessageEncoder, MessageManager};
+use crate::data::player::player_data::Player;
 use crate::service::service_types::ServiceType;
 use crate::service::service_types::ServiceType::TCPConnection;
+use crate::service::tcp_network::pad_client::pad_client_service::PadClientNetwork;
+use crate::service::tcp_network::pad_server::pad_server_service::PadServerNetwork;
 
 impl PadServerNetwork {
 

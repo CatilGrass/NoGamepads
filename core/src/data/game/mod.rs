@@ -1,6 +1,5 @@
-pub mod cli;
-pub mod runtime;
+pub mod game_cli;
 
-pub mod implements;
-pub mod structs;
+pub mod game_data;
+pub mod game_runtime;
 pub mod types;

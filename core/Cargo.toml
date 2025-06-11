@@ -14,7 +14,3 @@ clap = { version = "4.5.38", features = ["derive"] }
 sha1 = "0.10.6"
 log = "0.4.27"
 shell-words = "1.1.0"
-
-[lib]
-name = "nogamepads_core"
-crate-type = [ "rlib"]

@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Generate Documents" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Document">
-    <option name="command" value="doc --workspace" />
+    <option name="command" value="doc --workspace --no-deps" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />
     <option name="emulateTerminal" value="true" />
