@@ -44,7 +44,7 @@ impl PadServerNetwork {
                         ControlMessage::Exit => {
                             info!("[TCP Server] [Runtime] Player {} exited.", player.account.id);
                             entry_mutex!(self.runtime, |guard| {
-                                guard.send((player.account.clone(), End), player.account.clone(), ServiceType::TCPConnection);
+                                guard.send((player.account.clone(), End), player.account.clone(), TCPConnection);
                             });
                             break;
                         }
@@ -56,7 +56,7 @@ impl PadServerNetwork {
                             } else {
                                 warn!("[TCP Server] [Runtime] Too many error messages! Connection closed.");
                                 entry_mutex!(self.runtime, |guard| {
-                                    guard.send((player.account.clone(), End), player.account.clone(), ServiceType::TCPConnection);
+                                    guard.send((player.account.clone(), End), player.account.clone(), TCPConnection);
                                 });
                                 break;
                             }

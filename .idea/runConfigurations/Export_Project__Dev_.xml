@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Export Project (Dev)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Export">
+  <configuration default="false" name="Export Project (Dev)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Export" focusToolWindowBeforeRun="true">
     <option name="buildProfileId" value="dev" />
     <option name="command" value="run --manifest-path ./export/Cargo.toml --bin export_project" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -16,7 +16,7 @@
     <option name="isRedirectInput" value="false" />
     <option name="redirectInputPath" value="" />
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Build All (Dev)" run_configuration_type="CargoCommandRunConfiguration" run_configuration_target="RsBuildProfile:dev" />
+      <option name="RunConfigurationTask" enabled="false" run_configuration_name="Build All (Dev)" run_configuration_type="CargoCommandRunConfiguration" run_configuration_target="RsBuildProfile:dev" />
     </method>
   </configuration>
 </component>

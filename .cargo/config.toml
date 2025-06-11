@@ -1,6 +1,6 @@
 [alias]
 dev = ["run", "--manifest-path", "./export/Cargo.toml", "--profile", "dev", "--bin", "export_project", "dev"]
-export = ["run", "--manifest-path", "./export/Cargo.toml", "--profile", "release", "--release", "--bin", "export_project"]
+export = ["run", "--manifest-path", "./export/Cargo.toml", "--profile", "release", "--bin", "export_project"]
 
 padc = ["run", "--manifest-path", "./console/Cargo.toml", "--profile", "dev", "--quiet", "--bin", "padc"]
 

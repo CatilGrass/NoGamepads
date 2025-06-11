@@ -10,7 +10,7 @@ pub fn logger_build(level: LevelFilter) {
             writeln!(
                 buf,
                 "[{}] [{}] {}",
-                now.format("%Y-%m-%d %H:%M:%S"),
+                now.format("%H:%M:%S"),
                 level_style.value(record.level()),
                 record.args()
             )

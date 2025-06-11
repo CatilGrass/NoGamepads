@@ -18,12 +18,11 @@ use std::sync::atomic::Ordering::SeqCst;
 use std::time::Duration;
 use clap_complete::{generate, Shell};
 use log::{info, LevelFilter};
-use tokio::select;
+use tokio::{select, spawn};
 use tokio::signal::ctrl_c;
 use tokio::time::sleep;
 use nogamepads::entry_mutex;
 use nogamepads::logger_utils::logger_build;
-use nogamepads_console::gui::controller_app::MyApp;
 use nogamepads_core::data::controller::cli::cli_command::{process_controller_cli, ControllerCli};
 use nogamepads_core::data::controller::structs::ControllerData;
 use nogamepads_core::data::game::cli::cli_command::{process_game_cli, GameCli};
@@ -32,6 +31,7 @@ use nogamepads_core::service::service_runner::{NoGamepadsService, ServiceRunner}
 use nogamepads_core::service::tcp_network::DEFAULT_PORT;
 use nogamepads_core::service::tcp_network::pad_client::structs::PadClientNetwork;
 use nogamepads_core::service::tcp_network::pad_server::structs::PadServerNetwork;
+use nogamepads_core::service::tcp_network::utils::tokio_utils::build_tokio_runtime;
 
 #[derive(Parser, Debug)]
 #[command(version, color = ColorChoice::Auto)]
@@ -214,9 +214,6 @@ struct ConnectArgs {
     cmd: bool,
 
     #[arg(long)]
-    gui: bool,
-
-    #[arg(long)]
     debug: bool,
 }
 
@@ -231,9 +228,6 @@ struct ListenArgs {
 
     #[arg(long)]
     cmd: bool,
-
-    #[arg(long)]
-    gui: bool,
 
     #[arg(long)]
     tcp: bool,
@@ -425,8 +419,10 @@ fn connect(data: &mut LocalData, args: ConnectArgs) {
 
     let method = args.method.unwrap_or("tcp".to_string());
     let mut entry: Option<NoGamepadsService> = None;
-    match method.as_str() {
+
+    match method.trim().to_lowercase().as_str() {
         "tcp" => {
+            println!("Using TCP connection.");
             let mut client = PadClientNetwork::build(Arc::clone(&runtime));
             let addr = args.tcp_addr.unwrap_or(format!("127.0.0.1:{}", DEFAULT_PORT));
             client.bind_addr(SocketAddr::from_str(&addr).unwrap_or(
@@ -437,15 +433,17 @@ fn connect(data: &mut LocalData, args: ConnectArgs) {
         },
 
         "bluetooth" => {
+            println!("Using Bluetooth connection.");
             // TODO :: BLUETOOTH METHOD
         },
 
         "usb" => {
+            println!("Using USB connection.");
             // TODO :: USB METHOD
         },
 
         _ => {
-            eprintln!("Unknown connection method: {}", method);
+            eprintln!("Unknown connection method: \"{}\"", method);
             exit(1);
         }
     }
@@ -455,32 +453,33 @@ fn connect(data: &mut LocalData, args: ConnectArgs) {
         services.push(entry);
 
         if args.cmd {
+            println!("Enable command line.");
+
             services.push(RuntimeConsole::build(
-                ControllerCli::command(),
-                "ControllerCli".to_string(),
-                Arc::clone(&runtime),
+                ControllerCli::command(), "ControllerCli".to_string(), Arc::clone(&runtime),
+
+                // Process command line
                 |runtime, cmd| {
                     process_controller_cli(runtime, cmd)
-                }
+                },
+
+                // Check close
+                |runtime| {
+                    let mut close = false;
+                    entry_mutex!(runtime, |guard| {
+                        close = guard.close.load(SeqCst);
+                    });
+                    close
+                },
+
+                // Close
+                |runtime| {
+                    entry_mutex!(runtime, |guard| {
+                        guard.close();
+                    });
+                },
+
             ).build_entry());
-
-            // Ctrl + C
-            services.push(
-                build_ctrl_c_entry(
-                    Arc::clone(&runtime),
-                    |rt| {
-                        let mut close = false;
-                        entry_mutex!(rt, |guard| {
-                            close = guard.close.load(SeqCst);
-                        });
-                        close
-                    }
-                )
-            );
-        }
-
-        if args.gui {
-
         }
 
         if args.debug {
@@ -529,31 +528,30 @@ fn listen(data: &mut LocalData, args: ListenArgs) -> Option<GameRuntimeDataArchi
 
     if args.cmd {
         services.push(RuntimeConsole::build(
-            GameCli::command(),
-            "GameCli".to_string(),
-            Arc::clone(&runtime),
+            GameCli::command(), "GameCli".to_string(), Arc::clone(&runtime),
+
+            // Process command line
             |runtime, cmd| {
                 process_game_cli(runtime, cmd)
-            }
+            },
+
+            // Check close
+            |runtime| {
+                let mut close = false;
+                entry_mutex!(runtime, |guard| {
+                    close = guard.data.close.load(SeqCst);
+                });
+                close
+            },
+
+            // Close
+            |runtime| {
+                entry_mutex!(runtime, |guard| {
+                    guard.close_game();
+                });
+            },
+
         ).build_entry());
-        println!("Setup Command Line!");
-
-        services.push(
-            build_ctrl_c_entry(
-                Arc::clone(&runtime),
-                |rt| {
-                    let mut close = false;
-                    entry_mutex!(rt, |guard| {
-                        close = guard.data.close.load(SeqCst);
-                    });
-                    close
-                }
-            )
-        );
-    }
-
-    if args.gui {
-
     }
 
     if args.debug {
@@ -741,34 +739,4 @@ fn hsv_to_hex(h: i32, s: f64, v: f64) -> String {
     let g = ((g + m) * 255.0).round() as u8;
     let b = ((b + m) * 255.0).round() as u8;
     format!("#{:02X}{:02X}{:02X}", r, g, b)
-}
-
-fn build_ctrl_c_entry<T: Send + 'static>(rt: Arc<Mutex<T>>, check_close: fn(rt: Arc<Mutex<T>>) -> bool) -> NoGamepadsService {
-    let shutdown = async move {
-        let mut count = 3;
-        loop {
-            if count < 0 {
-                exit(0);
-            }
-
-            select! {
-                _ = sleep(Duration::from_secs(1)) => {
-                    if check_close(rt.clone()) {
-                        break;
-                    }
-                }
-
-                _ = ctrl_c() => {
-                    if count >= 3 {
-                        info!("Please use the close command instead of Ctrl + C. ");
-                        info!("To forcibly close the process, press Ctrl + C {} times consecutively.", count);
-                    } else if count > 0 {
-                        info!("Press Ctrl + C {} times to force close.", count);
-                    }
-                    count -= 1;
-                }
-            }
-        }
-    };
-    Box::pin(shutdown)
 }

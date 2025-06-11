@@ -111,9 +111,9 @@ pub fn process_controller_cli(runtime: Arc<Mutex<ControllerRuntime>>, cmd: Contr
         Commands::Pop => {
             entry_mutex!(runtime, |guard| {
                 if let Some(msg) = guard.pop() {
-                    info!("Pop: {:?}", msg);
+                    info!("{:?}", msg);
                 } else {
-                    info!("None!");
+                    info!("None");
                 }
             });
         }
@@ -121,7 +121,7 @@ pub fn process_controller_cli(runtime: Arc<Mutex<ControllerRuntime>>, cmd: Contr
         Commands::PopAll => {
             entry_mutex!(runtime, |guard| {
                 while let Some(msg) = guard.pop() {
-                    info!("Pop: {:?}", msg);
+                    info!("{:?}", msg);
                 }
             });
         }

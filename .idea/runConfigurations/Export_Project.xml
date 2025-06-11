@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Export Project" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Export">
     <option name="buildProfileId" value="release" />
-    <option name="command" value="run --manifest-path ./export/Cargo.toml --release --bin export_project" />
+    <option name="command" value="run --manifest-path ./export/Cargo.toml --bin export_project" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />
     <option name="emulateTerminal" value="true" />

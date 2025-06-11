@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build All (Dev)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Build (Dev)" activateToolWindowBeforeRun="false">
+  <configuration default="false" name="Build All (Dev)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Build (Dev)" focusToolWindowBeforeRun="true">
     <option name="buildProfileId" value="dev" />
     <option name="command" value="build --workspace" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
