@@ -5,3 +5,4 @@
 !src/**
 !dev/
 !dev/**
+/dev/bin/pad.exe

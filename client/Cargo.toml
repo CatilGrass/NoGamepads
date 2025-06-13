@@ -7,6 +7,8 @@ version.workspace = true
 nogamepads = { path = "../../NoGamepads" }
 nogamepads-core = { path = "../core" }
 
+serde = { version = "1.0.219", features = ["derive"] }
+quick-xml = { version = "0.37.5", features = ["serde", "serialize"] }
 bevy-tokio-tasks = "0.16.0"
 tokio = { version = "1.45.0", features = ["full"] }
 bevy = "0.16.0"

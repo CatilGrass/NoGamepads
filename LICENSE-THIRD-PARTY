@@ -7,6 +7,7 @@ This project uses third-party components with the following licenses:
 -----------------------------------------------------------------------
 * bincode
 * crossterm
+* quick-xml
 * tokio
 * bevy (original license: Apache-2.0 OR MIT)
 * chrono (original license: Apache-2.0 OR MIT)
@@ -38,6 +39,7 @@ Copyright (c) 2013-2014 The Rust Project Developers.
 * env_logger - Copyright (c) The env_logger Project Developer(s).
 * hex - Copyright (c) 2015-2020 The rust-hex Developers.
 * log - Copyright (c) The log Project Developer(s).
+* quick-xml - Copyright (c) 2016 Johann Tuffe.
 * rand - Copyright 2018 Developers of the Rand project.
 * serde - Copyright (c) The serde Project Developer(s).
 * serde_yaml - Copyright (c) The serde_yaml Project Developer(s).
