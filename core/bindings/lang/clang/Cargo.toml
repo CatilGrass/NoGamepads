@@ -4,7 +4,7 @@ edition = "2024"
 version.workspace = true
 
 [dependencies]
-nogamepads-core = { path = "../../../core" }
+nogamepads-core = { path = "./../../../../core" }
 libc = "0.2.172"
 
 [lib]

@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/export/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/apps/client/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/apps/console/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/bindings/c_lang/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/bindings/c_lang/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.cargo/shared" />
       <excludeFolder url="file://$MODULE_DIR$/core/target" />

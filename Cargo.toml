@@ -18,7 +18,7 @@ members = [
     "apps/client",
     "export",
 
-    "core/bindings/c_lang"
+    "core/bindings/lang/clang"
 ]
 
 [workspace.package]
