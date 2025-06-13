@@ -31,5 +31,6 @@ win_exes = { raw = "./", target = "./bin", files = [
 
 # Windows dynamic link libraries
 dlls = { raw = "./", target = "./lib", files = [
-    "nogamepads_c.dll"
+    "nogamepads_c.dll",
+    "nogamepads_c.dll.lib"
 ] }
