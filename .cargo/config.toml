@@ -1,18 +1,28 @@
-[alias]
-dev = ["run", "--manifest-path", "./export/Cargo.toml", "--profile", "dev", "--bin", "export_project", "dev"]
-export = ["run", "--manifest-path", "./export/Cargo.toml", "--profile", "release", "--bin", "export_project"]
-
-padc = ["run", "--manifest-path", "./console/Cargo.toml", "--profile", "dev", "--quiet", "--bin", "padc"]
-
 [build]
 target-dir = "./.cargo/shared/target"
 
+[alias]
+
+# Build configurations for debug and release environments
+dev_build = ["build", "--workspace", "--profile", "dev"]
+release_build = ["build", "--workspace", "--profile", "release"]
+
+# Export configurations for debug and release environments
+dev = ["run", "--manifest-path", "./export/Cargo.toml", "--profile", "dev", "--bin", "export_project", "dev"]
+release = ["run", "--manifest-path", "./export/Cargo.toml", "--profile", "release", "--bin", "export_project"]
+
+# Compile and run the console
+padc = ["run", "--manifest-path", "./apps/console/Cargo.toml", "--profile", "dev", "--quiet", "--bin", "padc"]
+
+# Compile and run the client
+pad = ["run", "--manifest-path", "./apps/client/Cargo.toml", "--profile", "dev", "--quiet", "--bin", "pad"]
+
 [env]
 
-# Project Settings
+# Project version settings
 PROJECT_VERSION = { value = "0.1.0" }
 
-# Pad Console Cli
+# Default account information for the console
 TEST_PLAYER_ACCOUNT = { value = "ame_na_lisa" }
 TEST_PLAYER_PASSWORD = { value = "amenalisa@@:P_QWQ" }
 TEST_PLAYER_NICKNAME = { value = "Ame.Na.LISA" }

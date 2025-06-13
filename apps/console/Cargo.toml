@@ -1,0 +1,16 @@
+[package]
+name = "nogamepads-console"
+description = "This crate provides a set of tools for simulating and deploying the client and server of the NoGamepads library."
+edition = "2024"
+version.workspace = true
+
+[dependencies]
+nogamepads = { path = "../../../NoGamepads" }
+nogamepads-core = { path = "../../core" }
+clap = { version = "4.5.38", features = ["derive"] }
+clap_complete = "4.5.52"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_yaml = "0.9.34"
+tokio = { version = "1.45.0", features = ["full"] }
+crossterm = "0.29.0"
+log = "0.4.27"

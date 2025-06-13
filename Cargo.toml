@@ -14,8 +14,8 @@ edition = "2024"
 [workspace]
 members = [
     "core",
-    "console",
-    "client",
+    "apps/console",
+    "apps/client",
     "export"
 ]
 

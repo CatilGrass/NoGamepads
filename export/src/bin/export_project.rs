@@ -29,7 +29,7 @@ pub fn main() {
     let version = if let Some(v) = args.get(1) { v.to_string() } else { env!("PROJECT_VERSION").to_string() };
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_path_buf();
 
-    let toml_config = root.join("./Config_Export.toml");
+    let toml_config = root.join("../../../Project_Export.toml");
     let config: Config = toml::from_str(fs::read_to_string(toml_config).unwrap().as_str())
         .expect("Failed to parse TOML");
 
