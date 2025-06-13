@@ -20,6 +20,13 @@
       <excludeFolder url="file://$MODULE_DIR$/export/0.1.0" />
       <excludeFolder url="file://$MODULE_DIR$/apps/console/target" />
       <excludeFolder url="file://$MODULE_DIR$/export/dev/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/cmake-build-debug" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/cmake-build-debug/.cmake" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/cmake-build-debug/CMakeFiles" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/cmake-build-debug/Testing" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/include" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/export/dev" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

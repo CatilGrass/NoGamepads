@@ -15,6 +15,8 @@ pub struct Config {
 pub struct Release {
     pub root: HashMap<String, ReleaseItem>,
     pub deps: HashMap<String, ReleaseItem>,
+    pub deploy_root: HashMap<String, ReleaseItem>,
+    pub deploy_deps: HashMap<String, ReleaseItem>
 }
 
 #[derive(Debug, Deserialize)]
@@ -58,6 +60,20 @@ pub fn main() {
         println!("Releasing \"{}\"", data.0);
         let raw_path = target_dir.join(data.1.raw);
         let target_path = export_version_dir.join(data.1.target);
+        copy_files(&raw_path, &target_path, data.1.files);
+    }
+
+    for data in config.release.deploy_root {
+        println!("Deploy \"{}\"", data.0);
+        let raw_path = root.join(data.1.raw);
+        let target_path = root.join(data.1.target);
+        copy_files(&raw_path, &target_path, data.1.files);
+    }
+
+    for data in config.release.deploy_deps {
+        println!("Deploy \"{}\"", data.0);
+        let raw_path = target_dir.join(data.1.raw);
+        let target_path = root.join(data.1.target);
         copy_files(&raw_path, &target_path, data.1.files);
     }
 

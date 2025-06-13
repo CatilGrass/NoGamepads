@@ -9,49 +9,49 @@
 #include <stdlib.h>
 
 typedef enum FfiConnectionMessageTag {
-  Join,
-  RequestGameInfos,
-  RequestLayoutConfigure,
-  RequestSkinPackage,
-  Ready,
-  Err,
+  ConnectionJoin,
+  ConnectionRequestGameInfos,
+  ConnectionRequestLayoutConfigure,
+  ConnectionRequestSkinPackage,
+  ConnectionReady,
+  ConnectionError,
 } FfiConnectionMessageTag;
 
 typedef enum FfiConnectionResponseMessageTag {
-  GameInfos,
-  Deny,
-  Fail,
-  Ok,
-  Welcome,
-  Err,
+  GameInfosResponse,
+  DenyResponse,
+  FailResponse,
+  OkResponse,
+  WelcomeResponse,
+  ErrorResponse,
 } FfiConnectionResponseMessageTag;
 
 typedef enum FfiControlMessageTag {
-  Msg,
-  Pressed,
-  Released,
-  Axis,
-  Dir,
-  Exit,
-  Err,
-  End,
+  CtrlMsg,
+  CtrlPressed,
+  CtrlReleased,
+  CtrlAxis,
+  CtrlDir,
+  CtrlExit,
+  CtrlError,
+  CtrlEnd,
 } FfiControlMessageTag;
 
 typedef enum FfiExitReason {
-  Exit,
-  GameOver,
-  ServerClosed,
-  YouAreKicked,
-  YouAreBanned,
-  Err,
+  ExitReason,
+  GameOverReason,
+  ServerClosedReason,
+  YouAreKickedReason,
+  YouAreBannedReason,
+  ErrorReason,
 } FfiExitReason;
 
 typedef enum FfiGameMessageTag {
-  EventTrigger,
-  Msg,
-  LetExit,
-  Err,
-  End,
+  GameEventTrigger,
+  GameMsg,
+  GameLetExit,
+  GameError,
+  GameEnd,
 } FfiGameMessageTag;
 
 typedef enum FfiJoinFailedMessage {
@@ -146,33 +146,33 @@ typedef struct FfiConnectionResponseMessage {
 extern "C" {
 #endif // __cplusplus
 
-ngpd_data_ void free_c_string(char *ptr);
+void free_c_string(char *ptr);
 
-ngpd_data_ struct FfiPlayer *player_register(const char *id, const char *password);
+struct FfiPlayer *player_register(const char *id, const char *password);
 
-ngpd_data_ bool player_check(const struct FfiPlayer *player, const char *password);
+bool player_check(const struct FfiPlayer *player, const char *password);
 
-ngpd_data_ void player_set_nickname(struct FfiPlayer *player, const char *nickname);
+void player_set_nickname(struct FfiPlayer *player, const char *nickname);
 
-ngpd_data_ void player_set_hue(struct FfiPlayer *player, int hue);
+void player_set_hue(struct FfiPlayer *player, int hue);
 
-ngpd_data_ void player_set_hsv(struct FfiPlayer *player, int hue, double saturation, double value);
+void player_set_hsv(struct FfiPlayer *player, int hue, double saturation, double value);
 
-ngpd_data_ void player_free(struct FfiPlayer *player);
+void player_free(struct FfiPlayer *player);
 
-ngpd_data_ void free_control_message(struct FfiControlMessage msg);
+void free_control_message(struct FfiControlMessage msg);
 
-ngpd_data_ void free_game_message(struct FfiGameMessage msg);
+void free_game_message(struct FfiGameMessage msg);
 
-ngpd_data_ void free_exit_reason(enum FfiExitReason msg);
+void free_exit_reason(enum FfiExitReason msg);
 
-ngpd_data_ void free_connection_message(struct FfiConnectionMessage msg);
+void free_connection_message(struct FfiConnectionMessage msg);
 
-ngpd_data_ void free_connection_response_message(struct FfiConnectionResponseMessage msg);
+void free_connection_response_message(struct FfiConnectionResponseMessage msg);
 
-ngpd_data_ void free_join_failed_message(enum FfiJoinFailedMessage msg);
+void free_join_failed_message(enum FfiJoinFailedMessage msg);
 
-ngpd_data_ void free_game_info(struct FfiGameInfo map);
+void free_game_info(struct FfiGameInfo map);
 
 #ifdef __cplusplus
 }  // extern "C"
