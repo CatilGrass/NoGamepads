@@ -7,7 +7,6 @@ build = "build.rs"
 
 [dependencies]
 nogamepads-core = { path = "./../../../../core" }
-libc = "0.2.172"
 
 [build-dependencies]
 cbindgen = "0.29.0"
