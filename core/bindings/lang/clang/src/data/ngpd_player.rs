@@ -32,10 +32,10 @@ impl From<Account> for FfiAccount {
     }
 }
 
-impl From<Player> for FfiPlayer {
-    fn from(player: Player) -> Self {
-        let account = FfiAccount::from(player.account);
-        let customize = player.customize.map(|c| {
+impl From<&Player> for FfiPlayer {
+    fn from(player: &Player) -> Self {
+        let account = FfiAccount::from(player.account.clone());
+        let customize = player.clone().customize.map(|c| {
             Box::into_raw(Box::new(FfiCustomize {
                 nickname: CString::new(c.nickname).unwrap().into_raw(),
                 color_hue: c.color_hue,
@@ -79,7 +79,7 @@ pub extern "C" fn player_register(id: *const c_char, password: *const c_char) ->
     let pass_str = unsafe { CStr::from_ptr(password) }.to_string_lossy();
 
     let player = Player::register(id_str.into_owned(), pass_str.into_owned());
-    Box::into_raw(Box::new(FfiPlayer::from(player)))
+    Box::into_raw(Box::new(FfiPlayer::from(&player)))
 }
 
 #[unsafe(no_mangle)]
@@ -98,7 +98,7 @@ pub extern "C" fn player_set_nickname(player: *mut FfiPlayer, nickname: *const c
     let mut rust_player : Player = unsafe { (&*player).try_into().unwrap() };
 
     rust_player.nickname(&nickname_str);
-    *unsafe { &mut *player } = FfiPlayer::from(rust_player);
+    *unsafe { &mut *player } = FfiPlayer::from(&rust_player);
 }
 
 #[unsafe(no_mangle)]
@@ -106,7 +106,7 @@ pub extern "C" fn player_set_hue(player: *mut FfiPlayer, hue: c_int) {
     let mut rust_player : Player = unsafe { (&*player).try_into().unwrap() };
 
     rust_player.hue(hue);
-    *unsafe { &mut *player } = FfiPlayer::from(rust_player);
+    *unsafe { &mut *player } = FfiPlayer::from(&rust_player);
 }
 
 #[unsafe(no_mangle)]
@@ -116,7 +116,7 @@ pub extern "C" fn player_set_hsv(
     let mut rust_player : Player = unsafe { (&*player).try_into().unwrap() };
 
     rust_player.hsv(hue, saturation, value);
-    *unsafe { &mut *player } = FfiPlayer::from(rust_player);
+    *unsafe { &mut *player } = FfiPlayer::from(&rust_player);
 }
 
 #[unsafe(no_mangle)]

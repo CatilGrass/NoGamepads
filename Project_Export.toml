@@ -5,7 +5,7 @@
 #   It will search starting from the project directory and copy to the specified location in the target directory.
 [release.root]
 
-# License files, third-party licenses
+# License files
 license = { raw = "./", target = "./", files = [
     "LICENSE-MIT"
 ] }
@@ -16,8 +16,8 @@ powershell_complete = { raw = "./.cargo/resources/scripts/", target = "./bin/com
 ] }
 
 # Headers
-headers = { raw = "./core/bindings/c_lang/headers/", target = "./lib", files = [
-    "ngpd_player.h"
+headers = { raw = "./core/bindings/lang/clang/headers/", target = "./lib", files = [
+    "nogamepads_data.h"
 ] }
 
 # Items defined in [release.deps]
@@ -31,5 +31,6 @@ win_exes = { raw = "./", target = "./bin", files = [
 
 # Windows dynamic link libraries
 dlls = { raw = "./", target = "./lib", files = [
-    "nogamepads_c.dll"
+    "nogamepads_c.dll",
+    "nogamepads_c.dll.lib"
 ] }

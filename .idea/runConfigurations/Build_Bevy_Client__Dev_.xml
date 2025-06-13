@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Build Bevy Client (Dev)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" folderName="Build (Dev)" activateToolWindowBeforeRun="false">
-    <option name="command" value="build --manifest-path ./client/Cargo.toml" />
+    <option name="buildProfileId" value="dev" />
+    <option name="command" value="build --profile dev --manifest-path ./client/Cargo.toml" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />
     <option name="emulateTerminal" value="true" />

@@ -3,8 +3,6 @@
 !Cargo.toml
 !src/
 !src/**
-!dev/
-!dev/**
 !docs/
 !docs/**
-/dev/bin/pad.exe
+/dev/
