@@ -14,7 +14,14 @@ pub struct FfiControlMessage {
 
 #[repr(C)]
 pub enum FfiControlMessageTag {
-    Msg, Pressed, Released, Axis, Dir, Exit, Err, End
+    CtrlMsg,
+    CtrlPressed,
+    CtrlReleased,
+    CtrlAxis,
+    CtrlDir,
+    CtrlExit,
+    CtrlError,
+    CtrlEnd
 }
 
 #[repr(C)]
@@ -47,7 +54,11 @@ pub struct FfiGameMessage {
 
 #[repr(C)]
 pub enum FfiGameMessageTag {
-    EventTrigger, Msg, LetExit, Err, End
+    GameEventTrigger,
+    GameMsg,
+    GameLetExit,
+    GameError,
+    GameEnd
 }
 
 #[repr(C)]
@@ -60,7 +71,12 @@ pub union FfiGameMessageUnion {
 
 #[repr(C)]
 pub enum FfiExitReason {
-    Exit, GameOver, ServerClosed, YouAreKicked, YouAreBanned, Err
+    ExitReason,
+    GameOverReason,
+    ServerClosedReason,
+    YouAreKickedReason,
+    YouAreBannedReason,
+    ErrorReason
 }
 
 #[repr(C)]
@@ -71,7 +87,12 @@ pub struct FfiConnectionMessage {
 
 #[repr(C)]
 pub enum FfiConnectionMessageTag {
-    Join, RequestGameInfos, RequestLayoutConfigure, RequestSkinPackage, Ready, Err
+    ConnectionJoin,
+    ConnectionRequestGameInfos,
+    ConnectionRequestLayoutConfigure,
+    ConnectionRequestSkinPackage,
+    ConnectionReady,
+    ConnectionError
 }
 
 #[repr(C)]
@@ -88,7 +109,12 @@ pub struct FfiConnectionResponseMessage {
 
 #[repr(C)]
 pub enum FfiConnectionResponseMessageTag {
-    GameInfos, Deny, Fail, Ok, Welcome, Err
+    GameInfosResponse,
+    DenyResponse,
+    FailResponse,
+    OkResponse,
+    WelcomeResponse,
+    ErrorResponse
 }
 
 #[repr(C)]
@@ -108,7 +134,7 @@ impl From<ControlMessage> for FfiControlMessage {
         match value {
             ControlMessage::Msg(msg) => unsafe {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Msg,
+                    tag: FfiControlMessageTag::CtrlMsg,
                     data: FfiControlMessageUnion {
                         message: str_rs_to_c(msg),
                     }
@@ -116,7 +142,7 @@ impl From<ControlMessage> for FfiControlMessage {
             }
             ControlMessage::Pressed(key) => {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Pressed,
+                    tag: FfiControlMessageTag::CtrlPressed,
                     data: FfiControlMessageUnion {
                         key: key.into()
                     }
@@ -124,7 +150,7 @@ impl From<ControlMessage> for FfiControlMessage {
             }
             ControlMessage::Released(key) => {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Released,
+                    tag: FfiControlMessageTag::CtrlReleased,
                     data: FfiControlMessageUnion {
                         key: key.into()
                     }
@@ -132,7 +158,7 @@ impl From<ControlMessage> for FfiControlMessage {
             }
             ControlMessage::Axis(key, axis) => {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Axis,
+                    tag: FfiControlMessageTag::CtrlAxis,
                     data: FfiControlMessageUnion {
                         key_and_axis: ManuallyDrop::new(FfiKeyAndAxis {
                             key: key.into(),
@@ -143,7 +169,7 @@ impl From<ControlMessage> for FfiControlMessage {
             }
             ControlMessage::Dir(key, (x, y)) => {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Axis,
+                    tag: FfiControlMessageTag::CtrlAxis,
                     data: FfiControlMessageUnion {
                         key_and_direction: ManuallyDrop::new(FfiKeyAndDirection {
                             key: key.into(),
@@ -154,19 +180,19 @@ impl From<ControlMessage> for FfiControlMessage {
             }
             ControlMessage::Exit => {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Axis,
+                    tag: FfiControlMessageTag::CtrlAxis,
                     data: FfiControlMessageUnion { none: () }
                 }
             }
             ControlMessage::Err => {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Axis,
+                    tag: FfiControlMessageTag::CtrlAxis,
                     data: FfiControlMessageUnion { none: () }
                 }
             }
             ControlMessage::End => {
                 FfiControlMessage {
-                    tag: FfiControlMessageTag::Axis,
+                    tag: FfiControlMessageTag::CtrlAxis,
                     data: FfiControlMessageUnion { none: () }
                 }
             }
@@ -177,30 +203,30 @@ impl From<ControlMessage> for FfiControlMessage {
 impl From<FfiControlMessage> for ControlMessage {
     fn from(value: FfiControlMessage) -> Self {
         match value.tag {
-            FfiControlMessageTag::Msg => unsafe {
+            FfiControlMessageTag::CtrlMsg => unsafe {
                 ControlMessage::Msg(str_c_to_rs(value.data.message))
             }
-            FfiControlMessageTag::Pressed => unsafe {
+            FfiControlMessageTag::CtrlPressed => unsafe {
                 ControlMessage::Pressed(value.data.key.into())
             }
-            FfiControlMessageTag::Released => unsafe {
+            FfiControlMessageTag::CtrlReleased => unsafe {
                 ControlMessage::Released(value.data.key.into())
             }
-            FfiControlMessageTag::Axis => {
+            FfiControlMessageTag::CtrlAxis => {
                 let value = unsafe { value.data.key_and_axis };
                 ControlMessage::Axis(value.key.into(), value.axis.into())
             }
-            FfiControlMessageTag::Dir => {
+            FfiControlMessageTag::CtrlDir => {
                 let value = unsafe { value.data.key_and_direction };
                 ControlMessage::Dir(value.key.into(), (value.x.into(), value.y.into()))
             }
-            FfiControlMessageTag::Exit => {
+            FfiControlMessageTag::CtrlExit => {
                 ControlMessage::Exit
             }
-            FfiControlMessageTag::Err => {
+            FfiControlMessageTag::CtrlError => {
                 ControlMessage::Err
             }
-            FfiControlMessageTag::End => {
+            FfiControlMessageTag::CtrlEnd => {
                 ControlMessage::End
             }
         }
@@ -212,7 +238,7 @@ impl From<GameMessage> for FfiGameMessage {
         match value {
             GameMessage::EventTrigger(key) => {
                 FfiGameMessage {
-                    tag: FfiGameMessageTag::EventTrigger,
+                    tag: FfiGameMessageTag::GameEventTrigger,
                     data: FfiGameMessageUnion {
                         key: key.into()
                     }
@@ -220,7 +246,7 @@ impl From<GameMessage> for FfiGameMessage {
             }
             GameMessage::Msg(msg) => unsafe {
                 FfiGameMessage {
-                    tag: FfiGameMessageTag::Msg,
+                    tag: FfiGameMessageTag::GameMsg,
                     data: FfiGameMessageUnion {
                         message: str_rs_to_c(msg)
                     }
@@ -228,7 +254,7 @@ impl From<GameMessage> for FfiGameMessage {
             }
             GameMessage::LetExit(reason) => {
                 FfiGameMessage {
-                    tag: FfiGameMessageTag::LetExit,
+                    tag: FfiGameMessageTag::GameLetExit,
                     data: FfiGameMessageUnion {
                         exit_reason: ManuallyDrop::new(FfiExitReason::from(&reason))
                     }
@@ -236,13 +262,13 @@ impl From<GameMessage> for FfiGameMessage {
             }
             GameMessage::Err => {
                 FfiGameMessage {
-                    tag: FfiGameMessageTag::Err,
+                    tag: FfiGameMessageTag::GameError,
                     data: FfiGameMessageUnion { none: () }
                 }
             }
             GameMessage::End => {
                 FfiGameMessage {
-                    tag: FfiGameMessageTag::End,
+                    tag: FfiGameMessageTag::GameEnd,
                     data: FfiGameMessageUnion { none: () }
                 }
             }
@@ -253,19 +279,19 @@ impl From<GameMessage> for FfiGameMessage {
 impl From<FfiGameMessage> for GameMessage {
     fn from(value: FfiGameMessage) -> Self {
         match value.tag {
-            FfiGameMessageTag::EventTrigger => unsafe {
+            FfiGameMessageTag::GameEventTrigger => unsafe {
                 GameMessage::EventTrigger(value.data.key.into())
             }
-            FfiGameMessageTag::Msg => unsafe {
+            FfiGameMessageTag::GameMsg => unsafe {
                 GameMessage::Msg(str_c_to_rs(value.data.message))
             }
-            FfiGameMessageTag::LetExit => unsafe {
+            FfiGameMessageTag::GameLetExit => unsafe {
                 GameMessage::LetExit(value.data.exit_reason.deref().into())
             }
-            FfiGameMessageTag::Err => {
+            FfiGameMessageTag::GameError => {
                 GameMessage::Err
             }
-            FfiGameMessageTag::End => {
+            FfiGameMessageTag::GameEnd => {
                 GameMessage::End
             }
         }
@@ -275,12 +301,12 @@ impl From<FfiGameMessage> for GameMessage {
 impl From<&ExitReason> for FfiExitReason {
     fn from(value: &ExitReason) -> Self {
         match value {
-            ExitReason::Exit => { FfiExitReason::Exit }
-            ExitReason::GameOver => { FfiExitReason::GameOver }
-            ExitReason::ServerClosed => { FfiExitReason::ServerClosed }
-            ExitReason::YouAreKicked => { FfiExitReason::YouAreKicked }
-            ExitReason::YouAreBanned => { FfiExitReason::YouAreBanned }
-            ExitReason::Err => { FfiExitReason::Err }
+            ExitReason::Exit => { FfiExitReason::ExitReason }
+            ExitReason::GameOver => { FfiExitReason::GameOverReason }
+            ExitReason::ServerClosed => { FfiExitReason::ServerClosedReason }
+            ExitReason::YouAreKicked => { FfiExitReason::YouAreKickedReason }
+            ExitReason::YouAreBanned => { FfiExitReason::YouAreBannedReason }
+            ExitReason::Err => { FfiExitReason::ErrorReason }
         }
     }
 }
@@ -288,12 +314,12 @@ impl From<&ExitReason> for FfiExitReason {
 impl From<&FfiExitReason> for ExitReason {
     fn from(value: &FfiExitReason) -> Self {
         match value {
-            FfiExitReason::Exit => { ExitReason::Exit }
-            FfiExitReason::GameOver => { ExitReason::GameOver }
-            FfiExitReason::ServerClosed => { ExitReason::ServerClosed }
-            FfiExitReason::YouAreKicked => { ExitReason::YouAreKicked }
-            FfiExitReason::YouAreBanned => { ExitReason::YouAreBanned }
-            FfiExitReason::Err => { ExitReason::Err }
+            FfiExitReason::ExitReason => { ExitReason::Exit }
+            FfiExitReason::GameOverReason => { ExitReason::GameOver }
+            FfiExitReason::ServerClosedReason => { ExitReason::ServerClosed }
+            FfiExitReason::YouAreKickedReason => { ExitReason::YouAreKicked }
+            FfiExitReason::YouAreBannedReason => { ExitReason::YouAreBanned }
+            FfiExitReason::ErrorReason => { ExitReason::Err }
         }
     }
 }
@@ -304,7 +330,7 @@ impl From<ConnectionMessage> for FfiConnectionMessage {
             ConnectionMessage::Join(player) => {
                 let c_player : FfiPlayer = (&player).into();
                 FfiConnectionMessage {
-                    tag: FfiConnectionMessageTag::Join,
+                    tag: FfiConnectionMessageTag::ConnectionJoin,
                     data: FfiConnectionMessageUnion {
                         player: ManuallyDrop::new(c_player),
                     }
@@ -312,31 +338,31 @@ impl From<ConnectionMessage> for FfiConnectionMessage {
             }
             ConnectionMessage::RequestGameInfos => {
                 FfiConnectionMessage {
-                    tag: FfiConnectionMessageTag::RequestGameInfos,
+                    tag: FfiConnectionMessageTag::ConnectionRequestGameInfos,
                     data: FfiConnectionMessageUnion { none: () }
                 }
             }
             ConnectionMessage::RequestLayoutConfigure => {
                 FfiConnectionMessage {
-                    tag: FfiConnectionMessageTag::RequestLayoutConfigure,
+                    tag: FfiConnectionMessageTag::ConnectionRequestLayoutConfigure,
                     data: FfiConnectionMessageUnion { none: () }
                 }
             }
             ConnectionMessage::RequestSkinPackage => {
                 FfiConnectionMessage {
-                    tag: FfiConnectionMessageTag::RequestSkinPackage,
+                    tag: FfiConnectionMessageTag::ConnectionRequestSkinPackage,
                     data: FfiConnectionMessageUnion { none: () }
                 }
             }
             ConnectionMessage::Ready => {
                 FfiConnectionMessage {
-                    tag: FfiConnectionMessageTag::Ready,
+                    tag: FfiConnectionMessageTag::ConnectionReady,
                     data: FfiConnectionMessageUnion { none: () }
                 }
             }
             ConnectionMessage::Err => {
                 FfiConnectionMessage {
-                    tag: FfiConnectionMessageTag::Err,
+                    tag: FfiConnectionMessageTag::ConnectionError,
                     data: FfiConnectionMessageUnion { none: () }
                 }
             }
@@ -347,14 +373,14 @@ impl From<ConnectionMessage> for FfiConnectionMessage {
 impl From<FfiConnectionMessage> for ConnectionMessage {
     fn from(value: FfiConnectionMessage) -> Self {
         match value.tag {
-            FfiConnectionMessageTag::Join => unsafe {
+            FfiConnectionMessageTag::ConnectionJoin => unsafe {
                 ConnectionMessage::Join(value.data.player.deref().try_into().unwrap_or_default())
             }
-            FfiConnectionMessageTag::RequestGameInfos => { ConnectionMessage::RequestGameInfos }
-            FfiConnectionMessageTag::RequestLayoutConfigure => { ConnectionMessage::RequestLayoutConfigure }
-            FfiConnectionMessageTag::RequestSkinPackage => { ConnectionMessage::RequestSkinPackage }
-            FfiConnectionMessageTag::Ready => { ConnectionMessage::Ready }
-            FfiConnectionMessageTag::Err => { ConnectionMessage::Err }
+            FfiConnectionMessageTag::ConnectionRequestGameInfos => { ConnectionMessage::RequestGameInfos }
+            FfiConnectionMessageTag::ConnectionRequestLayoutConfigure => { ConnectionMessage::RequestLayoutConfigure }
+            FfiConnectionMessageTag::ConnectionRequestSkinPackage => { ConnectionMessage::RequestSkinPackage }
+            FfiConnectionMessageTag::ConnectionReady => { ConnectionMessage::Ready }
+            FfiConnectionMessageTag::ConnectionError => { ConnectionMessage::Err }
         }
     }
 }
@@ -364,7 +390,7 @@ impl From<ConnectionResponseMessage> for FfiConnectionResponseMessage {
         match value {
             ConnectionResponseMessage::GameInfos(info) => {
                 FfiConnectionResponseMessage {
-                    tag: FfiConnectionResponseMessageTag::GameInfos,
+                    tag: FfiConnectionResponseMessageTag::GameInfosResponse,
                     data: FfiConnectionResponseMessageUnion {
                         game_info: ManuallyDrop::new((&info).into())
                     }
@@ -372,7 +398,7 @@ impl From<ConnectionResponseMessage> for FfiConnectionResponseMessage {
             }
             ConnectionResponseMessage::Deny(fail) => {
                 FfiConnectionResponseMessage {
-                    tag: FfiConnectionResponseMessageTag::Deny,
+                    tag: FfiConnectionResponseMessageTag::DenyResponse,
                     data: FfiConnectionResponseMessageUnion {
                         failed_message: ManuallyDrop::new((&fail).into())
                     }
@@ -380,7 +406,7 @@ impl From<ConnectionResponseMessage> for FfiConnectionResponseMessage {
             }
             ConnectionResponseMessage::Fail(fail) => {
                 FfiConnectionResponseMessage {
-                    tag: FfiConnectionResponseMessageTag::Fail,
+                    tag: FfiConnectionResponseMessageTag::FailResponse,
                     data: FfiConnectionResponseMessageUnion {
                         failed_message: ManuallyDrop::new((&fail).into())
                     }
@@ -388,19 +414,19 @@ impl From<ConnectionResponseMessage> for FfiConnectionResponseMessage {
             }
             ConnectionResponseMessage::Ok => {
                 FfiConnectionResponseMessage {
-                    tag: FfiConnectionResponseMessageTag::Ok,
+                    tag: FfiConnectionResponseMessageTag::OkResponse,
                     data: FfiConnectionResponseMessageUnion { none: () }
                 }
             }
             ConnectionResponseMessage::Welcome => {
                 FfiConnectionResponseMessage {
-                    tag: FfiConnectionResponseMessageTag::Welcome,
+                    tag: FfiConnectionResponseMessageTag::WelcomeResponse,
                     data: FfiConnectionResponseMessageUnion { none: () }
                 }
             }
             ConnectionResponseMessage::Err => {
                 FfiConnectionResponseMessage {
-                    tag: FfiConnectionResponseMessageTag::Err,
+                    tag: FfiConnectionResponseMessageTag::ErrorResponse,
                     data: FfiConnectionResponseMessageUnion { none: () }
                 }
             }
@@ -411,22 +437,22 @@ impl From<ConnectionResponseMessage> for FfiConnectionResponseMessage {
 impl From<FfiConnectionResponseMessage> for ConnectionResponseMessage {
     fn from(value: FfiConnectionResponseMessage) -> Self {
         match value.tag {
-            FfiConnectionResponseMessageTag::GameInfos => unsafe {
+            FfiConnectionResponseMessageTag::GameInfosResponse => unsafe {
                 ConnectionResponseMessage::GameInfos(value.data.game_info.deref().try_into().unwrap_or_default())
             }
-            FfiConnectionResponseMessageTag::Deny => unsafe {
+            FfiConnectionResponseMessageTag::DenyResponse => unsafe {
                 ConnectionResponseMessage::Deny(value.data.failed_message.deref().try_into().unwrap_or_default())
             }
-            FfiConnectionResponseMessageTag::Fail => unsafe {
+            FfiConnectionResponseMessageTag::FailResponse => unsafe {
                 ConnectionResponseMessage::Fail(value.data.failed_message.deref().try_into().unwrap_or_default())
             }
-            FfiConnectionResponseMessageTag::Ok => {
+            FfiConnectionResponseMessageTag::OkResponse => {
                 ConnectionResponseMessage::Ok
             }
-            FfiConnectionResponseMessageTag::Welcome => {
+            FfiConnectionResponseMessageTag::WelcomeResponse => {
                 ConnectionResponseMessage::Welcome
             }
-            FfiConnectionResponseMessageTag::Err => {
+            FfiConnectionResponseMessageTag::ErrorResponse => {
                 ConnectionResponseMessage::Err
             }
         }

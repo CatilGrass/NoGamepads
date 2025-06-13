@@ -1,0 +1,5 @@
+/include/
+/include/**
+/libs/
+/libs/**
+/cmake-build-debug/

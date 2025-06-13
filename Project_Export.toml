@@ -34,3 +34,18 @@ dlls = { raw = "./", target = "./lib", files = [
     "nogamepads_c.dll",
     "nogamepads_c.dll.lib"
 ] }
+
+[release.deploy_root]
+
+# Headers
+headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindings/lang/clang/binding_example/includes/", files = [
+    "nogamepads_data.h"
+] }
+
+[release.deploy_deps]
+
+# Windows dynamic link libraries
+dlls = { raw = "./", target = "./core/bindings/lang/clang/binding_example/libs/", files = [
+    "nogamepads_c.dll",
+    "nogamepads_c.dll.lib"
+] }

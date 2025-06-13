@@ -12,6 +12,3 @@ include = [
     "ngpd_message",
     "ngpd_player"
 ]
-
-[fn]
-prefix = "ngpd_data_"
