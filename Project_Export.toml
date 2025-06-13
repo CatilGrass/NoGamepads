@@ -38,7 +38,7 @@ dlls = { raw = "./", target = "./lib", files = [
 [release.deploy_root]
 
 # Headers
-headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindings/lang/clang/binding_example/includes/", files = [
+headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindings/lang/clang/binding_example/include/", files = [
     "nogamepads_data.h"
 ] }
 
