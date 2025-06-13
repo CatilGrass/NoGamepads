@@ -16,7 +16,9 @@ members = [
     "core",
     "apps/console",
     "apps/client",
-    "export"
+    "export",
+
+    "core/bindings/c_lang"
 ]
 
 [workspace.package]

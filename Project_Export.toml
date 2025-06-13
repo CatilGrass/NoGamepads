@@ -15,6 +15,11 @@ powershell_complete = { raw = "./.cargo/resources/scripts/", target = "./bin/com
     "install_completion_powershell.ps1"
 ] }
 
+# Headers
+headers = { raw = "./core/bindings/c_lang/headers/", target = "./lib", files = [
+    "ngpd_player.h"
+] }
+
 # Items defined in [release.deps]
 #   It will search starting from the build directory and copy to the specified location in the target directory.
 [release.deps]
@@ -22,4 +27,9 @@ powershell_complete = { raw = "./.cargo/resources/scripts/", target = "./bin/com
 # Windows executables
 win_exes = { raw = "./", target = "./bin", files = [
     "padc.exe", "pad.exe"
+] }
+
+# Windows dynamic link libraries
+dlls = { raw = "./", target = "./lib", files = [
+    "nogamepads_c.dll"
 ] }

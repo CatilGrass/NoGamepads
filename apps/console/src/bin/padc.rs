@@ -11,14 +11,10 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc};
 use std::sync::atomic::Ordering::SeqCst;
-use std::time::Duration;
 use clap_complete::{generate, Shell};
 use log::{info, LevelFilter};
-use tokio::{select, spawn};
-use tokio::signal::ctrl_c;
-use tokio::time::sleep;
 use nogamepads::entry_mutex;
 use nogamepads::logger_utils::logger_build;
 use nogamepads_core::data::controller::controller_cli::{process_controller_cli, ControllerCli};
@@ -31,7 +27,6 @@ use nogamepads_core::service::service_runner::{NoGamepadsService, ServiceRunner}
 use nogamepads_core::service::tcp_network::DEFAULT_PORT;
 use nogamepads_core::service::tcp_network::pad_client::pad_client_service::PadClientNetwork;
 use nogamepads_core::service::tcp_network::pad_server::pad_server_service::PadServerNetwork;
-use nogamepads_core::service::tcp_network::utils::tokio_utils::build_tokio_runtime;
 
 #[derive(Parser, Debug)]
 #[command(version, color = ColorChoice::Auto)]

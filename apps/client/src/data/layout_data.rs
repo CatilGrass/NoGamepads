@@ -13,7 +13,7 @@ pub struct LayoutXml {
 }
 
 #[derive(Debug, Deserialize)]
-struct Preload {
+pub struct Preload {
 
     #[serde(rename = "sound", default)]
     pub sounds: Vec<Asset>,

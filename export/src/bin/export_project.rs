@@ -29,7 +29,7 @@ pub fn main() {
     let version = if let Some(v) = args.get(1) { v.to_string() } else { env!("PROJECT_VERSION").to_string() };
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_path_buf();
 
-    let toml_config = root.join("../../../Project_Export.toml");
+    let toml_config = root.join("./Project_Export.toml");
     let config: Config = toml::from_str(fs::read_to_string(toml_config).unwrap().as_str())
         .expect("Failed to parse TOML");
 
@@ -48,14 +48,14 @@ pub fn main() {
     let _ = remove_dir_all(&export_version_dir);
 
     for data in config.release.root {
-        println!("Releasing \"{}\" files", data.0);
+        println!("Releasing \"{}\"", data.0);
         let raw_path = root.join(data.1.raw);
         let target_path = export_version_dir.join(data.1.target);
         copy_files(&raw_path, &target_path, data.1.files);
     }
 
     for data in config.release.deps {
-        println!("Releasing \"{}\" files", data.0);
+        println!("Releasing \"{}\"", data.0);
         let raw_path = target_dir.join(data.1.raw);
         let target_path = export_version_dir.join(data.1.target);
         copy_files(&raw_path, &target_path, data.1.files);

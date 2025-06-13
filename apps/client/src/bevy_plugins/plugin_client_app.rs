@@ -1,9 +1,6 @@
 use std::sync::{Arc, Mutex};
-use bevy::app::FixedLast;
-use bevy::input::common_conditions::input_just_pressed;
 use bevy::log::info;
-use bevy::log::tracing::Instrument;
-use bevy::prelude::{App, AppExit, Commands, Component, EventReader, IntoScheduleConfigs, KeyCode, NextState, OnEnter, OnExit, Plugin, PreStartup, Query, ResMut, Startup, State, States, Update};
+use bevy::prelude::{App, Commands, Component, OnEnter, Plugin, PreStartup, Query, ResMut, Startup, States};
 use bevy_tokio_tasks::TokioTasksRuntime;
 use nogamepads::entry_mutex;
 use nogamepads_core::data::controller::controller_data::ControllerData;
@@ -12,6 +9,7 @@ use nogamepads_core::data::player::player_data::Player;
 use nogamepads_core::service::tcp_network::pad_client::pad_client_service::PadClientNetwork;
 use crate::bevy_plugins::plugin_client_app::GameState::Exiting;
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default, States)]
 enum GameState {
     #[default]

@@ -1,10 +1,9 @@
-use std::process::exit;
 use crate::service::cli_addition::utils::read_cli;
 use clap::{Command, FromArgMatches};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use log::{info, warn};
-use tokio::{count, join, select, spawn};
+use tokio::{join, select, spawn};
 use tokio::signal::ctrl_c;
 use tokio::time::sleep;
 use crate::service::service_runner::NoGamepadsService;

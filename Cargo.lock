@@ -3204,6 +3204,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nogamepads-c-bindings"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "nogamepads-core",
+]
+
+[[package]]
 name = "nogamepads-client"
 version = "0.1.0"
 dependencies = [
