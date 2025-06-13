@@ -5,7 +5,7 @@
 #   It will search starting from the project directory and copy to the specified location in the target directory.
 [release.root]
 
-# License files, third-party licenses
+# License files
 license = { raw = "./", target = "./", files = [
     "LICENSE-MIT"
 ] }
@@ -17,7 +17,7 @@ powershell_complete = { raw = "./.cargo/resources/scripts/", target = "./bin/com
 
 # Headers
 headers = { raw = "./core/bindings/lang/clang/headers/", target = "./lib", files = [
-    "nogamepads.h"
+    "nogamepads_data.h"
 ] }
 
 # Items defined in [release.deps]
