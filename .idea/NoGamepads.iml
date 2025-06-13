@@ -10,6 +10,8 @@
       <sourceFolder url="file://$MODULE_DIR$/apps/console/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/bindings/c_lang/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/bindings/c_lang/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.cargo/shared" />
       <excludeFolder url="file://$MODULE_DIR$/core/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
