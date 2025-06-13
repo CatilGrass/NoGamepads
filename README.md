@@ -1,9 +1,7 @@
 # No Gamepads
 [![License](https://img.shields.io/github/license/CatilGrass/NoGamepads)](https://github.com/CatilGrass/NoGamepads/blob/main/LICENSE-MIT)
 
-[![Development Status](https://img.shields.io/badge/status-Dev%20In%20Progress-yellow)]()
-[![Build](https://img.shields.io/badge/build-unstable-orange)]()
-[![Version](https://img.shields.io/badge/version-0.1.0--alpha-lightgrey)]()
+![Development Status](https://img.shields.io/badge/status-Dev%20In%20Progress-yellow?style=flat-square&logo=git&logoColor=white)
 
 ​	`No Gamepads` expands your game's control capabilities: enabling players to connect mobile devices as in-game controllers. For local multiplayer games, it eliminates the need for each player to own a physical controller, avoids crowding around a single keyboard, and removes the hassle of configuring complex input mappings – just use a smartphone!
 
