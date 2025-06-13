@@ -686,7 +686,7 @@ fn manage_keys(data: &mut LocalData, cmds: KeyManageCommands, get_map: fn(game: 
 }
 
 fn local_config() -> PathBuf {
-    current_dir().unwrap().join("../../../../nogamepads.yaml")
+    current_dir().unwrap().join("./nogamepads.yaml")
 }
 
 fn read() -> LocalData {
