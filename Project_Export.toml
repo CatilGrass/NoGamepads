@@ -16,8 +16,8 @@ powershell_complete = { raw = "./.cargo/resources/scripts/", target = "./bin/com
 ] }
 
 # Headers
-headers = { raw = "./core/bindings/c_lang/headers/", target = "./lib", files = [
-    "ngpd_player.h"
+headers = { raw = "./core/bindings/lang/clang/headers/", target = "./lib", files = [
+    "nogamepads.h"
 ] }
 
 # Items defined in [release.deps]
