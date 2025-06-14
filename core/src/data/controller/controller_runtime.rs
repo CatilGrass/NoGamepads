@@ -68,7 +68,7 @@ impl ControllerRuntime {
         self.receive(0, self.service_type.clone())
     }
 
-    fn send_message (&mut self, msg: ControlMessage) {
+    pub fn send_message (&mut self, msg: ControlMessage) {
         let service = self.service_type.clone();
         self.send(msg, 0, service);
     }
