@@ -1,10 +1,10 @@
+use std::ffi::{c_char, c_double};
 use crate::converter::string_converter::{str_c_to_rs, str_rs_to_c};
 use crate::data::ngpd_game_info::FfiGameInfo;
 use crate::data::ngpd_player::FfiPlayer;
 use nogamepads_core::data::message::message_enums::{ConnectionMessage, ConnectionResponseMessage, ControlMessage, ExitReason, GameMessage, JoinFailedMessage};
 use std::mem::ManuallyDrop;
 use std::ops::Deref;
-use std::os::raw::{c_char, c_double};
 
 #[repr(C)]
 pub struct FfiControlMessage {
@@ -481,31 +481,37 @@ impl From<&FfiJoinFailedMessage> for JoinFailedMessage {
     }
 }
 
+/// Free ControlMessage
 #[unsafe(no_mangle)]
 pub extern "C" fn free_control_message(msg: FfiControlMessage) {
     let _ = msg;
 }
 
+/// Free GameMessage
 #[unsafe(no_mangle)]
 pub extern "C" fn free_game_message(msg: FfiGameMessage) {
     let _ = msg;
 }
 
+/// Free ExitReason
 #[unsafe(no_mangle)]
 pub extern "C" fn free_exit_reason(msg: FfiExitReason) {
     let _ = msg;
 }
 
+/// Free ConnectionMessage
 #[unsafe(no_mangle)]
 pub extern "C" fn free_connection_message(msg: FfiConnectionMessage) {
     let _ = msg;
 }
 
+/// Free ConnectionResponseMessage
 #[unsafe(no_mangle)]
 pub extern "C" fn free_connection_response_message(msg: FfiConnectionResponseMessage) {
     let _ = msg;
 }
 
+/// Free JoinFailedMessage
 #[unsafe(no_mangle)]
 pub extern "C" fn free_join_failed_message(msg: FfiJoinFailedMessage) {
     let _ = msg;

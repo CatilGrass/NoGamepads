@@ -10,5 +10,6 @@ include = [
 
     "ngpd_game_info",
     "ngpd_message",
-    "ngpd_player"
+    "ngpd_player",
+    "ngpd_controller",
 ]

@@ -142,37 +142,153 @@ typedef struct FfiConnectionResponseMessage {
   union FfiConnectionResponseMessageUnion data;
 } FfiConnectionResponseMessage;
 
+typedef struct FfiControllerData {
+  void *_0;
+} FfiControllerData;
+
+typedef struct FfiControllerRuntime {
+  void *inner;
+  void (*drop_fn)(void*);
+} FfiControllerRuntime;
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
 void free_c_string(char *ptr);
 
+/**
+ * Register a player
+ */
 struct FfiPlayer *player_register(const char *id, const char *password);
 
+/**
+ * Check if the player's password is correct
+ */
 bool player_check(const struct FfiPlayer *player, const char *password);
 
+/**
+ * Set the player's nickname
+ */
 void player_set_nickname(struct FfiPlayer *player, const char *nickname);
 
+/**
+ * Set the player's hue
+ */
 void player_set_hue(struct FfiPlayer *player, int hue);
 
+/**
+ * Set the player's HSV color
+ */
 void player_set_hsv(struct FfiPlayer *player, int hue, double saturation, double value);
 
+/**
+ * Free the player
+ */
 void player_free(struct FfiPlayer *player);
 
+/**
+ * Free ControlMessage
+ */
 void free_control_message(struct FfiControlMessage msg);
 
+/**
+ * Free GameMessage
+ */
 void free_game_message(struct FfiGameMessage msg);
 
+/**
+ * Free ExitReason
+ */
 void free_exit_reason(enum FfiExitReason msg);
 
+/**
+ * Free ConnectionMessage
+ */
 void free_connection_message(struct FfiConnectionMessage msg);
 
+/**
+ * Free ConnectionResponseMessage
+ */
 void free_connection_response_message(struct FfiConnectionResponseMessage msg);
 
+/**
+ * Free JoinFailedMessage
+ */
 void free_join_failed_message(enum FfiJoinFailedMessage msg);
 
 void free_game_info(struct FfiGameInfo map);
+
+/**
+ * Create controller data
+ */
+struct FfiControllerData *controller_data_new(void);
+
+/**
+ * Bind player to controller
+ */
+void controller_data_bind_player(struct FfiControllerData *controller,
+                                 struct FfiPlayer *ffi_player);
+
+/**
+ * Build runtime
+ */
+struct FfiControllerRuntime *controller_data_build_runtime(struct FfiControllerData *controller);
+
+/**
+ * Free ControllerData memory
+ */
+void controller_data_free(struct FfiControllerData *controller);
+
+/**
+ * Close runtime and exit game
+ */
+void controller_runtime_close(struct FfiControllerRuntime *runtime);
+
+/**
+ * Send control message
+ */
+void controller_runtime_send_message(struct FfiControllerRuntime *runtime,
+                                     struct FfiControlMessage *control_message);
+
+/**
+ * Send text message
+ */
+void controller_runtime_send_text_message(struct FfiControllerRuntime *runtime,
+                                          const char *message_ptr);
+
+/**
+ * Press a button
+ */
+void controller_runtime_press_a_button(struct FfiControllerRuntime *runtime, uint8_t key);
+
+/**
+ * Release a button
+ */
+void controller_runtime_release_a_button(struct FfiControllerRuntime *runtime, uint8_t key);
+
+/**
+ * Release a button
+ */
+void controller_runtime_change_axis(struct FfiControllerRuntime *runtime, uint8_t key, double axis);
+
+/**
+ * Release a button
+ */
+void controller_runtime_change_direction(struct FfiControllerRuntime *runtime,
+                                         uint8_t key,
+                                         double x,
+                                         double y);
+
+/**
+ * Pop a message from the queue
+ */
+struct FfiGameMessage *controller_runtime_pop(struct FfiControllerRuntime *runtime);
+
+/**
+ * Free runtime memory
+ */
+void controller_runtime_free(struct FfiControllerRuntime *runtime);
 
 #ifdef __cplusplus
 }  // extern "C"

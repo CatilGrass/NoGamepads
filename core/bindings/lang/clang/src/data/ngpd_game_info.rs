@@ -1,6 +1,5 @@
 use std::collections::HashMap;
-use std::ffi::{CStr, CString};
-use std::os::raw::c_char;
+use std::ffi::{c_char, CStr, CString};
 
 #[repr(C)]
 pub struct KeyValuePair {

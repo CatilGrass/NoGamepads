@@ -1,5 +1,4 @@
-use std::ffi::{CStr, CString};
-use std::os::raw::{c_char, c_double, c_int};
+use std::ffi::{c_char, c_double, c_int, CStr, CString};
 use std::ptr;
 use nogamepads_core::data::player::player_data::{Account, Customize, Player};
 
@@ -73,6 +72,7 @@ impl TryFrom<&FfiPlayer> for Player {
     }
 }
 
+/// Register a player
 #[unsafe(no_mangle)]
 pub extern "C" fn player_register(id: *const c_char, password: *const c_char) -> *mut FfiPlayer {
     let id_str = unsafe { CStr::from_ptr(id) }.to_string_lossy();
@@ -82,6 +82,7 @@ pub extern "C" fn player_register(id: *const c_char, password: *const c_char) ->
     Box::into_raw(Box::new(FfiPlayer::from(&player)))
 }
 
+/// Check if the player's password is correct
 #[unsafe(no_mangle)]
 pub extern "C" fn player_check(player: *const FfiPlayer, password: *const c_char) -> bool {
     let player = unsafe { &*player };
@@ -92,6 +93,7 @@ pub extern "C" fn player_check(player: *const FfiPlayer, password: *const c_char
         .unwrap_or(false)
 }
 
+/// Set the player's nickname
 #[unsafe(no_mangle)]
 pub extern "C" fn player_set_nickname(player: *mut FfiPlayer, nickname: *const c_char) {
     let nickname_str = unsafe { CStr::from_ptr(nickname) }.to_string_lossy().into_owned();
@@ -101,6 +103,7 @@ pub extern "C" fn player_set_nickname(player: *mut FfiPlayer, nickname: *const c
     *unsafe { &mut *player } = FfiPlayer::from(&rust_player);
 }
 
+/// Set the player's hue
 #[unsafe(no_mangle)]
 pub extern "C" fn player_set_hue(player: *mut FfiPlayer, hue: c_int) {
     let mut rust_player : Player = unsafe { (&*player).try_into().unwrap() };
@@ -109,6 +112,7 @@ pub extern "C" fn player_set_hue(player: *mut FfiPlayer, hue: c_int) {
     *unsafe { &mut *player } = FfiPlayer::from(&rust_player);
 }
 
+/// Set the player's HSV color
 #[unsafe(no_mangle)]
 pub extern "C" fn player_set_hsv(
     player: *mut FfiPlayer, hue: c_int, saturation: c_double, value: c_double
@@ -119,6 +123,7 @@ pub extern "C" fn player_set_hsv(
     *unsafe { &mut *player } = FfiPlayer::from(&rust_player);
 }
 
+/// Free the player
 #[unsafe(no_mangle)]
 pub extern "C" fn player_free(player: *mut FfiPlayer) {
     if player.is_null() { return; }
