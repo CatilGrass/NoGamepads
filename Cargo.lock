@@ -3227,6 +3227,8 @@ name = "nogamepads-c-bindings"
 version = "0.1.0"
 dependencies = [
  "cbindgen",
+ "log",
+ "nogamepads",
  "nogamepads-core",
 ]
 
