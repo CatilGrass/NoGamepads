@@ -185,7 +185,7 @@ void player_set_hsv(struct FfiPlayer *player, int hue, double saturation, double
 /**
  * Free the player
  */
-void player_free(struct FfiPlayer *player);
+void free_player(struct FfiPlayer *player);
 
 /**
  * Free ControlMessage
@@ -268,12 +268,12 @@ void controller_runtime_press_a_button(struct FfiControllerRuntime *runtime, uin
 void controller_runtime_release_a_button(struct FfiControllerRuntime *runtime, uint8_t key);
 
 /**
- * Release a button
+ * Change axis value
  */
 void controller_runtime_change_axis(struct FfiControllerRuntime *runtime, uint8_t key, double axis);
 
 /**
- * Release a button
+ * Change direction value
  */
 void controller_runtime_change_direction(struct FfiControllerRuntime *runtime,
                                          uint8_t key,

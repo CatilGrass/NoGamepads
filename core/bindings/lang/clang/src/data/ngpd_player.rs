@@ -125,20 +125,30 @@ pub extern "C" fn player_set_hsv(
 
 /// Free the player
 #[unsafe(no_mangle)]
-pub extern "C" fn player_free(player: *mut FfiPlayer) {
+pub extern "C" fn free_player(player: *mut FfiPlayer) {
     if player.is_null() { return; }
 
-    let ffi_player = unsafe { Box::from_raw(player) };
-
-    // Free account strings
     unsafe {
-        let _ = CString::from_raw(ffi_player.account.id);
-        let _ = CString::from_raw(ffi_player.account.player_hash);
-    }
+        let player = &mut *player;
 
-    // Free customize if present
-    if !ffi_player.customize.is_null() {
-        let ffi_custom = unsafe { Box::from_raw(ffi_player.customize) };
-        unsafe { let _ = CString::from_raw(ffi_custom.nickname); };
+        if !player.account.id.is_null() {
+            drop(CString::from_raw(player.account.id));
+            player.account.id = ptr::null_mut();
+        }
+
+        if !player.account.player_hash.is_null() {
+            drop(CString::from_raw(player.account.player_hash));
+            player.account.player_hash = ptr::null_mut();
+        }
+
+        if !player.customize.is_null() {
+            let customize = &mut *player.customize;
+            if !customize.nickname.is_null() {
+                drop(CString::from_raw(customize.nickname));
+            }
+            player.customize = ptr::null_mut();
+        }
+
+        drop(Box::from_raw(player));
     }
 }
