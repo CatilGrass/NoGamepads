@@ -1,12 +1,12 @@
-use std::ffi::{c_char, c_void, CStr};
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
-use std::sync::{Arc, Mutex};
+use crate::data::ngpd_controller::FfiControllerRuntime;
+use crate::data::ngpd_game::FfiGameRuntime;
 use nogamepads_core::data::controller::controller_runtime::ControllerRuntime;
 use nogamepads_core::data::game::game_runtime::GameRuntime;
 use nogamepads_core::service::tcp_network::pad_client::pad_client_service::PadClientNetwork;
 use nogamepads_core::service::tcp_network::pad_server::pad_server_service::PadServerNetwork;
-use crate::data::ngpd_controller::FfiControllerRuntime;
-use crate::data::ngpd_game::FfiGameRuntime;
+use std::ffi::{c_char, c_void, CStr};
+use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
+use std::sync::{Arc, Mutex};
 
 #[repr(C)]
 pub struct FfiTcpClientService(*mut c_void);
@@ -16,35 +16,37 @@ pub struct FfiTcpServerService(*mut c_void);
 
 impl FfiTcpClientService {
 
-    fn as_inner(&self) -> &mut PadClientNetwork {
-        unsafe { &mut *(self.0 as *mut PadClientNetwork) }
-    }
-
     /// Build tcp client
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_client_build(
         runtime: *mut FfiControllerRuntime,
-    ) -> FfiTcpClientService {
+    ) -> *mut FfiTcpClientService {
+
+        if runtime.is_null() {
+            return std::ptr::null_mut();
+        }
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<ControllerRuntime>> };
         let arc_clone: Arc<Mutex<ControllerRuntime>> = unsafe { (&*arc_ptr).clone() };
 
-        let service = Box::new(PadClientNetwork::build(arc_clone));
-        let ptr = Box::into_raw(service);
+        let service = PadClientNetwork::build(arc_clone);
+        let raw = Box::into_raw(Box::new(FfiTcpClientService(Box::into_raw(Box::new(service)) as *mut _)));
 
-        FfiTcpClientService(ptr as *mut c_void)
+        raw
     }
 
     /// Bind ipv4 address
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_client_bind_ipv4(
-        service: FfiTcpClientService,
+        service: *mut FfiTcpClientService,
         a0: u8,
         a1: u8,
         a2: u8,
         a3: u8
     ) {
-        let inner = service.as_inner();
+        if service.is_null() { return; }
+
+        let inner = unsafe { &mut *((*service).0 as *mut PadClientNetwork) };
         let ip = IpAddr::V4(Ipv4Addr::new(a0, a1, a2, a3));
         inner.bind_ip(ip);
     }
@@ -52,14 +54,17 @@ impl FfiTcpClientService {
     /// Bind ipv6 address
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_client_bind_ipv6(
-        service: FfiTcpClientService,
+        service: *mut FfiTcpClientService,
         ip_str: *const c_char
     ) -> bool {
+
+        if service.is_null() { return false; }
+
         if ip_str.is_null() {
             return false;
         }
 
-        let inner = service.as_inner();
+        let inner = unsafe { &mut *((*service).0 as *mut PadClientNetwork) };
 
         let c_str = unsafe { CStr::from_ptr(ip_str) };
         if let Ok(ip_str) = c_str.to_str() {
@@ -75,23 +80,28 @@ impl FfiTcpClientService {
     /// Bind port
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_client_bind_port(
-        service: FfiTcpClientService,
+        service: *mut FfiTcpClientService,
         port: u16
     ) {
-        service.as_inner().bind_port(port);
+        if service.is_null() { return; }
+
+        let inner = unsafe { &mut *((*service).0 as *mut PadClientNetwork) };
+        inner.bind_port(port);
     }
 
     /// Bind address with ipv4
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_client_bind_address_v4(
-        service: FfiTcpClientService,
+        service: *mut FfiTcpClientService,
         a0: u8,
         a1: u8,
         a2: u8,
         a3: u8,
         port: u16
     ) {
-        let inner = service.as_inner();
+        if service.is_null() { return; }
+
+        let inner = unsafe { &mut *((*service).0 as *mut PadClientNetwork) };
         let addr = SocketAddr::new(
             IpAddr::V4(Ipv4Addr::new(a0, a1, a2, a3)),
             port
@@ -103,15 +113,16 @@ impl FfiTcpClientService {
     /// Bind address with ipv6
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_client_bind_address_v6(
-        service: FfiTcpClientService,
+        service: *mut FfiTcpClientService,
         ip_str: *const c_char,
         port: u16
     ) -> bool {
-        if ip_str.is_null() {
+
+        if ip_str.is_null() || service.is_null() {
             return false;
         }
 
-        let inner = service.as_inner();
+        let inner = unsafe { &mut *((*service).0 as *mut PadClientNetwork) };
 
         let c_str = unsafe { CStr::from_ptr(ip_str) };
         if let Ok(ip_str) = c_str.to_str() {
@@ -132,12 +143,12 @@ impl FfiTcpClientService {
     /// Connect
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_client_connect(
-        service: FfiTcpClientService
+        service: *mut FfiTcpClientService
     ) {
-        let service_ptr = service.0 as *mut PadClientNetwork;
-        assert!(!service_ptr.is_null(), "Service pointer is null");
+        if service.is_null() { return; }
 
-        let service = unsafe { Box::from_raw(service_ptr) };
+        let inner = unsafe { &mut *((*service).0 as *mut PadClientNetwork) };
+        let service = unsafe { Box::from_raw(inner) };
 
         service.connect();
     }
@@ -145,13 +156,11 @@ impl FfiTcpClientService {
     /// Free tcp client
     #[unsafe(no_mangle)]
     pub extern "C" fn free_tcp_client(
-        service: FfiTcpClientService
+        service: *mut FfiTcpClientService
     ) {
-        if service.0.is_null() {
-            return;
-        }
+        if service.is_null() { return; }
 
-        let service_ptr = service.0 as *mut PadClientNetwork;
+        let service_ptr = service as *mut PadClientNetwork;
 
         unsafe {
             let _ = Box::from_raw(service_ptr);
@@ -161,35 +170,35 @@ impl FfiTcpClientService {
 
 impl FfiTcpServerService {
 
-    fn as_inner(&self) -> &mut PadServerNetwork {
-        unsafe { &mut *(self.0 as *mut PadServerNetwork) }
-    }
-
     /// Build tcp server
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_server_build(
         runtime: *mut FfiGameRuntime,
-    ) -> FfiTcpServerService {
+    ) -> *mut FfiTcpServerService {
+
+        if runtime.is_null() { return std::ptr::null_mut(); }
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
         let arc_clone: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
 
-        let service = Box::new(PadServerNetwork::build(arc_clone));
-        let ptr = Box::into_raw(service);
+        let service = PadServerNetwork::build(arc_clone);
+        let raw = Box::into_raw(Box::new(FfiTcpServerService(Box::into_raw(Box::new(service)) as *mut _)));
 
-        FfiTcpServerService(ptr as *mut c_void)
+        raw
     }
 
     /// Bind ipv4 address
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_server_bind_ipv4(
-        service: FfiTcpServerService,
+        service: *mut FfiTcpServerService,
         a0: u8,
         a1: u8,
         a2: u8,
         a3: u8
     ) {
-        let inner = service.as_inner();
+        if service.is_null() { return; }
+
+        let inner = unsafe { &mut *((*service).0 as *mut PadServerNetwork) };
         let ip = IpAddr::V4(Ipv4Addr::new(a0, a1, a2, a3));
         inner.bind_ip(ip);
     }
@@ -197,14 +206,12 @@ impl FfiTcpServerService {
     /// Bind ipv6 address
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_server_bind_ipv6(
-        service: FfiTcpServerService,
+        service: *mut FfiTcpServerService,
         ip_str: *const c_char
     ) -> bool {
-        if ip_str.is_null() {
-            return false;
-        }
+        if ip_str.is_null() || service.is_null() { return false; }
 
-        let inner = service.as_inner();
+        let inner = unsafe { &mut *((*service).0 as *mut PadServerNetwork) };
 
         let c_str = unsafe { CStr::from_ptr(ip_str) };
         if let Ok(ip_str) = c_str.to_str() {
@@ -220,23 +227,28 @@ impl FfiTcpServerService {
     /// Bind port
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_server_bind_port(
-        service: FfiTcpServerService,
+        service: *mut FfiTcpServerService,
         port: u16
     ) {
-        service.as_inner().bind_port(port);
+        if service.is_null() { return; }
+
+        let inner = unsafe { &mut *((*service).0 as *mut PadServerNetwork) };
+        inner.bind_port(port);
     }
 
     /// Bind address with ipv4
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_server_bind_address_v4(
-        service: FfiTcpServerService,
+        service: *mut FfiTcpServerService,
         a0: u8,
         a1: u8,
         a2: u8,
         a3: u8,
         port: u16
     ) {
-        let inner = service.as_inner();
+        if service.is_null() { return; }
+
+        let inner = unsafe { &mut *((*service).0 as *mut PadServerNetwork) };
         let addr = SocketAddr::new(
             IpAddr::V4(Ipv4Addr::new(a0, a1, a2, a3)),
             port
@@ -248,15 +260,13 @@ impl FfiTcpServerService {
     /// Bind address with ipv6
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_server_bind_address_v6(
-        service: FfiTcpServerService,
+        service: *mut FfiTcpServerService,
         ip_str: *const c_char,
         port: u16
     ) -> bool {
-        if ip_str.is_null() {
-            return false;
-        }
+        if ip_str.is_null() || service.is_null() { return false; }
 
-        let inner = service.as_inner();
+        let inner = unsafe { &mut *((*service).0 as *mut PadServerNetwork) };
 
         let c_str = unsafe { CStr::from_ptr(ip_str) };
         if let Ok(ip_str) = c_str.to_str() {
@@ -277,12 +287,12 @@ impl FfiTcpServerService {
     /// Start listening
     #[unsafe(no_mangle)]
     pub extern "C" fn tcp_server_listening_block_on(
-        service: FfiTcpServerService
+        service: *mut FfiTcpServerService
     ) {
-        let service_ptr = service.0 as *mut PadServerNetwork;
-        assert!(!service_ptr.is_null(), "Service pointer is null");
+        if service.is_null() { return; }
 
-        let service = unsafe { Box::from_raw(service_ptr) };
+        let inner = unsafe { &mut *((*service).0 as *mut PadServerNetwork) };
+        let service = unsafe { Box::from_raw(inner) };
 
         service.listening_block_on();
     }
@@ -290,13 +300,11 @@ impl FfiTcpServerService {
     /// Free tcp server
     #[unsafe(no_mangle)]
     pub extern "C" fn free_tcp_server(
-        service: FfiTcpServerService
+        service: *mut FfiTcpServerService
     ) {
-        if service.0.is_null() {
-            return;
-        }
+        if service.is_null() { return; }
 
-        let service_ptr = service.0 as *mut PadServerNetwork;
+        let service_ptr = service as *mut PadServerNetwork;
 
         unsafe {
             let _ = Box::from_raw(service_ptr);

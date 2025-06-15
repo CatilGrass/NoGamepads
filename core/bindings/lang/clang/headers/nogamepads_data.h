@@ -545,12 +545,12 @@ void free_ffi_service_type(enum FfiServiceType *ptr);
 /**
  * Build tcp client
  */
-struct FfiTcpClientService tcp_client_build(struct FfiControllerRuntime *runtime);
+struct FfiTcpClientService *tcp_client_build(struct FfiControllerRuntime *runtime);
 
 /**
  * Bind ipv4 address
  */
-void tcp_client_bind_ipv4(struct FfiTcpClientService service,
+void tcp_client_bind_ipv4(struct FfiTcpClientService *service,
                           uint8_t a0,
                           uint8_t a1,
                           uint8_t a2,
@@ -559,17 +559,17 @@ void tcp_client_bind_ipv4(struct FfiTcpClientService service,
 /**
  * Bind ipv6 address
  */
-bool tcp_client_bind_ipv6(struct FfiTcpClientService service, const char *ip_str);
+bool tcp_client_bind_ipv6(struct FfiTcpClientService *service, const char *ip_str);
 
 /**
  * Bind port
  */
-void tcp_client_bind_port(struct FfiTcpClientService service, uint16_t port);
+void tcp_client_bind_port(struct FfiTcpClientService *service, uint16_t port);
 
 /**
  * Bind address with ipv4
  */
-void tcp_client_bind_address_v4(struct FfiTcpClientService service,
+void tcp_client_bind_address_v4(struct FfiTcpClientService *service,
                                 uint8_t a0,
                                 uint8_t a1,
                                 uint8_t a2,
@@ -579,29 +579,29 @@ void tcp_client_bind_address_v4(struct FfiTcpClientService service,
 /**
  * Bind address with ipv6
  */
-bool tcp_client_bind_address_v6(struct FfiTcpClientService service,
+bool tcp_client_bind_address_v6(struct FfiTcpClientService *service,
                                 const char *ip_str,
                                 uint16_t port);
 
 /**
  * Connect
  */
-void tcp_client_connect(struct FfiTcpClientService service);
+void tcp_client_connect(struct FfiTcpClientService *service);
 
 /**
  * Free tcp client
  */
-void free_tcp_client(struct FfiTcpClientService service);
+void free_tcp_client(struct FfiTcpClientService *service);
 
 /**
  * Build tcp server
  */
-struct FfiTcpServerService tcp_server_build(struct FfiGameRuntime *runtime);
+struct FfiTcpServerService *tcp_server_build(struct FfiGameRuntime *runtime);
 
 /**
  * Bind ipv4 address
  */
-void tcp_server_bind_ipv4(struct FfiTcpServerService service,
+void tcp_server_bind_ipv4(struct FfiTcpServerService *service,
                           uint8_t a0,
                           uint8_t a1,
                           uint8_t a2,
@@ -610,17 +610,17 @@ void tcp_server_bind_ipv4(struct FfiTcpServerService service,
 /**
  * Bind ipv6 address
  */
-bool tcp_server_bind_ipv6(struct FfiTcpServerService service, const char *ip_str);
+bool tcp_server_bind_ipv6(struct FfiTcpServerService *service, const char *ip_str);
 
 /**
  * Bind port
  */
-void tcp_server_bind_port(struct FfiTcpServerService service, uint16_t port);
+void tcp_server_bind_port(struct FfiTcpServerService *service, uint16_t port);
 
 /**
  * Bind address with ipv4
  */
-void tcp_server_bind_address_v4(struct FfiTcpServerService service,
+void tcp_server_bind_address_v4(struct FfiTcpServerService *service,
                                 uint8_t a0,
                                 uint8_t a1,
                                 uint8_t a2,
@@ -630,19 +630,19 @@ void tcp_server_bind_address_v4(struct FfiTcpServerService service,
 /**
  * Bind address with ipv6
  */
-bool tcp_server_bind_address_v6(struct FfiTcpServerService service,
+bool tcp_server_bind_address_v6(struct FfiTcpServerService *service,
                                 const char *ip_str,
                                 uint16_t port);
 
 /**
  * Start listening
  */
-void tcp_server_listening_block_on(struct FfiTcpServerService service);
+void tcp_server_listening_block_on(struct FfiTcpServerService *service);
 
 /**
  * Free tcp server
  */
-void free_tcp_server(struct FfiTcpServerService service);
+void free_tcp_server(struct FfiTcpServerService *service);
 
 #ifdef __cplusplus
 }  // extern "C"
