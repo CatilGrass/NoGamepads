@@ -13,7 +13,7 @@ pub struct FfiControllerData(*mut c_void);
 
 #[repr(C)]
 pub struct FfiControllerRuntime {
-    inner: *mut c_void,
+    pub(crate) inner: *mut c_void,
     drop_fn: extern "C" fn(*mut c_void),
 }
 
@@ -114,9 +114,9 @@ impl FfiControllerRuntime {
         }
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<ControllerRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
+        let arc_ref: Arc<Mutex<ControllerRuntime>> = unsafe { (&*arc_ptr).clone() };
 
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        entry_mutex!(arc_ref, |mutex_guard| {
             mutex_guard.close();
         });
 
@@ -135,10 +135,10 @@ impl FfiControllerRuntime {
         }
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<ControllerRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
+        let arc_ref: Arc<Mutex<ControllerRuntime>> = unsafe { (&*arc_ptr).clone() };
         let msg = unsafe { ControlMessage::from(control_message.read()) };
 
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        entry_mutex!(arc_ref, |mutex_guard| {
             mutex_guard.send_message(msg);
         });
 
@@ -258,12 +258,12 @@ impl FfiControllerRuntime {
         }
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<ControllerRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
+        let arc_ref: Arc<Mutex<ControllerRuntime>> = unsafe { (&*arc_ptr).clone() };
 
         let result = {
             let mut pop_result = None;
 
-            entry_mutex!(*arc_ref, |mutex_guard| {
+            entry_mutex!(arc_ref, |mutex_guard| {
                 pop_result = mutex_guard.pop();
             });
 

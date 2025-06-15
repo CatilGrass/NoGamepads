@@ -25,7 +25,7 @@ pub struct FfiControlEvent {
 
 #[repr(C)]
 pub struct FfiGameRuntime {
-    inner: *mut c_void,
+    pub(crate) inner: *mut c_void,
     drop_fn: extern "C" fn(*mut c_void),
 }
 
@@ -191,12 +191,12 @@ impl FfiGameRuntime {
     ) {
         if runtime.is_null() || player.is_null() { return; }
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
         let ffi_player_ref = unsafe { &*player };
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
         let service = unsafe { ServiceType::from(&service_type.read()) };
 
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        entry_mutex!(arc_ref, |mutex_guard| {
             mutex_guard.send_game_message(&player.account, message, service);
         });
     }
@@ -207,9 +207,9 @@ impl FfiGameRuntime {
     ) {
         if runtime.is_null() { return; }
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
 
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        entry_mutex!(arc_ref, |mutex_guard| {
             do_on(mutex_guard);
         });
     }
@@ -255,9 +255,9 @@ impl FfiGameRuntime {
     pub extern "C" fn game_runtime_pop_control_event(runtime: *mut FfiGameRuntime) -> *mut FfiControlEvent {
         if runtime.is_null() { return std::ptr::null_mut(); }
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
         let mut control_event = None;
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        entry_mutex!(arc_ref, |mutex_guard| {
             control_event = mutex_guard.pop_control_event();
         });
         match control_event {
@@ -300,8 +300,8 @@ impl FfiGameRuntime {
 
         if runtime.is_null() { return; }
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             mutex_guard.kick_player(&player, service);
         });
     }
@@ -321,8 +321,8 @@ impl FfiGameRuntime {
 
         if runtime.is_null() { return; }
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             mutex_guard.ban_player(&player, service);
         });
     }
@@ -340,8 +340,8 @@ impl FfiGameRuntime {
 
         if runtime.is_null() { return; }
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             mutex_guard.pardon_player(&player);
         });
     }
@@ -380,8 +380,8 @@ impl FfiGameRuntime {
 
         let mut locked = false;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             locked = mutex_guard.is_game_locked();
         });
 
@@ -402,8 +402,8 @@ impl FfiGameRuntime {
 
         let mut status = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             status = mutex_guard.control.get_button_status(&account, &key);
         });
 
@@ -429,8 +429,8 @@ impl FfiGameRuntime {
 
         let mut status = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             status = mutex_guard.control.get_axis(&account, &key);
         });
 
@@ -456,8 +456,8 @@ impl FfiGameRuntime {
 
         let mut status = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             status = mutex_guard.control.get_direction(&account, &key);
         });
 
@@ -482,8 +482,8 @@ impl FfiGameRuntime {
 
         let mut service_type = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             service_type = mutex_guard.data.get_service_type(&account);
         });
 
@@ -508,8 +508,8 @@ impl FfiGameRuntime {
 
         let mut banned = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             banned = Some(mutex_guard.data.is_account_banned(&account));
         });
 
@@ -534,8 +534,8 @@ impl FfiGameRuntime {
 
         let mut online = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             online = Some(mutex_guard.data.is_account_online(&account));
         });
 
@@ -553,8 +553,8 @@ impl FfiGameRuntime {
 
         let mut online_list = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             online_list = Some(mutex_guard.data.online_accounts());
         });
 
@@ -581,8 +581,8 @@ impl FfiGameRuntime {
 
         let mut banned_list = None;
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(*arc_ref, |mutex_guard| {
+        let arc_ref: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
+        entry_mutex!(arc_ref, |mutex_guard| {
             banned_list = Some(mutex_guard.data.banned_accounts());
         });
 
@@ -601,6 +601,18 @@ impl FfiGameRuntime {
             len,
             cap,
         }
+    }
+
+    /// Free game runtime
+    #[unsafe(no_mangle)]
+    pub extern "C" fn free_game_runtime(runtime: *mut FfiGameRuntime) {
+        if runtime.is_null() {
+            return;
+        }
+
+        let runtime_box = unsafe { Box::from_raw(runtime) };
+
+        (runtime_box.drop_fn)(runtime_box.inner);
     }
 }
 
