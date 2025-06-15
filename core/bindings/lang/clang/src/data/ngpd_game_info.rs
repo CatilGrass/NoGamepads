@@ -96,7 +96,7 @@ impl From<&FfiGameInfo> for Option<HashMap<String, String>> {
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free_game_info(map: FfiGameInfo) {
+pub extern "C" fn free_game_info(map: FfiGameInfo) {
     let kv_pairs = unsafe { Vec::from_raw_parts(map.data, map.len, map.cap) };
 
     for pair in kv_pairs {

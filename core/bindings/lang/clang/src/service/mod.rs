@@ -1,0 +1,1 @@
+pub mod ngpd_service_types;

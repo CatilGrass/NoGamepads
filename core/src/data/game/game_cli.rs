@@ -172,7 +172,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) -> bool 
 
         Commands::Pop => {
             entry_mutex!(runtime, |guard| {
-                if let Some((account, message)) = guard.pop_event() {
+                if let Some((account, message)) = guard.pop_control_event() {
                     info!("{}: {:?}", account.id, message);
                 } else {
                     info!("None")
@@ -182,7 +182,7 @@ pub fn process_game_cli(runtime: Arc<Mutex<GameRuntime>>, cmd: GameCli) -> bool 
 
         Commands::PopAll => {
             entry_mutex!(runtime, |guard| {
-                while let Some((account, message)) = guard.pop_event() {
+                while let Some((account, message)) = guard.pop_control_event() {
                     info!("{}: {:?}", account.id, message);
                 }
             });

@@ -71,8 +71,8 @@ impl GameData {
     }
 
     /// Read game runtime archive data
-    pub fn load_data(&mut self, storage: GameRuntimeDataArchive) -> &mut GameData {
-        self.archive = storage;
+    pub fn load_data(&mut self, archive: GameRuntimeDataArchive) -> &mut GameData {
+        self.archive = archive;
         self
     }
 
