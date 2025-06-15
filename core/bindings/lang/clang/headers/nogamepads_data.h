@@ -61,6 +61,12 @@ typedef enum FfiJoinFailedMessage {
   UnknownError,
 } FfiJoinFailedMessage;
 
+typedef enum FfiServiceType {
+  TCPConnection,
+  BlueTooth,
+  USB,
+} FfiServiceType;
+
 typedef struct FfiAccount {
   char *id;
   char *player_hash;
@@ -151,6 +157,52 @@ typedef struct FfiControllerRuntime {
   void (*drop_fn)(void*);
 } FfiControllerRuntime;
 
+typedef struct FfiGameData {
+  void *_0;
+} FfiGameData;
+
+typedef struct FfiGameRuntimeArchive {
+  void *_0;
+} FfiGameRuntimeArchive;
+
+typedef struct FfiGameRuntime {
+  void *inner;
+  void (*drop_fn)(void*);
+} FfiGameRuntime;
+
+typedef struct FfiControlEvent {
+  struct FfiPlayer player;
+  struct FfiControlMessage message;
+} FfiControlEvent;
+
+typedef struct FfiButtonStatus {
+  bool found;
+  bool pressed;
+  bool released;
+} FfiButtonStatus;
+
+typedef struct FfiAxis {
+  bool found;
+  double axis;
+} FfiAxis;
+
+typedef struct FfiDirection {
+  bool found;
+  double x;
+  double y;
+} FfiDirection;
+
+typedef struct FfiBooleanResult {
+  bool found;
+  bool result;
+} FfiBooleanResult;
+
+typedef struct FfiPlayerList {
+  struct FfiPlayer *players;
+  uintptr_t len;
+  uintptr_t cap;
+} FfiPlayerList;
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
@@ -161,6 +213,16 @@ void free_c_string(char *ptr);
  * Register a player
  */
 struct FfiPlayer *player_register(const char *id, const char *password);
+
+/**
+ * Register a player from hash
+ */
+struct FfiPlayer *player_from_hash(const char *hash);
+
+/**
+ * Get a hash from player
+ */
+const char *player_get_hash(struct FfiPlayer *player);
 
 /**
  * Check if the player's password is correct
@@ -190,32 +252,32 @@ void free_player(struct FfiPlayer *player);
 /**
  * Free ControlMessage
  */
-void free_control_message(struct FfiControlMessage msg);
+void free_control_message(struct FfiControlMessage *msg);
 
 /**
  * Free GameMessage
  */
-void free_game_message(struct FfiGameMessage msg);
+void free_game_message(struct FfiGameMessage *msg);
 
 /**
  * Free ExitReason
  */
-void free_exit_reason(enum FfiExitReason msg);
+void free_exit_reason(enum FfiExitReason *msg);
 
 /**
  * Free ConnectionMessage
  */
-void free_connection_message(struct FfiConnectionMessage msg);
+void free_connection_message(struct FfiConnectionMessage *msg);
 
 /**
  * Free ConnectionResponseMessage
  */
-void free_connection_response_message(struct FfiConnectionResponseMessage msg);
+void free_connection_response_message(struct FfiConnectionResponseMessage *msg);
 
 /**
  * Free JoinFailedMessage
  */
-void free_join_failed_message(enum FfiJoinFailedMessage msg);
+void free_join_failed_message(enum FfiJoinFailedMessage *msg);
 
 void free_game_info(struct FfiGameInfo map);
 
@@ -288,7 +350,184 @@ struct FfiGameMessage *controller_runtime_pop(struct FfiControllerRuntime *runti
 /**
  * Free runtime memory
  */
-void controller_runtime_free(struct FfiControllerRuntime *runtime);
+void free_controller_runtime(struct FfiControllerRuntime *runtime);
+
+/**
+ * Create game data
+ */
+struct FfiGameData *game_data_new(void);
+
+/**
+ * Load data archive
+ */
+struct FfiGameData *game_data_load_archive(struct FfiGameData *data,
+                                           struct FfiGameRuntimeArchive *archive);
+
+/**
+ * Build runtime by data
+ */
+struct FfiGameRuntime *game_data_build_runtime(struct FfiGameData *data);
+
+/**
+ * Free data
+ */
+void free_game_data(struct FfiGameData *data);
+
+/**
+ * Create game archive data
+ */
+struct FfiGameRuntimeArchive *game_archive_data_new(void);
+
+/**
+ * Add ban player
+ */
+struct FfiGameRuntimeArchive *game_archive_data_add_ban_player(struct FfiGameRuntimeArchive *data,
+                                                               struct FfiPlayer *ffi_player);
+
+/**
+ * Free data
+ */
+void free_game_archive_data(struct FfiGameRuntimeArchive *data);
+
+/**
+ * Send a message to
+ */
+void game_runtime_send_message_to(struct FfiGameRuntime *runtime,
+                                  const struct FfiPlayer *player,
+                                  struct FfiGameMessage *message,
+                                  enum FfiServiceType *service_type);
+
+/**
+ * Send a text message
+ */
+void game_runtime_send_text_message(struct FfiGameRuntime *runtime,
+                                    const struct FfiPlayer *player,
+                                    enum FfiServiceType *service_type,
+                                    const char *text);
+
+/**
+ * Send a event message
+ */
+void game_runtime_send_event(struct FfiGameRuntime *runtime,
+                             const struct FfiPlayer *player,
+                             enum FfiServiceType *service_type,
+                             uint8_t key);
+
+/**
+ * Pop a control event
+ */
+struct FfiControlEvent *game_runtime_pop_control_event(struct FfiGameRuntime *runtime);
+
+/**
+ * Let player exit
+ */
+void game_runtime_let_exit(struct FfiGameRuntime *runtime,
+                           const struct FfiPlayer *player,
+                           enum FfiServiceType *service_type,
+                           enum FfiExitReason *reason);
+
+/**
+ * Kick a player
+ */
+void game_runtime_kick_player(struct FfiGameRuntime *runtime,
+                              const struct FfiPlayer *player,
+                              enum FfiServiceType *service_type);
+
+/**
+ * Ban a player (And kick)
+ */
+void game_runtime_ban_player(struct FfiGameRuntime *runtime,
+                             const struct FfiPlayer *player,
+                             enum FfiServiceType *service_type);
+
+/**
+ * Pardon a player
+ */
+void game_runtime_pardon_player(struct FfiGameRuntime *runtime, const struct FfiPlayer *player);
+
+/**
+ * Close runtime
+ */
+void game_runtime_close(struct FfiGameRuntime *runtime);
+
+/**
+ * Lock game
+ */
+void game_runtime_lock(struct FfiGameRuntime *runtime);
+
+/**
+ * Unlock game
+ */
+void game_runtime_unlock(struct FfiGameRuntime *runtime);
+
+/**
+ * Get game lock status
+ */
+bool game_runtime_get_lock_status(struct FfiGameRuntime *runtime);
+
+/**
+ * Get button status of player
+ */
+struct FfiButtonStatus game_runtime_get_button_status(struct FfiGameRuntime *runtime,
+                                                      const struct FfiPlayer *player,
+                                                      uint8_t key);
+
+/**
+ * Get axis value of player
+ */
+struct FfiAxis game_runtime_get_axis(struct FfiGameRuntime *runtime,
+                                     const struct FfiPlayer *player,
+                                     uint8_t key);
+
+/**
+ * Get direction value of player
+ */
+struct FfiDirection game_runtime_get_direction(struct FfiGameRuntime *runtime,
+                                               const struct FfiPlayer *player,
+                                               uint8_t key);
+
+/**
+ * Get service type of player
+ */
+const enum FfiServiceType *game_runtime_get_service_type(struct FfiGameRuntime *runtime,
+                                                         const struct FfiPlayer *player);
+
+/**
+ * Is player banned
+ */
+struct FfiBooleanResult game_runtime_is_player_banned(struct FfiGameRuntime *runtime,
+                                                      const struct FfiPlayer *player);
+
+/**
+ * Is player online
+ */
+struct FfiBooleanResult game_runtime_is_player_online(struct FfiGameRuntime *runtime,
+                                                      const struct FfiPlayer *player);
+
+/**
+ * Get online list
+ */
+struct FfiPlayerList game_runtime_get_online_list(struct FfiGameRuntime *runtime);
+
+/**
+ * Get banned list
+ */
+struct FfiPlayerList game_runtime_get_banned_list(struct FfiGameRuntime *runtime);
+
+/**
+ * Free control event
+ */
+void free_control_event(struct FfiControlEvent *event);
+
+/**
+ * Free player list
+ */
+void free_player_list(struct FfiPlayerList list);
+
+/**
+ * Free service type tag
+ */
+void free_ffi_service_type(enum FfiServiceType *ptr);
 
 #ifdef __cplusplus
 }  // extern "C"

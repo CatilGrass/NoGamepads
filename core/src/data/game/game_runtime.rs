@@ -154,7 +154,7 @@ impl GameRuntime {
     }
 
     /// Pop an event message
-    pub fn pop_event(&mut self) -> Option<(Account, ControlMessage)> {
+    pub fn pop_control_event(&mut self) -> Option<(Account, ControlMessage)> {
         let pop = self.control.events.pop_front();
         if pop.is_some() {
             let (account, msg) = pop.unwrap();

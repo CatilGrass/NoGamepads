@@ -30,7 +30,7 @@ impl FfiControllerData {
     /// Bind player to controller
     #[unsafe(no_mangle)]
     #[allow(unsafe_op_in_unsafe_fn)]
-    pub unsafe extern "C" fn controller_data_bind_player(
+    pub extern "C" fn controller_data_bind_player(
         controller: *mut FfiControllerData,
         ffi_player: *mut FfiPlayer
     ) {
@@ -47,13 +47,13 @@ impl FfiControllerData {
         controller_inner.bind_player(player);
 
         // Release the FFI Player
-        drop(Box::from_raw(ffi_player));
+        drop(unsafe { Box::from_raw(ffi_player) });
     }
 
     /// Build runtime
     #[unsafe(no_mangle)]
     #[allow(unsafe_op_in_unsafe_fn)]
-    pub unsafe extern "C" fn controller_data_build_runtime(
+    pub extern "C" fn controller_data_build_runtime(
         controller: *mut FfiControllerData
     ) -> *mut FfiControllerRuntime {
         assert!(!controller.is_null(), "ControllerData pointer is null");
@@ -85,7 +85,7 @@ impl FfiControllerData {
 
     /// Free ControllerData memory
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_data_free(controller: *mut FfiControllerData) {
+    pub extern "C" fn controller_data_free(controller: *mut FfiControllerData) {
         if controller.is_null() {
             return;
         }
@@ -106,7 +106,7 @@ impl FfiControllerRuntime {
 
     /// Close runtime and exit game
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_close(
+    pub extern "C" fn controller_runtime_close(
         runtime: *mut FfiControllerRuntime
     ) {
         if runtime.is_null() {
@@ -126,7 +126,7 @@ impl FfiControllerRuntime {
 
     /// Send control message
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_send_message(
+    pub extern "C" fn controller_runtime_send_message(
         runtime: *mut FfiControllerRuntime,
         control_message: *mut FfiControlMessage
     ) {
@@ -147,7 +147,7 @@ impl FfiControllerRuntime {
 
     /// Send text message
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_send_text_message(
+    pub extern "C" fn controller_runtime_send_text_message(
         runtime: *mut FfiControllerRuntime,
         message_ptr: *const c_char
     ) {
@@ -159,17 +159,15 @@ impl FfiControllerRuntime {
         let text = c_str.to_string_lossy().into_owned();
         let message = FfiControlMessage::from(ControlMessage::Msg(text));
 
-        unsafe {
-            Self::controller_runtime_send_message(
-                runtime,
-                Box::into_raw(Box::new(message))
-            )
-        }
+        Self::controller_runtime_send_message(
+            runtime,
+            Box::into_raw(Box::new(message))
+        )
     }
 
     /// Press a button
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_press_a_button(
+    pub extern "C" fn controller_runtime_press_a_button(
         runtime: *mut FfiControllerRuntime,
         key: u8
     ) {
@@ -181,17 +179,15 @@ impl FfiControllerRuntime {
             ControlMessage::Pressed(key)
         );
 
-        unsafe {
-            Self::controller_runtime_send_message(
-                runtime,
-                Box::into_raw(Box::new(message))
-            )
-        }
+        Self::controller_runtime_send_message(
+            runtime,
+            Box::into_raw(Box::new(message))
+        )
     }
 
     /// Release a button
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_release_a_button(
+    pub extern "C" fn controller_runtime_release_a_button(
         runtime: *mut FfiControllerRuntime,
         key: u8
     ) {
@@ -203,17 +199,15 @@ impl FfiControllerRuntime {
             ControlMessage::Released(key)
         );
 
-        unsafe {
-            Self::controller_runtime_send_message(
-                runtime,
-                Box::into_raw(Box::new(message))
-            )
-        }
+        Self::controller_runtime_send_message(
+            runtime,
+            Box::into_raw(Box::new(message))
+        )
     }
 
     /// Change axis value
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_change_axis(
+    pub extern "C" fn controller_runtime_change_axis(
         runtime: *mut FfiControllerRuntime,
         key: u8,
         axis: c_double
@@ -226,17 +220,15 @@ impl FfiControllerRuntime {
             ControlMessage::Axis(key, axis)
         );
 
-        unsafe {
-            Self::controller_runtime_send_message(
-                runtime,
-                Box::into_raw(Box::new(message))
-            )
-        }
+        Self::controller_runtime_send_message(
+            runtime,
+            Box::into_raw(Box::new(message))
+        )
     }
 
     /// Change direction value
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_change_direction(
+    pub extern "C" fn controller_runtime_change_direction(
         runtime: *mut FfiControllerRuntime,
         key: u8,
         x: c_double,
@@ -250,17 +242,15 @@ impl FfiControllerRuntime {
             ControlMessage::Dir(key, (x, y))
         );
 
-        unsafe {
-            Self::controller_runtime_send_message(
-                runtime,
-                Box::into_raw(Box::new(message))
-            )
-        }
+        Self::controller_runtime_send_message(
+            runtime,
+            Box::into_raw(Box::new(message))
+        )
     }
 
     /// Pop a message from the queue
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_pop(
+    pub extern "C" fn controller_runtime_pop(
         runtime: *mut FfiControllerRuntime
     ) -> *mut FfiGameMessage {
         if runtime.is_null() {
@@ -294,7 +284,7 @@ impl FfiControllerRuntime {
 
     /// Free runtime memory
     #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn controller_runtime_free(runtime: *mut FfiControllerRuntime) {
+    pub extern "C" fn free_controller_runtime(runtime: *mut FfiControllerRuntime) {
         if runtime.is_null() {
             return;
         }

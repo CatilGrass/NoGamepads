@@ -65,6 +65,17 @@ impl Player {
         player
     }
 
+    pub fn register_from_hash(hash: String) -> Player {
+        let mut player = Player {
+            customize: None,
+            account: Account::default()
+        };
+
+        player.account.id = "$only_hash$".to_string();
+        player.account.player_hash = hash;
+        player
+    }
+
     pub fn check(&self, password: String) -> bool {
         let hash = Self::gen_hash(self.account.id.clone(), password);
         hash == self.account.player_hash
