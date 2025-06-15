@@ -27,9 +27,8 @@ impl FfiTcpClientService {
         }
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<ControllerRuntime>> };
-        let arc_clone: Arc<Mutex<ControllerRuntime>> = unsafe { (&*arc_ptr).clone() };
 
-        let service = PadClientNetwork::build(arc_clone);
+        let service = PadClientNetwork::build(Arc::clone(&arc_ptr));
         let raw = Box::into_raw(Box::new(FfiTcpClientService(Box::into_raw(Box::new(service)) as *mut _)));
 
         raw
@@ -179,9 +178,8 @@ impl FfiTcpServerService {
         if runtime.is_null() { return std::ptr::null_mut(); }
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_clone: Arc<Mutex<GameRuntime>> = unsafe { (&*arc_ptr).clone() };
 
-        let service = PadServerNetwork::build(arc_clone);
+        let service = PadServerNetwork::build(Arc::clone(&arc_ptr));
         let raw = Box::into_raw(Box::new(FfiTcpServerService(Box::into_raw(Box::new(service)) as *mut _)));
 
         raw
