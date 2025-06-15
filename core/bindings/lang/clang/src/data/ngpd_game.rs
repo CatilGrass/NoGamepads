@@ -104,10 +104,10 @@ impl FfiGameData {
             return std::ptr::null_mut();
         }
 
-        let data_inner = unsafe { &mut *((*data).0 as *mut GameData) };
-        let game_data = *unsafe { Box::from_raw(data_inner) };
+        let data_inner = unsafe { data.read() };
+        let raw_data = data_inner.0;
 
-        let runtime = game_data.runtime();
+        let game_data: Box<GameData> = unsafe { Box::from_raw(raw_data as *mut GameData) };
 
         extern "C" fn drop_runtime(raw: *mut c_void) {
             unsafe {
@@ -116,7 +116,7 @@ impl FfiGameData {
             }
         }
 
-        let arc_raw = Arc::into_raw(runtime.clone()) as *mut c_void;
+        let arc_raw = Arc::into_raw(game_data.runtime()) as *mut c_void;
 
         Box::into_raw(Box::new(FfiGameRuntime {
             inner: arc_raw,

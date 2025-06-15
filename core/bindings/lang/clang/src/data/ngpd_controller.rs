@@ -60,11 +60,10 @@ impl FfiControllerData {
 
         // Take ownership
         let controller_box = unsafe { Box::from_raw(controller) };
-        let raw_data = (*controller_box).0;
+        let raw_data = controller_box.0;
 
         // Convert ControllerData
-        let controller_data = unsafe { Box::from_raw(raw_data as *mut ControllerData) };
-        let runtime = controller_data.runtime();
+        let controller_data: Box<ControllerData> = unsafe { Box::from_raw(raw_data as *mut ControllerData) };
 
         // Define custom drop function
         extern "C" fn drop_runtime(raw: *mut c_void) {
@@ -75,7 +74,7 @@ impl FfiControllerData {
         }
 
         // Convert to an FFI-safe structure
-        let arc_raw = Arc::into_raw(runtime.clone()) as *mut c_void;
+        let arc_raw = Arc::into_raw(controller_data.runtime()) as *mut c_void;
 
         Box::into_raw(Box::new(FfiControllerRuntime {
             inner: arc_raw,
@@ -136,7 +135,11 @@ impl FfiControllerRuntime {
 
         let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<ControllerRuntime>> };
         let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        let msg = unsafe { ControlMessage::from(control_message.read()) };
+
+        let msg = unsafe {
+            let boxed_msg = Box::from_raw(control_message);
+            ControlMessage::from(*boxed_msg)
+        };
 
         entry_mutex!(arc_ref, |mutex_guard| {
             mutex_guard.send_message(msg);

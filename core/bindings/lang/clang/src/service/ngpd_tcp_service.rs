@@ -7,6 +7,7 @@ use nogamepads_core::service::tcp_network::pad_server::pad_server_service::PadSe
 use std::ffi::{c_char, c_void, CStr};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
 use std::sync::{Arc, Mutex};
+use nogamepads_core::service::tcp_network::utils::tokio_utils::build_tokio_runtime;
 
 #[repr(C)]
 pub struct FfiTcpClientService(*mut c_void);
@@ -150,7 +151,8 @@ impl FfiTcpClientService {
         let inner = unsafe { &mut *((*service).0 as *mut PadClientNetwork) };
         let service = unsafe { Box::from_raw(inner) };
 
-        service.connect();
+        let rt = build_tokio_runtime("nogamepads-c-tcp".to_string());
+        rt.block_on(service.build_entry());
     }
 
     /// Free tcp client
@@ -294,7 +296,8 @@ impl FfiTcpServerService {
         let inner = unsafe { &mut *((*service).0 as *mut PadServerNetwork) };
         let service = unsafe { Box::from_raw(inner) };
 
-        service.listening_block_on();
+        let rt = build_tokio_runtime("nogamepads-c-tcp".to_string());
+        rt.block_on(service.build_entry());
     }
 
     /// Free tcp server
