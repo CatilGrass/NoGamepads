@@ -1,11 +1,12 @@
 use std::ffi::{c_char, c_double, c_int, CStr, CString};
 use std::ptr;
 use nogamepads_core::data::player::player_data::{Account, Customize, Player};
+use crate::converter::string_converter::str_rs_to_c;
 
 #[repr(C)]
 pub struct FfiAccount {
-    id: *mut c_char,
-    player_hash: *mut c_char,
+    pub(crate) id: *mut c_char,
+    pub(crate) player_hash: *mut c_char,
 }
 
 #[repr(C)]
@@ -80,6 +81,25 @@ pub extern "C" fn player_register(id: *const c_char, password: *const c_char) ->
 
     let player = Player::register(id_str.into_owned(), pass_str.into_owned());
     Box::into_raw(Box::new(FfiPlayer::from(&player)))
+}
+
+/// Register a player from hash
+#[unsafe(no_mangle)]
+pub extern "C" fn player_from_hash(hash: *const c_char) -> *mut FfiPlayer {
+    let hash_str = unsafe { CStr::from_ptr(hash) }.to_string_lossy();
+
+    let player = Player::register_from_hash(hash_str.into_owned());
+    Box::into_raw(Box::new(FfiPlayer::from(&player)))
+}
+
+/// Get a hash from player
+#[unsafe(no_mangle)]
+pub extern "C" fn player_get_hash(player: *mut FfiPlayer) -> *const c_char {
+    let rust_player : Player = unsafe { (&*player).try_into().unwrap() };
+
+    let hash = rust_player.account.player_hash.clone();
+    *unsafe { &mut *player } = FfiPlayer::from(&rust_player);
+    unsafe { str_rs_to_c(hash) }
 }
 
 /// Check if the player's password is correct

@@ -483,96 +483,105 @@ impl From<&FfiJoinFailedMessage> for JoinFailedMessage {
 
 /// Free ControlMessage
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free_control_message(msg: *mut FfiControlMessage) {
+pub extern "C" fn free_control_message(msg: *mut FfiControlMessage) {
     if msg.is_null() { return; }
-    let msg = Box::from_raw(msg);
+    let msg = unsafe { Box::from_raw(msg) };
 
-    match msg.tag {
-        FfiControlMessageTag::CtrlMsg => {
-            if !msg.data.message.is_null() {
-                drop(CString::from_raw(msg.data.message));
+    unsafe {
+        match msg.tag {
+            FfiControlMessageTag::CtrlMsg => {
+                if !msg.data.message.is_null() {
+                    drop(CString::from_raw(msg.data.message));
+                }
             }
+            FfiControlMessageTag::CtrlAxis => {
+                let ptr = ManuallyDrop::into_inner(msg.data.key_and_axis);
+                drop(ptr);
+            }
+            FfiControlMessageTag::CtrlDir => {
+                let ptr = ManuallyDrop::into_inner(msg.data.key_and_direction);
+                drop(ptr);
+            }
+            _ => {}
         }
-        FfiControlMessageTag::CtrlAxis => {
-            let ptr = ManuallyDrop::into_inner(msg.data.key_and_axis);
-            drop(ptr);
-        }
-        FfiControlMessageTag::CtrlDir => {
-            let ptr = ManuallyDrop::into_inner(msg.data.key_and_direction);
-            drop(ptr);
-        }
-        _ => {}
     }
 }
 
 /// Free GameMessage
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free_game_message(msg: *mut FfiGameMessage) {
+pub extern "C" fn free_game_message(msg: *mut FfiGameMessage) {
     if msg.is_null() { return; }
-    let msg = Box::from_raw(msg);
+    let msg = unsafe { Box::from_raw(msg) };
 
-    match msg.tag {
-        FfiGameMessageTag::GameMsg => {
-            if !msg.data.message.is_null() {
-                drop(CString::from_raw(msg.data.message));
+    unsafe {
+        match msg.tag {
+            FfiGameMessageTag::GameMsg => {
+                if !msg.data.message.is_null() {
+                    drop(CString::from_raw(msg.data.message));
+                }
             }
+            FfiGameMessageTag::GameLetExit => {
+                let reason = ManuallyDrop::into_inner(msg.data.exit_reason);
+                drop(reason);
+            }
+            _ => {}
         }
-        FfiGameMessageTag::GameLetExit => {
-            let reason = ManuallyDrop::into_inner(msg.data.exit_reason);
-            drop(reason);
-        }
-        _ => {}
     }
 }
 
 /// Free ExitReason
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free_exit_reason(msg: *mut FfiExitReason) {
+pub extern "C" fn free_exit_reason(msg: *mut FfiExitReason) {
     if !msg.is_null() {
-        drop(Box::from_raw(msg));
+        drop(unsafe { Box::from_raw(msg) });
     }
 }
+
 /// Free ConnectionMessage
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free_connection_message(msg: *mut FfiConnectionMessage) {
+pub extern "C" fn free_connection_message(msg: *mut FfiConnectionMessage) {
     if msg.is_null() { return; }
-    let msg = Box::from_raw(msg);
+    let msg = unsafe { Box::from_raw(msg) };
 
-    match msg.tag {
-        FfiConnectionMessageTag::ConnectionJoin => {
-            let player = ManuallyDrop::into_inner(msg.data.player);
-            let player_ptr = Box::into_raw(Box::new(player));
+    unsafe {
+        match msg.tag {
+            FfiConnectionMessageTag::ConnectionJoin => {
+                let player = ManuallyDrop::into_inner(msg.data.player);
+                let player_ptr = Box::into_raw(Box::new(player));
 
-            free_player(player_ptr);
+                free_player(player_ptr);
+            }
+            _ => {}
         }
-        _ => {}
     }
 }
 
 /// Free ConnectionResponseMessage
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free_connection_response_message(msg: *mut FfiConnectionResponseMessage) {
+pub extern "C" fn free_connection_response_message(msg: *mut FfiConnectionResponseMessage) {
     if msg.is_null() { return; }
-    let msg = Box::from_raw(msg);
+    let msg = unsafe { Box::from_raw(msg) };
 
-    match msg.tag {
-        FfiConnectionResponseMessageTag::GameInfosResponse => {
-            let game_info = ManuallyDrop::into_inner(msg.data.game_info);
-            free_game_info(game_info);
+    unsafe {
+        match msg.tag {
+            FfiConnectionResponseMessageTag::GameInfosResponse => {
+                let game_info = ManuallyDrop::into_inner(msg.data.game_info);
+                free_game_info(game_info);
+            }
+            FfiConnectionResponseMessageTag::DenyResponse |
+            FfiConnectionResponseMessageTag::FailResponse => {
+                let failed_msg = ManuallyDrop::into_inner(msg.data.failed_message);
+                drop(failed_msg);
+            }
+            _ => {}
         }
-        FfiConnectionResponseMessageTag::DenyResponse |
-        FfiConnectionResponseMessageTag::FailResponse => {
-            let failed_msg = ManuallyDrop::into_inner(msg.data.failed_message);
-            drop(failed_msg);
-        }
-        _ => {}
     }
 }
 
 /// Free JoinFailedMessage
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free_join_failed_message(msg: *mut FfiJoinFailedMessage) {
+pub extern "C" fn free_join_failed_message(msg: *mut FfiJoinFailedMessage) {
     if !msg.is_null() {
-        drop(Box::from_raw(msg));
+        drop(unsafe { Box::from_raw(msg) });
     }
 }

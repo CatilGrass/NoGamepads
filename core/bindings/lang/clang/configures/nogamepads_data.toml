@@ -12,4 +12,7 @@ include = [
     "ngpd_message",
     "ngpd_player",
     "ngpd_controller",
+    "ngpd_game",
+
+    "ngpd_service_types",
 ]
