@@ -15,4 +15,5 @@ include = [
     "ngpd_game",
 
     "ngpd_service_types",
+    "ngpd_tcp_service"
 ]
