@@ -3,11 +3,17 @@ project(binding_example C)
 
 set(CMAKE_C_STANDARD 99)
 
+# Executables
+
 add_executable(example_server_listening tcp_server.c)
 add_executable(example_connect_server tcp_client.c)
 
+# Includes
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${PROJECT_SOURCE_DIR}/libs)
+
+# Libraries
 
 target_link_libraries(example_server_listening
         ${PROJECT_SOURCE_DIR}/libs/nogamepads_c.dll.lib

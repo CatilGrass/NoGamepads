@@ -1,13 +1,14 @@
 use crate::data::ngpd_controller::FfiControllerRuntime;
 use crate::data::ngpd_game::FfiGameRuntime;
-use nogamepads_core::data::controller::controller_runtime::ControllerRuntime;
-use nogamepads_core::data::game::game_runtime::GameRuntime;
 use nogamepads_core::service::tcp_network::pad_client::pad_client_service::PadClientNetwork;
 use nogamepads_core::service::tcp_network::pad_server::pad_server_service::PadServerNetwork;
+use nogamepads_core::service::tcp_network::utils::tokio_utils::build_tokio_runtime;
 use std::ffi::{c_char, c_void, CStr};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
+use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
-use nogamepads_core::service::tcp_network::utils::tokio_utils::build_tokio_runtime;
+use nogamepads_core::data::controller::controller_runtime::ControllerRuntime;
+use nogamepads_core::data::game::game_runtime::GameRuntime;
 
 #[repr(C)]
 pub struct FfiTcpClientService(*mut c_void);
@@ -24,16 +25,22 @@ impl FfiTcpClientService {
     ) -> *mut FfiTcpClientService {
 
         if runtime.is_null() {
-            return std::ptr::null_mut();
+            return null_mut();
         }
 
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<ControllerRuntime>> };
-        let arc_ref = unsafe { Arc::clone(&*arc_ptr) };
+        let runtime_ref = unsafe { &*runtime };
+        let data_ptr = runtime_ref.inner as *const Mutex<ControllerRuntime>;
 
-        let service = PadClientNetwork::build(Arc::clone(&arc_ref));
-        let raw = Box::into_raw(Box::new(FfiTcpClientService(Box::into_raw(Box::new(service)) as *mut _)));
+        let arc = unsafe {
+            let atomic_arc = Arc::from_raw(data_ptr);
+            Arc::clone(&atomic_arc)
+        };
 
-        raw
+        let client = PadClientNetwork::build(arc.clone());
+
+        let client_box = Box::new(client);
+        let service = FfiTcpClientService(Box::into_raw(client_box) as *mut _);
+        Box::into_raw(Box::new(service))
     }
 
     /// Bind ipv4 address
@@ -160,12 +167,17 @@ impl FfiTcpClientService {
     pub extern "C" fn free_tcp_client(
         service: *mut FfiTcpClientService
     ) {
-        if service.is_null() { return; }
+        if service.is_null() {
+            return;
+        }
 
-        let service_ptr = service as *mut PadClientNetwork;
+        let wrapper = unsafe { Box::from_raw(service) };
+        let client_ptr = wrapper.0;
 
         unsafe {
-            let _ = Box::from_raw(service_ptr);
+            if !client_ptr.is_null() {
+                let _ = Box::from_raw(client_ptr as *mut PadClientNetwork);
+            }
         }
     }
 }
@@ -178,15 +190,23 @@ impl FfiTcpServerService {
         runtime: *mut FfiGameRuntime,
     ) -> *mut FfiTcpServerService {
 
-        if runtime.is_null() { return std::ptr::null_mut(); }
+        if runtime.is_null() {
+            return null_mut();
+        }
 
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::clone(&*arc_ptr) };
+        let runtime_ref = unsafe { &*runtime };
+        let data_ptr = runtime_ref.inner as *const Mutex<GameRuntime>;
 
-        let service = PadServerNetwork::build(Arc::clone(&arc_ref));
-        let raw = Box::into_raw(Box::new(FfiTcpServerService(Box::into_raw(Box::new(service)) as *mut _)));
+        let arc = unsafe {
+            let atomic_arc = Arc::from_raw(data_ptr);
+            Arc::clone(&atomic_arc)
+        };
 
-        raw
+        let server = PadServerNetwork::build(arc.clone());
+
+        let server_box = Box::new(server);
+        let service = FfiTcpServerService(Box::into_raw(server_box) as *mut _);
+        Box::into_raw(Box::new(service))
     }
 
     /// Bind ipv4 address
@@ -305,12 +325,14 @@ impl FfiTcpServerService {
     pub extern "C" fn free_tcp_server(
         service: *mut FfiTcpServerService
     ) {
-        if service.is_null() { return; }
+        if !service.is_null() {
+            unsafe {
+                let service = Box::from_raw(service);
 
-        let service_ptr = service as *mut PadServerNetwork;
-
-        unsafe {
-            let _ = Box::from_raw(service_ptr);
+                if !service.0.is_null() {
+                    Arc::from_raw(service.0 as *mut _);
+                }
+            }
         }
     }
 }

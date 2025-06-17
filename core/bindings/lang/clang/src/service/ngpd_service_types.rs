@@ -2,6 +2,7 @@ use nogamepads_core::service::service_types::ServiceType;
 
 #[repr(C)]
 pub enum FfiServiceType {
+    Unknown,
     TCPConnection,
     BlueTooth,
     USB,
@@ -23,6 +24,9 @@ impl From<&FfiServiceType> for ServiceType {
             FfiServiceType::TCPConnection => { ServiceType::TCPConnection }
             FfiServiceType::BlueTooth => { ServiceType::BlueTooth }
             FfiServiceType::USB => { ServiceType::USB }
+            _ => {
+                ServiceType::default()
+            }
         }
     }
 }

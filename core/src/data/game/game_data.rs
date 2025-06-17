@@ -91,6 +91,12 @@ impl GameData {
         };
         Arc::new(Mutex::new(runtime))
     }
+
+    /// Build the game-side runtime using game data (borrowed)
+    pub fn runtime_with_borrowed_data(&self) -> Arc<Mutex<GameRuntime>> {
+        let runtime = self.clone().runtime();
+        runtime
+    }
 }
 
 impl From<GameRuntimeDataArchive> for GameRuntimeData {

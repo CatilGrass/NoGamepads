@@ -8,7 +8,6 @@ use nogamepads_core::data::message::message_enums::{ExitReason, GameMessage};
 use nogamepads_core::data::player::player_data::Player;
 use nogamepads_core::service::service_types::ServiceType;
 use std::ffi::{c_char, c_double, c_void, CStr};
-use std::ptr::null;
 use std::sync::{Arc, Mutex, MutexGuard};
 
 #[repr(C)]
@@ -72,6 +71,68 @@ impl FfiGameData {
         raw
     }
 
+    /// Add info
+    #[unsafe(no_mangle)]
+    pub extern "C" fn game_data_add_info(
+        data: *mut FfiGameData,
+        key: *const c_char,
+        value: *const c_char,
+    ) -> *mut FfiGameData {
+
+        if data.is_null() || key.is_null() || value.is_null() {
+            return std::ptr::null_mut();
+        }
+
+        let key_str = unsafe { CStr::from_ptr(key) }.to_string_lossy().into_owned();
+        let value_str = unsafe { CStr::from_ptr(value) }.to_string_lossy().into_owned();
+
+        let data_inner = unsafe { &mut *((*data).0 as *mut GameData) };
+        data_inner.info(key_str, value_str);
+
+        let raw = Box::into_raw(Box::new(FfiGameData(Box::into_raw(Box::new(data)) as *mut _)));
+        raw
+    }
+
+    /// Set name info
+    #[unsafe(no_mangle)]
+    pub extern "C" fn game_data_set_name_info(
+        data: *mut FfiGameData,
+        name: *const c_char,
+    ) -> *mut FfiGameData {
+
+        if data.is_null() || name.is_null() {
+            return std::ptr::null_mut();
+        }
+
+        let name_str = unsafe { CStr::from_ptr(name) }.to_string_lossy().into_owned();
+
+        let data_inner = unsafe { &mut *((*data).0 as *mut GameData) };
+        data_inner.name(name_str);
+
+        let raw = Box::into_raw(Box::new(FfiGameData(Box::into_raw(Box::new(data)) as *mut _)));
+        raw
+    }
+
+    /// Set version info
+    #[unsafe(no_mangle)]
+    pub extern "C" fn game_data_set_version_info(
+        data: *mut FfiGameData,
+        version: *const c_char,
+    ) -> *mut FfiGameData {
+
+        if data.is_null() || version.is_null() {
+            return std::ptr::null_mut();
+        }
+
+        let version_str = unsafe { CStr::from_ptr(version) }.to_string_lossy().into_owned();
+
+        let data_inner = unsafe { &mut *((*data).0 as *mut GameData) };
+        data_inner.version(version_str);
+
+        let raw = Box::into_raw(Box::new(FfiGameData(Box::into_raw(Box::new(data)) as *mut _)));
+        raw
+    }
+
     /// Load data archive
     #[unsafe(no_mangle)]
     pub extern "C" fn game_data_load_archive(
@@ -104,24 +165,25 @@ impl FfiGameData {
             return std::ptr::null_mut();
         }
 
-        let data_inner = unsafe { data.read() };
-        let raw_data = data_inner.0;
+        let data_inner = unsafe { &mut *((*data).0 as *mut GameData) };
 
-        let game_data: Box<GameData> = unsafe { Box::from_raw(raw_data as *mut GameData) };
+        let arc = data_inner.runtime_with_borrowed_data();
+        let ptr = Arc::into_raw(arc) as *mut c_void;
 
-        extern "C" fn drop_runtime(raw: *mut c_void) {
+        let ffi_runtime = Box::new(FfiGameRuntime {
+            inner: ptr,
+            drop_fn: Self::drop_game_runtime,
+        });
+
+        Box::into_raw(ffi_runtime)
+    }
+
+    extern "C" fn drop_game_runtime(ptr: *mut c_void) {
+        if !ptr.is_null() {
             unsafe {
-                let arc_ptr = raw as *const Arc<Mutex<GameRuntime>>;
-                drop(Arc::from_raw(arc_ptr));
+                let _ = Arc::<Mutex<GameRuntime>>::from_raw(ptr as *mut _);
             }
         }
-
-        let arc_raw = Arc::into_raw(game_data.runtime()) as *mut c_void;
-
-        Box::into_raw(Box::new(FfiGameRuntime {
-            inner: arc_raw,
-            drop_fn: drop_runtime,
-        }))
     }
 
     /// Free data
@@ -183,34 +245,62 @@ impl FfiGameRuntimeArchive {
 
 impl FfiGameRuntime {
 
+    fn operate_game_runtime(
+        runtime: *mut FfiGameRuntime,
+        callback: fn(guard: &mut MutexGuard<GameRuntime>)
+    ) {
+        unsafe {
+            let ffi_runtime = &*runtime;
+            Arc::increment_strong_count(ffi_runtime.inner);
+            let arc = Arc::<Mutex<GameRuntime>>::from_raw(ffi_runtime.inner as *mut _);
+            let arc_clone = Arc::clone(&arc);
+            let _ = Arc::into_raw(arc);
+            entry_mutex!(arc_clone, |guard| {
+                callback(guard);
+            });
+            Arc::decrement_strong_count(ffi_runtime.inner);
+        }
+    }
+
+    fn operate_game_runtime_with_return<Input, Result>(
+        runtime: *mut FfiGameRuntime,
+        input: Input,
+        callback: fn(guard: &mut MutexGuard<GameRuntime>, input: Input) -> Option<Result>
+    ) -> Option<Result> {
+        unsafe {
+            let ffi_runtime = &*runtime;
+            Arc::increment_strong_count(ffi_runtime.inner);
+            let arc = Arc::<Mutex<GameRuntime>>::from_raw(ffi_runtime.inner as *mut _);
+            let arc_clone = Arc::clone(&arc);
+            let _ = Arc::into_raw(arc);
+            let mut result = None;
+            entry_mutex!(arc_clone, |guard| {
+                result = callback(guard, input);
+            });
+            Arc::decrement_strong_count(ffi_runtime.inner);
+            result
+        }
+    }
+
     fn send_message_to(
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer,
-        service_type: *mut FfiServiceType,
+        service_type: FfiServiceType,
         message: GameMessage,
     ) {
         if runtime.is_null() || player.is_null() { return; }
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
+
         let ffi_player_ref = unsafe { &*player };
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
-        let service = unsafe { ServiceType::from(&service_type.read()) };
 
-        entry_mutex!(arc_ref, |mutex_guard| {
-            mutex_guard.send_game_message(&player.account, message, service);
-        });
-    }
+        let service = ServiceType::from(&service_type);
 
-    fn do_on_rt(
-        runtime: *mut FfiGameRuntime,
-        do_on: fn(guard: &mut MutexGuard<GameRuntime>)
-    ) {
-        if runtime.is_null() { return; }
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-
-        entry_mutex!(arc_ref, |mutex_guard| {
-            do_on(mutex_guard);
+        Self::operate_game_runtime_with_return(
+            runtime,
+            (&player.account, message, service),
+            |guard, (account, message, service)| {
+                guard.send_game_message(account, message, service);
+                Some(())
         });
     }
 
@@ -220,7 +310,7 @@ impl FfiGameRuntime {
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer,
         message: *mut FfiGameMessage,
-        service_type: *mut FfiServiceType
+        service_type: FfiServiceType
     ) {
         if message.is_null() { return; }
         let msg = unsafe { GameMessage::from(message.read()) };
@@ -232,7 +322,7 @@ impl FfiGameRuntime {
     pub extern "C" fn game_runtime_send_text_message(
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer,
-        service_type: *mut FfiServiceType,
+        service_type: FfiServiceType,
         text: *const c_char
     ) {
         let text_str = unsafe { CStr::from_ptr(text) }.to_string_lossy().into_owned().to_string();
@@ -244,7 +334,7 @@ impl FfiGameRuntime {
     pub extern "C" fn game_runtime_send_event(
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer,
-        service_type: *mut FfiServiceType,
+        service_type: FfiServiceType,
         key: u8
     ) {
         Self::send_message_to(runtime, player, service_type, GameMessage::EventTrigger(key));
@@ -254,12 +344,13 @@ impl FfiGameRuntime {
     #[unsafe(no_mangle)]
     pub extern "C" fn game_runtime_pop_control_event(runtime: *mut FfiGameRuntime) -> *mut FfiControlEvent {
         if runtime.is_null() { return std::ptr::null_mut(); }
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        let mut control_event = None;
-        entry_mutex!(arc_ref, |mutex_guard| {
-            control_event = mutex_guard.pop_control_event();
-        });
+
+        let control_event = Self::operate_game_runtime_with_return(
+            runtime,
+            (), |guard, _| {
+                guard.pop_control_event()
+            });
+
         match control_event {
             None => { std::ptr::null_mut() }
             Some((account, message)) => {
@@ -276,13 +367,21 @@ impl FfiGameRuntime {
     pub extern "C" fn game_runtime_let_exit(
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer,
-        service_type: *mut FfiServiceType,
-        reason: *mut FfiExitReason
+        service_type: FfiServiceType,
+        reason: FfiExitReason
     ) {
-        if reason.is_null() { return; }
-        let reason = unsafe { reason.read() };
-        let reason_msg = GameMessage::LetExit(ExitReason::from(&reason));
-        Self::send_message_to(runtime, player, service_type, reason_msg);
+        if runtime.is_null() || player.is_null() { return; }
+
+        let ffi_player_ref = unsafe { &*player };
+        let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
+
+        Self::operate_game_runtime_with_return(
+            runtime, (&player.account, ExitReason::from(&reason), ServiceType::from(&service_type)),
+            |guard, (account, reason, service)| {
+                guard.let_account_exit(account, reason, service);
+                Some(())
+            }
+        );
     }
 
     /// Kick a player
@@ -290,20 +389,20 @@ impl FfiGameRuntime {
     pub extern "C" fn game_runtime_kick_player(
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer,
-        service_type: *mut FfiServiceType
+        service_type: FfiServiceType
     ) {
-        if runtime.is_null() || player.is_null() || service_type.is_null() { return; }
+        if runtime.is_null() || player.is_null() { return; }
 
         let ffi_player_ref = unsafe { &*player };
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
-        let service = unsafe { ServiceType::from(&service_type.read()) };
 
-        if runtime.is_null() { return; }
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            mutex_guard.kick_player(&player, service);
-        });
+        Self::operate_game_runtime_with_return(
+            runtime, (&player, ServiceType::from(&service_type)),
+            |guard, (player, service)| {
+                guard.kick_player(player, service);
+                Some(())
+            }
+        );
     }
 
     /// Ban a player (And kick)
@@ -311,20 +410,20 @@ impl FfiGameRuntime {
     pub extern "C" fn game_runtime_ban_player(
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer,
-        service_type: *mut FfiServiceType
+        service_type: FfiServiceType
     ) {
-        if runtime.is_null() || player.is_null() || service_type.is_null() { return; }
+        if runtime.is_null() || player.is_null() { return; }
 
         let ffi_player_ref = unsafe { &*player };
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
-        let service = unsafe { ServiceType::from(&service_type.read()) };
 
-        if runtime.is_null() { return; }
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            mutex_guard.ban_player(&player, service);
-        });
+        Self::operate_game_runtime_with_return(
+            runtime, (&player, ServiceType::from(&service_type)),
+            |guard, (player, service)| {
+                guard.ban_player(player, service);
+                Some(())
+            }
+        );
     }
 
     /// Pardon a player
@@ -338,19 +437,20 @@ impl FfiGameRuntime {
         let ffi_player_ref = unsafe { &*player };
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
 
-        if runtime.is_null() { return; }
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            mutex_guard.pardon_player(&player);
-        });
+        Self::operate_game_runtime_with_return(
+            runtime, &player,
+            |guard, player| {
+                guard.pardon_player(player);
+                Some(())
+            }
+        );
     }
 
     /// Close runtime
     #[unsafe(no_mangle)]
     pub extern "C" fn game_runtime_close(runtime: *mut FfiGameRuntime) {
         if runtime.is_null() { return; }
-        Self::do_on_rt(runtime, |guard| {
+        Self::operate_game_runtime(runtime, |guard| {
             guard.close_game();
         })
     }
@@ -359,7 +459,7 @@ impl FfiGameRuntime {
     #[unsafe(no_mangle)]
     pub extern "C" fn game_runtime_lock(runtime: *mut FfiGameRuntime) {
         if runtime.is_null() { return; }
-        Self::do_on_rt(runtime, |guard| {
+        Self::operate_game_runtime(runtime, |guard| {
             guard.lock_game();
         })
     }
@@ -368,7 +468,7 @@ impl FfiGameRuntime {
     #[unsafe(no_mangle)]
     pub extern "C" fn game_runtime_unlock(runtime: *mut FfiGameRuntime) {
         if runtime.is_null() { return; }
-        Self::do_on_rt(runtime, |guard| {
+        Self::operate_game_runtime(runtime, |guard| {
             guard.unlock_game();
         })
     }
@@ -377,15 +477,12 @@ impl FfiGameRuntime {
     #[unsafe(no_mangle)]
     pub extern "C" fn game_runtime_get_lock_status(runtime: *mut FfiGameRuntime) -> bool {
         if runtime.is_null() { return false; }
-
-        let mut locked = false;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            locked = mutex_guard.is_game_locked();
+        let result = Self::operate_game_runtime_with_return(
+            runtime, (),
+            |guard, _| {
+            Some(guard.is_game_locked())
         });
-
-        locked
+        result.unwrap_or(false)
     }
 
     /// Get button status of player
@@ -400,12 +497,11 @@ impl FfiGameRuntime {
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
         let account = player.account;
 
-        let mut status = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            status = mutex_guard.control.get_button_status(&account, &key);
-        });
+        let status = Self::operate_game_runtime_with_return(
+            runtime, (account, key), |guard, (account, key)| {
+                guard.control.get_button_status(&account, &key)
+            }
+        );
 
         match status {
             None => { FfiButtonStatus { found: false, pressed: false, released: false } }
@@ -427,12 +523,11 @@ impl FfiGameRuntime {
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
         let account = player.account;
 
-        let mut status = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            status = mutex_guard.control.get_axis(&account, &key);
-        });
+        let status = Self::operate_game_runtime_with_return(
+            runtime, (account, key), |guard, (account, key)| {
+                guard.control.get_axis(&account, &key)
+            }
+        );
 
         match status {
             None => { FfiAxis { found: false, axis: 0.0 } }
@@ -454,12 +549,11 @@ impl FfiGameRuntime {
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
         let account = player.account;
 
-        let mut status = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            status = mutex_guard.control.get_direction(&account, &key);
-        });
+        let status = Self::operate_game_runtime_with_return(
+            runtime, (account, key), |guard, (account, key)| {
+                guard.control.get_direction(&account, &key)
+            }
+        );
 
         match status {
             None => { FfiDirection { found: false, x: 0.0, y: 0.0 } }
@@ -474,23 +568,22 @@ impl FfiGameRuntime {
     pub extern "C" fn game_runtime_get_service_type(
         runtime: *mut FfiGameRuntime,
         player: *const FfiPlayer
-    ) -> *const FfiServiceType {
+    ) -> FfiServiceType {
 
         let ffi_player_ref = unsafe { &*player };
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
         let account = player.account;
 
-        let mut service_type = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            service_type = mutex_guard.data.get_service_type(&account);
-        });
+        let service_type = Self::operate_game_runtime_with_return(
+            runtime, account, |guard, account| {
+                guard.data.get_service_type(&account)
+            }
+        );
 
         match service_type {
-            None => { null() }
+            None => { FfiServiceType::BlueTooth }
             Some(r) => {
-                Box::into_raw(Box::new(FfiServiceType::from(&r)))
+                FfiServiceType::from(&r)
             }
         }
     }
@@ -506,12 +599,11 @@ impl FfiGameRuntime {
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
         let account = player.account;
 
-        let mut banned = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            banned = Some(mutex_guard.data.is_account_banned(&account));
-        });
+        let banned = Self::operate_game_runtime_with_return(
+            runtime, account, |guard, account| {
+                Some(guard.data.is_account_banned(&account))
+            }
+        );
 
         match banned {
             None => { FfiBooleanResult { found: false, result: false } }
@@ -532,12 +624,11 @@ impl FfiGameRuntime {
         let player = Player::try_from(&*ffi_player_ref).unwrap_or_default();
         let account = player.account;
 
-        let mut online = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            online = Some(mutex_guard.data.is_account_online(&account));
-        });
+        let online = Self::operate_game_runtime_with_return(
+            runtime, account, |guard, account| {
+                Some(guard.data.is_account_online(&account))
+            }
+        );
 
         match online {
             None => { FfiBooleanResult { found: false, result: false } }
@@ -551,12 +642,11 @@ impl FfiGameRuntime {
     #[unsafe(no_mangle)]
     pub extern "C" fn game_runtime_get_online_list(runtime: *mut FfiGameRuntime) -> FfiPlayerList {
 
-        let mut online_list = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            online_list = Some(mutex_guard.data.online_accounts());
-        });
+        let online_list = Self::operate_game_runtime_with_return(
+            runtime, (), |guard, _| {
+                Some(guard.data.online_accounts())
+            }
+        );
 
         let mut result : Vec<FfiPlayer> = vec![];
         if online_list.is_some() {
@@ -579,12 +669,11 @@ impl FfiGameRuntime {
     #[unsafe(no_mangle)]
     pub extern "C" fn game_runtime_get_banned_list(runtime: *mut FfiGameRuntime) -> FfiPlayerList {
 
-        let mut banned_list = None;
-        let arc_ptr = unsafe { (*runtime).inner as *const Arc<Mutex<GameRuntime>> };
-        let arc_ref = unsafe { Arc::from_raw(arc_ptr) };
-        entry_mutex!(arc_ref, |mutex_guard| {
-            banned_list = Some(mutex_guard.data.banned_accounts());
-        });
+        let banned_list = Self::operate_game_runtime_with_return(
+            runtime, (), |guard, _| {
+                Some(guard.data.banned_accounts())
+            }
+        );
 
         let mut result : Vec<FfiPlayer> = vec![];
         if banned_list.is_none() {
