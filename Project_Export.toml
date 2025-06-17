@@ -44,8 +44,11 @@ headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindin
 
 [release.deploy_deps]
 
-# Windows dynamic link libraries
-dlls = { raw = "./", target = "./core/bindings/lang/clang/binding_example/libs/", files = [
+c_binding_example_win = { raw = "./", target = "./core/bindings/lang/clang/binding_example/libs/", files = [
     "nogamepads_c.dll",
     "nogamepads_c.dll.lib"
+] }
+
+csharp_binding_win = { raw = "./", target = "./core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Core/Native/", files = [
+    "nogamepads_c.dll",
 ] }
