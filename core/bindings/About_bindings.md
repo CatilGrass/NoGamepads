@@ -1,4 +1,7 @@
-# Index
+# About bindings
+
+​	`NoGamepads` provides language bindings for `C` and `C#`, enabling you to  invoke its core functionality using either `C` or` C#` languages.
+​	If you are working with more popular game engines, you may directly  utilize our provided engine plugins, which are specifically crafted for  the corresponding game engine.
 
 ## Language Bindings
 
