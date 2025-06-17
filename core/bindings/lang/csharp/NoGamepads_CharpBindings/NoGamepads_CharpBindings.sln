@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoGamepads_Core", "NoGamepa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoGamepads_Example", "NoGamepads_Example\NoGamepads_Example.csproj", "{D576309A-DCDF-4A71-B3F0-C22EE34B9F2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoGamepads_Bindings", "NoGamepads_Bindings\NoGamepads_Bindings.csproj", "{5A5FFBF1-C1CC-449B-8225-4CA6E4EBD39E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{D576309A-DCDF-4A71-B3F0-C22EE34B9F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D576309A-DCDF-4A71-B3F0-C22EE34B9F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D576309A-DCDF-4A71-B3F0-C22EE34B9F2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A5FFBF1-C1CC-449B-8225-4CA6E4EBD39E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A5FFBF1-C1CC-449B-8225-4CA6E4EBD39E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A5FFBF1-C1CC-449B-8225-4CA6E4EBD39E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A5FFBF1-C1CC-449B-8225-4CA6E4EBD39E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

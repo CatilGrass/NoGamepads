@@ -1,0 +1,11 @@
+./NoGamepads_Bindings/bin/
+./NoGamepads_Bindings/obj/
+
+./NoGamepads_Core/bin/
+./NoGamepads_Core/obj/
+
+./NoGamepads_Example/bin/
+./NoGamepads_Example/obj/
+
+./NoGamepads_Bindings/Native/
+./NoGamepads_Core/Generated/
