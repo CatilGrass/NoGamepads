@@ -38,17 +38,22 @@ dlls = { raw = "./", target = "./lib", files = [
 [release.deploy_root]
 
 # Headers
-headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindings/lang/clang/binding_example/include/", files = [
+c_binding_example_headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindings/lang/clang/binding_example/include/", files = [
+    "nogamepads_data.h",
+] }
+
+csharp_binding_headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Bindings/Native/", files = [
     "nogamepads_data.h",
 ] }
 
 [release.deploy_deps]
 
-c_binding_example_win = { raw = "./", target = "./core/bindings/lang/clang/binding_example/libs/", files = [
+# Deps
+c_binding_example_deps_win = { raw = "./", target = "./core/bindings/lang/clang/binding_example/libs/", files = [
     "nogamepads_c.dll",
     "nogamepads_c.dll.lib"
 ] }
 
-csharp_binding_win = { raw = "./", target = "./core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Core/Native/", files = [
+csharp_binding_deps_win = { raw = "./", target = "./core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Bindings/Native/", files = [
     "nogamepads_c.dll",
 ] }

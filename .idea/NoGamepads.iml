@@ -27,6 +27,14 @@
       <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/include" />
       <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/clang/binding_example/libs" />
       <excludeFolder url="file://$MODULE_DIR$/export/dev" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Bindings/Native" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Bindings/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Bindings/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Core/Generated" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Core/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Core/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Example/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Example/obj" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

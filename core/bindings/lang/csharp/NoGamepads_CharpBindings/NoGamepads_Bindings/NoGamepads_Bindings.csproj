@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>NoGamepads_Bindings</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
@@ -11,10 +13,8 @@
         <Content Include="Native\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Folder Include="Runtime\" />
-        <Folder Include="Services\" />
         
-        <ProjectReference Include="..\NoGamepads_Bindings\NoGamepads_Bindings.csproj" />
+        <PackageReference Include="CppSharp" Version="1.1.5.3168" />
     </ItemGroup>
 
 </Project>
