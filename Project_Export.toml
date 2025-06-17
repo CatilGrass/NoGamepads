@@ -18,7 +18,6 @@ powershell_complete = { raw = "./.cargo/resources/scripts/", target = "./bin/com
 # Headers
 headers = { raw = "./core/bindings/lang/clang/headers/", target = "./lib", files = [
     "nogamepads_data.h",
-    "nogamepads_utils.h",
 ] }
 
 # Items defined in [release.deps]
@@ -41,7 +40,6 @@ dlls = { raw = "./", target = "./lib", files = [
 # Headers
 headers = { raw = "./core/bindings/lang/clang/headers/", target = "./core/bindings/lang/clang/binding_example/include/", files = [
     "nogamepads_data.h",
-    "nogamepads_utils.h",
 ] }
 
 [release.deploy_deps]
