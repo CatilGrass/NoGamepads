@@ -1,2 +1,11 @@
 ./Working/
 ./Working/*
+
+/NoGamepads_CharpBindings/NoGamepads_Bindings/bin/
+/NoGamepads_CharpBindings/NoGamepads_Bindings/Native/
+/NoGamepads_CharpBindings/NoGamepads_Bindings/obj/
+/NoGamepads_CharpBindings/NoGamepads_Core/bin/
+/NoGamepads_CharpBindings/NoGamepads_Core/Generated/
+/NoGamepads_CharpBindings/NoGamepads_Core/obj/
+/NoGamepads_CharpBindings/NoGamepads_Example/bin/
+/NoGamepads_CharpBindings/NoGamepads_Example/obj/

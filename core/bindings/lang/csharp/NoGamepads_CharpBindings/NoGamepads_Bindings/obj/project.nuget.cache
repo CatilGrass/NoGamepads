@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UH+YucOeckc=",
+  "dgSpecHash": "z9dVGP0O7sc=",
   "success": true,
-  "projectFilePath": "D:\\TINP\\NoGamepads\\core\\bindings\\lang\\csharp\\NoGamepads_CharpBindings\\NoGamepads_Example\\NoGamepads_Example.csproj",
+  "projectFilePath": "D:\\TINP\\NoGamepads\\core\\bindings\\lang\\csharp\\NoGamepads_CharpBindings\\NoGamepads_Bindings\\NoGamepads_Bindings.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\CatilGrass\\.nuget\\packages\\cppsharp\\1.1.5.3168\\cppsharp.1.1.5.3168.nupkg.sha512",
     "C:\\Users\\CatilGrass\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",

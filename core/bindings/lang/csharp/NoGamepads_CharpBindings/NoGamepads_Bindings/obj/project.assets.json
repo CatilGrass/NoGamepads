@@ -1,0 +1,1868 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "CppSharp/1.1.5.3168": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Win32.Registry": "5.0.0"
+        },
+        "compile": {
+          "ref/net6.0/CppSharp.AST.dll": {},
+          "ref/net6.0/CppSharp.Generator.dll": {},
+          "ref/net6.0/CppSharp.Parser.CSharp.dll": {},
+          "ref/net6.0/CppSharp.Parser.dll": {},
+          "ref/net6.0/CppSharp.Runtime.dll": {},
+          "ref/net6.0/CppSharp.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_builtin_vars.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_builtin_vars.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_cmath.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_cmath.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_complex_builtins.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_complex_builtins.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_device_functions.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_device_functions.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_intrinsics.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_intrinsics.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_libdevice_declares.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_libdevice_declares.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_math.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_math.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_math_forward_declares.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_math_forward_declares.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_runtime_wrapper.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_runtime_wrapper.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_cuda_texture_intrinsics.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_cuda_texture_intrinsics.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_hip_cmath.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_hip_cmath.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_hip_libdevice_declares.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_hip_libdevice_declares.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_hip_math.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_hip_math.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_hip_runtime_wrapper.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_hip_runtime_wrapper.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__clang_hip_stdlib.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__clang_hip_stdlib.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__stddef_max_align_t.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__stddef_max_align_t.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__wmmintrin_aes.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__wmmintrin_aes.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/__wmmintrin_pclmul.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/__wmmintrin_pclmul.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/adxintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/adxintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/altivec.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/altivec.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ammintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ammintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/amxcomplexintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/amxcomplexintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/amxfp16intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/amxfp16intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/amxintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/amxintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/arm64intr.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/arm64intr.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/arm_acle.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/arm_acle.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/arm_cmse.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/arm_cmse.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/arm_neon_sve_bridge.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/arm_neon_sve_bridge.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/armintr.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/armintr.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx2intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx2intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512bf16intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512bf16intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512bitalgintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512bitalgintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512bwintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512bwintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512cdintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512cdintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512dqintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512dqintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512erintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512erintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512fintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512fintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512fp16intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512fp16intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512ifmaintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512ifmaintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512ifmavlintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512ifmavlintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512pfintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512pfintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vbmi2intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vbmi2intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vbmiintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vbmiintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vbmivlintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vbmivlintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlbf16intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlbf16intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlbitalgintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlbitalgintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlbwintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlbwintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlcdintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlcdintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vldqintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vldqintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlfp16intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlfp16intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlvbmi2intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlvbmi2intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlvnniintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlvnniintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vlvp2intersectintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vlvp2intersectintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vnniintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vnniintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vp2intersectintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vp2intersectintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vpopcntdqintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vpopcntdqintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avx512vpopcntdqvlintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avx512vpopcntdqvlintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avxifmaintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avxifmaintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avxintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avxintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avxneconvertintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avxneconvertintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avxvnniint16intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avxvnniint16intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avxvnniint8intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avxvnniint8intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/avxvnniintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/avxvnniintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/bmi2intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/bmi2intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/bmiintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/bmiintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/builtins.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/builtins.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cet.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cet.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cetintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cetintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cldemoteintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cldemoteintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/clflushoptintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/clflushoptintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/clwbintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/clwbintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/clzerointrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/clzerointrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cmpccxaddintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cmpccxaddintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cpuid.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cpuid.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/crc32intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/crc32intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/algorithm": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cuda_wrappers/algorithm"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/bits/shared_ptr_base.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cuda_wrappers/bits/shared_ptr_base.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/cmath": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cuda_wrappers/cmath"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/complex": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cuda_wrappers/complex"
+          },
+          "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/new": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/cuda_wrappers/new"
+          },
+          "contentFiles/any/any/lib/clang/18/include/emmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/emmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/enqcmdintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/enqcmdintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/f16cintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/f16cintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/float.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/float.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/fma4intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/fma4intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/fmaintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/fmaintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/fxsrintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/fxsrintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/gfniintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/gfniintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hexagon_circ_brev_intrinsics.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hexagon_circ_brev_intrinsics.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hexagon_protos.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hexagon_protos.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hexagon_types.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hexagon_types.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hlsl.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hlsl.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hlsl/hlsl_basic_types.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hlsl/hlsl_basic_types.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hlsl/hlsl_intrinsics.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hlsl/hlsl_intrinsics.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hresetintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hresetintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/htmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/htmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/htmxlintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/htmxlintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/hvx_hexagon_protos.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/hvx_hexagon_protos.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ia32intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ia32intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/immintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/immintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/inttypes.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/inttypes.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/invpcidintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/invpcidintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/iso646.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/iso646.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/keylockerintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/keylockerintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/larchintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/larchintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/limits.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/limits.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/ctype.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/llvm_libc_wrappers/ctype.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/inttypes.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/llvm_libc_wrappers/inttypes.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/stdio.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/llvm_libc_wrappers/stdio.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/stdlib.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/llvm_libc_wrappers/stdlib.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/string.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/llvm_libc_wrappers/string.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/lwpintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/lwpintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/lzcntintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/lzcntintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/mm3dnow.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/mm3dnow.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/mm_malloc.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/mm_malloc.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/mmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/mmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/module.modulemap": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/module.modulemap"
+          },
+          "contentFiles/any/any/lib/clang/18/include/movdirintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/movdirintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/msa.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/msa.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/mwaitxintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/mwaitxintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/nmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/nmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/opencl-c-base.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/opencl-c-base.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/opencl-c.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/opencl-c.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/__clang_openmp_device_functions.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/openmp_wrappers/__clang_openmp_device_functions.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/cmath": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/openmp_wrappers/cmath"
+          },
+          "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/complex": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/openmp_wrappers/complex"
+          },
+          "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/complex.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/openmp_wrappers/complex.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/complex_cmath.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/openmp_wrappers/complex_cmath.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/math.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/openmp_wrappers/math.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/new": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/openmp_wrappers/new"
+          },
+          "contentFiles/any/any/lib/clang/18/include/pconfigintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/pconfigintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/pkuintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/pkuintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/pmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/pmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/popcntintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/popcntintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/bmi2intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/bmi2intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/bmiintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/bmiintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/emmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/emmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/immintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/immintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/mm_malloc.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/mm_malloc.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/mmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/mmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/pmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/pmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/smmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/smmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/tmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/tmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/x86gprintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/x86gprintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/x86intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/x86intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/xmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ppc_wrappers/xmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/prfchiintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/prfchiintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/prfchwintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/prfchwintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/ptwriteintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/ptwriteintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/raointintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/raointintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/rdpruintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/rdpruintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/rdseedintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/rdseedintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/riscv_ntlh.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/riscv_ntlh.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/rtmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/rtmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/s390intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/s390intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/serializeintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/serializeintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/sgxintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/sgxintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/sha512intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/sha512intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/shaintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/shaintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/sifive_vector.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/sifive_vector.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/sm3intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/sm3intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/sm4intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/sm4intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/smmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/smmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/stdalign.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/stdalign.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/stdarg.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/stdarg.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/stdatomic.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/stdatomic.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/stdbool.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/stdbool.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/stddef.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/stddef.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/stdint.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/stdint.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/stdnoreturn.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/stdnoreturn.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/tbmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/tbmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/tgmath.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/tgmath.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/tmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/tmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/tsxldtrkintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/tsxldtrkintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/uintrintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/uintrintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/unwind.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/unwind.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/vadefs.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/vadefs.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/vaesintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/vaesintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/varargs.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/varargs.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/vecintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/vecintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/velintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/velintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/velintrin_approx.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/velintrin_approx.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/velintrin_gen.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/velintrin_gen.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/vpclmulqdqintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/vpclmulqdqintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/waitpkgintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/waitpkgintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/wasm_simd128.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/wasm_simd128.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/wbnoinvdintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/wbnoinvdintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/wmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/wmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/x86gprintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/x86gprintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/x86intrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/x86intrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/xmmintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/xmmintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/xopintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/xopintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/xsavecintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/xsavecintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/xsaveintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/xsaveintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/xsaveoptintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/xsaveoptintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/xsavesintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/xsavesintrin.h"
+          },
+          "contentFiles/any/any/lib/clang/18/include/xtestintrin.h": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "lib/clang/18/include/xtestintrin.h"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/lib/net6.0/CppSharp.AST.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/lib/net6.0/CppSharp.Generator.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/lib/net6.0/CppSharp.Parser.CSharp.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/lib/net6.0/CppSharp.Parser.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/lib/net6.0/CppSharp.Runtime.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/lib/net6.0/CppSharp.dll": {
+            "assetType": "runtime",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libCppSharp.CppParser.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libStd-symbols.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-x64/lib/net6.0/CppSharp.AST.dll": {
+            "assetType": "runtime",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/lib/net6.0/CppSharp.Generator.dll": {
+            "assetType": "runtime",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/lib/net6.0/CppSharp.Parser.CSharp.dll": {
+            "assetType": "runtime",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/lib/net6.0/CppSharp.Parser.dll": {
+            "assetType": "runtime",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/lib/net6.0/CppSharp.Runtime.dll": {
+            "assetType": "runtime",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/lib/net6.0/CppSharp.dll": {
+            "assetType": "runtime",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libCppSharp.CppParser.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libStd-symbols.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/lib/net6.0/CppSharp.AST.dll": {
+            "assetType": "runtime",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/lib/net6.0/CppSharp.Generator.dll": {
+            "assetType": "runtime",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/lib/net6.0/CppSharp.Parser.CSharp.dll": {
+            "assetType": "runtime",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/lib/net6.0/CppSharp.Parser.dll": {
+            "assetType": "runtime",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/lib/net6.0/CppSharp.Runtime.dll": {
+            "assetType": "runtime",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/lib/net6.0/CppSharp.dll": {
+            "assetType": "runtime",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/CppSharp.CppParser.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/Std-symbols.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
+      "Microsoft.NETCore.Platforms/5.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        }
+      },
+      "Microsoft.Win32.Registry/5.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Security.AccessControl": "5.0.0",
+          "System.Security.Principal.Windows": "5.0.0"
+        },
+        "compile": {
+          "ref/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Security.AccessControl/5.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0",
+          "System.Security.Principal.Windows": "5.0.0"
+        },
+        "compile": {
+          "ref/netstandard2.0/System.Security.AccessControl.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.AccessControl.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Security.Principal.Windows/5.0.0": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp3.0/System.Security.Principal.Windows.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.Principal.Windows.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CppSharp/1.1.5.3168": {
+      "sha512": "ZT2BvLEVungRyek8pNUXVW/DofMgP8iBlbZMvzdmPrMZ18KeV17famg8xtbOOaqXHzJy1cJOpspJ/wMnygYTug==",
+      "type": "package",
+      "path": "cppsharp/1.1.5.3168",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_builtin_vars.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_cmath.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_complex_builtins.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_device_functions.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_intrinsics.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_libdevice_declares.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_math.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_math_forward_declares.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_runtime_wrapper.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_cuda_texture_intrinsics.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_hip_cmath.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_hip_libdevice_declares.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_hip_math.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_hip_runtime_wrapper.h",
+        "contentFiles/any/any/lib/clang/18/include/__clang_hip_stdlib.h",
+        "contentFiles/any/any/lib/clang/18/include/__stddef_max_align_t.h",
+        "contentFiles/any/any/lib/clang/18/include/__wmmintrin_aes.h",
+        "contentFiles/any/any/lib/clang/18/include/__wmmintrin_pclmul.h",
+        "contentFiles/any/any/lib/clang/18/include/adxintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/altivec.h",
+        "contentFiles/any/any/lib/clang/18/include/ammintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/amxcomplexintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/amxfp16intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/amxintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/arm64intr.h",
+        "contentFiles/any/any/lib/clang/18/include/arm_acle.h",
+        "contentFiles/any/any/lib/clang/18/include/arm_cmse.h",
+        "contentFiles/any/any/lib/clang/18/include/arm_neon_sve_bridge.h",
+        "contentFiles/any/any/lib/clang/18/include/armintr.h",
+        "contentFiles/any/any/lib/clang/18/include/avx2intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512bf16intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512bitalgintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512bwintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512cdintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512dqintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512erintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512fintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512fp16intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512ifmaintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512ifmavlintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512pfintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vbmi2intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vbmiintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vbmivlintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlbf16intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlbitalgintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlbwintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlcdintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vldqintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlfp16intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlvbmi2intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlvnniintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vlvp2intersectintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vnniintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vp2intersectintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vpopcntdqintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avx512vpopcntdqvlintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avxifmaintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avxintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avxneconvertintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avxvnniint16intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avxvnniint8intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/avxvnniintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/bmi2intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/bmiintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/builtins.h",
+        "contentFiles/any/any/lib/clang/18/include/cet.h",
+        "contentFiles/any/any/lib/clang/18/include/cetintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/cldemoteintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/clflushoptintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/clwbintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/clzerointrin.h",
+        "contentFiles/any/any/lib/clang/18/include/cmpccxaddintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/cpuid.h",
+        "contentFiles/any/any/lib/clang/18/include/crc32intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/algorithm",
+        "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/bits/shared_ptr_base.h",
+        "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/cmath",
+        "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/complex",
+        "contentFiles/any/any/lib/clang/18/include/cuda_wrappers/new",
+        "contentFiles/any/any/lib/clang/18/include/emmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/enqcmdintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/f16cintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/float.h",
+        "contentFiles/any/any/lib/clang/18/include/fma4intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/fmaintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/fxsrintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/gfniintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/hexagon_circ_brev_intrinsics.h",
+        "contentFiles/any/any/lib/clang/18/include/hexagon_protos.h",
+        "contentFiles/any/any/lib/clang/18/include/hexagon_types.h",
+        "contentFiles/any/any/lib/clang/18/include/hlsl.h",
+        "contentFiles/any/any/lib/clang/18/include/hlsl/hlsl_basic_types.h",
+        "contentFiles/any/any/lib/clang/18/include/hlsl/hlsl_intrinsics.h",
+        "contentFiles/any/any/lib/clang/18/include/hresetintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/htmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/htmxlintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/hvx_hexagon_protos.h",
+        "contentFiles/any/any/lib/clang/18/include/ia32intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/immintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/inttypes.h",
+        "contentFiles/any/any/lib/clang/18/include/invpcidintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/iso646.h",
+        "contentFiles/any/any/lib/clang/18/include/keylockerintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/larchintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/limits.h",
+        "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/ctype.h",
+        "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/inttypes.h",
+        "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/stdio.h",
+        "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/stdlib.h",
+        "contentFiles/any/any/lib/clang/18/include/llvm_libc_wrappers/string.h",
+        "contentFiles/any/any/lib/clang/18/include/lwpintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/lzcntintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/mm3dnow.h",
+        "contentFiles/any/any/lib/clang/18/include/mm_malloc.h",
+        "contentFiles/any/any/lib/clang/18/include/mmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/module.modulemap",
+        "contentFiles/any/any/lib/clang/18/include/movdirintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/msa.h",
+        "contentFiles/any/any/lib/clang/18/include/mwaitxintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/nmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/opencl-c-base.h",
+        "contentFiles/any/any/lib/clang/18/include/opencl-c.h",
+        "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/__clang_openmp_device_functions.h",
+        "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/cmath",
+        "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/complex",
+        "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/complex.h",
+        "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/complex_cmath.h",
+        "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/math.h",
+        "contentFiles/any/any/lib/clang/18/include/openmp_wrappers/new",
+        "contentFiles/any/any/lib/clang/18/include/pconfigintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/pkuintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/pmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/popcntintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/bmi2intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/bmiintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/emmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/immintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/mm_malloc.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/mmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/pmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/smmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/tmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/x86gprintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/x86intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ppc_wrappers/xmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/prfchiintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/prfchwintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/ptwriteintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/raointintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/rdpruintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/rdseedintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/riscv_ntlh.h",
+        "contentFiles/any/any/lib/clang/18/include/rtmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/s390intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/serializeintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/sgxintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/sha512intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/shaintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/sifive_vector.h",
+        "contentFiles/any/any/lib/clang/18/include/sm3intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/sm4intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/smmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/stdalign.h",
+        "contentFiles/any/any/lib/clang/18/include/stdarg.h",
+        "contentFiles/any/any/lib/clang/18/include/stdatomic.h",
+        "contentFiles/any/any/lib/clang/18/include/stdbool.h",
+        "contentFiles/any/any/lib/clang/18/include/stddef.h",
+        "contentFiles/any/any/lib/clang/18/include/stdint.h",
+        "contentFiles/any/any/lib/clang/18/include/stdnoreturn.h",
+        "contentFiles/any/any/lib/clang/18/include/tbmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/tgmath.h",
+        "contentFiles/any/any/lib/clang/18/include/tmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/tsxldtrkintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/uintrintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/unwind.h",
+        "contentFiles/any/any/lib/clang/18/include/vadefs.h",
+        "contentFiles/any/any/lib/clang/18/include/vaesintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/varargs.h",
+        "contentFiles/any/any/lib/clang/18/include/vecintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/velintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/velintrin_approx.h",
+        "contentFiles/any/any/lib/clang/18/include/velintrin_gen.h",
+        "contentFiles/any/any/lib/clang/18/include/vpclmulqdqintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/waitpkgintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/wasm_simd128.h",
+        "contentFiles/any/any/lib/clang/18/include/wbnoinvdintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/wmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/x86gprintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/x86intrin.h",
+        "contentFiles/any/any/lib/clang/18/include/xmmintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/xopintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/xsavecintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/xsaveintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/xsaveoptintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/xsavesintrin.h",
+        "contentFiles/any/any/lib/clang/18/include/xtestintrin.h",
+        "cppsharp.1.1.5.3168.nupkg.sha512",
+        "cppsharp.nuspec",
+        "ref/net6.0/CppSharp.AST.dll",
+        "ref/net6.0/CppSharp.Generator.dll",
+        "ref/net6.0/CppSharp.Parser.CSharp.dll",
+        "ref/net6.0/CppSharp.Parser.dll",
+        "ref/net6.0/CppSharp.Runtime.dll",
+        "ref/net6.0/CppSharp.dll",
+        "runtimes/linux-x64/lib/net6.0/CppSharp.AST.dll",
+        "runtimes/linux-x64/lib/net6.0/CppSharp.Generator.dll",
+        "runtimes/linux-x64/lib/net6.0/CppSharp.Parser.CSharp.dll",
+        "runtimes/linux-x64/lib/net6.0/CppSharp.Parser.dll",
+        "runtimes/linux-x64/lib/net6.0/CppSharp.Runtime.dll",
+        "runtimes/linux-x64/lib/net6.0/CppSharp.dll",
+        "runtimes/linux-x64/native/libCppSharp.CppParser.so",
+        "runtimes/linux-x64/native/libStd-symbols.so",
+        "runtimes/osx-x64/lib/net6.0/CppSharp.AST.dll",
+        "runtimes/osx-x64/lib/net6.0/CppSharp.Generator.dll",
+        "runtimes/osx-x64/lib/net6.0/CppSharp.Parser.CSharp.dll",
+        "runtimes/osx-x64/lib/net6.0/CppSharp.Parser.dll",
+        "runtimes/osx-x64/lib/net6.0/CppSharp.Runtime.dll",
+        "runtimes/osx-x64/lib/net6.0/CppSharp.dll",
+        "runtimes/osx-x64/native/libCppSharp.CppParser.dylib",
+        "runtimes/osx-x64/native/libStd-symbols.dylib",
+        "runtimes/win-x64/lib/net6.0/CppSharp.AST.dll",
+        "runtimes/win-x64/lib/net6.0/CppSharp.Generator.dll",
+        "runtimes/win-x64/lib/net6.0/CppSharp.Parser.CSharp.dll",
+        "runtimes/win-x64/lib/net6.0/CppSharp.Parser.dll",
+        "runtimes/win-x64/lib/net6.0/CppSharp.Runtime.dll",
+        "runtimes/win-x64/lib/net6.0/CppSharp.dll",
+        "runtimes/win-x64/native/CppSharp.CppParser.dll",
+        "runtimes/win-x64/native/Std-symbols.dll"
+      ]
+    },
+    "Microsoft.NETCore.Platforms/5.0.0": {
+      "sha512": "VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
+      "type": "package",
+      "path": "microsoft.netcore.platforms/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard1.0/_._",
+        "microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+        "microsoft.netcore.platforms.nuspec",
+        "runtime.json",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Microsoft.Win32.Registry/5.0.0": {
+      "sha512": "dDoKi0PnDz31yAyETfRntsLArTlVAVzUzCIvvEDsDsucrl33Dl8pIJG06ePTJTI3tGpeyHS9Cq7Foc/s4EeKcg==",
+      "type": "package",
+      "path": "microsoft.win32.registry/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/Microsoft.Win32.Registry.dll",
+        "lib/net461/Microsoft.Win32.Registry.dll",
+        "lib/net461/Microsoft.Win32.Registry.xml",
+        "lib/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "lib/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "microsoft.win32.registry.5.0.0.nupkg.sha512",
+        "microsoft.win32.registry.nuspec",
+        "ref/net46/Microsoft.Win32.Registry.dll",
+        "ref/net461/Microsoft.Win32.Registry.dll",
+        "ref/net461/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "ref/netstandard1.3/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/de/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/es/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/fr/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/it/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/ja/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/ko/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/ru/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/zh-hans/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/zh-hant/Microsoft.Win32.Registry.xml",
+        "ref/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "ref/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "runtimes/win/lib/net46/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/net461/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/net461/Microsoft.Win32.Registry.xml",
+        "runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Security.AccessControl/5.0.0": {
+      "sha512": "dagJ1mHZO3Ani8GH0PHpPEe/oYO+rVdbQjvjJkBRNQkX4t0r1iaeGn8+/ybkSLEan3/slM0t59SVdHzuHf2jmw==",
+      "type": "package",
+      "path": "system.security.accesscontrol/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.Security.AccessControl.dll",
+        "lib/net461/System.Security.AccessControl.dll",
+        "lib/net461/System.Security.AccessControl.xml",
+        "lib/netstandard1.3/System.Security.AccessControl.dll",
+        "lib/netstandard2.0/System.Security.AccessControl.dll",
+        "lib/netstandard2.0/System.Security.AccessControl.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net46/System.Security.AccessControl.dll",
+        "ref/net461/System.Security.AccessControl.dll",
+        "ref/net461/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/System.Security.AccessControl.dll",
+        "ref/netstandard1.3/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/de/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/es/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/fr/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/it/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ja/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ko/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ru/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/zh-hans/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/zh-hant/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/System.Security.AccessControl.dll",
+        "ref/netstandard2.0/System.Security.AccessControl.xml",
+        "ref/uap10.0.16299/_._",
+        "runtimes/win/lib/net46/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net461/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net461/System.Security.AccessControl.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.xml",
+        "runtimes/win/lib/netstandard1.3/System.Security.AccessControl.dll",
+        "runtimes/win/lib/uap10.0.16299/_._",
+        "system.security.accesscontrol.5.0.0.nupkg.sha512",
+        "system.security.accesscontrol.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Security.Principal.Windows/5.0.0": {
+      "sha512": "t0MGLukB5WAVU9bO3MGzvlGnyJPgUlcwerXn1kzBRjwLKixT96XV0Uza41W49gVd8zEMFu9vQEFlv0IOrytICA==",
+      "type": "package",
+      "path": "system.security.principal.windows/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.Security.Principal.Windows.dll",
+        "lib/net461/System.Security.Principal.Windows.dll",
+        "lib/net461/System.Security.Principal.Windows.xml",
+        "lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "lib/netstandard2.0/System.Security.Principal.Windows.dll",
+        "lib/netstandard2.0/System.Security.Principal.Windows.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net46/System.Security.Principal.Windows.dll",
+        "ref/net461/System.Security.Principal.Windows.dll",
+        "ref/net461/System.Security.Principal.Windows.xml",
+        "ref/netcoreapp3.0/System.Security.Principal.Windows.dll",
+        "ref/netcoreapp3.0/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/System.Security.Principal.Windows.dll",
+        "ref/netstandard1.3/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/de/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/es/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/fr/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/it/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/ja/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/ko/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/ru/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/zh-hans/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/zh-hant/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/System.Security.Principal.Windows.dll",
+        "ref/netstandard2.0/System.Security.Principal.Windows.xml",
+        "ref/uap10.0.16299/_._",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.xml",
+        "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll",
+        "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/net46/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/net461/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/net461/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/uap10.0.16299/_._",
+        "system.security.principal.windows.5.0.0.nupkg.sha512",
+        "system.security.principal.windows.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "CppSharp >= 1.1.5.3168"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\CatilGrass\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "D:\\TINP\\NoGamepads\\core\\bindings\\lang\\csharp\\NoGamepads_CharpBindings\\NoGamepads_Bindings\\NoGamepads_Bindings.csproj",
+      "projectName": "NoGamepads_Bindings",
+      "projectPath": "D:\\TINP\\NoGamepads\\core\\bindings\\lang\\csharp\\NoGamepads_CharpBindings\\NoGamepads_Bindings\\NoGamepads_Bindings.csproj",
+      "packagesPath": "C:\\Users\\CatilGrass\\.nuget\\packages\\",
+      "outputPath": "D:\\TINP\\NoGamepads\\core\\bindings\\lang\\csharp\\NoGamepads_CharpBindings\\NoGamepads_Bindings\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\CatilGrass\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "CppSharp": {
+            "target": "Package",
+            "version": "[1.1.5.3168, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.428\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
