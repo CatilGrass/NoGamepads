@@ -1,19 +1,23 @@
 ﻿using NoGamepads_Core.Data;
+using NoGamepads_Core.Runtime;
 
-Player player = new Player("Pzw", "123456")
+namespace NoGamepads_Example;
+
+internal class Program
 {
-    NickName = ""
-};
+    public static void Main(string[] args)
+    {
+        Player player = new Player("CatilGrass", "Unknown Password");
 
-Console.WriteLine("Player hash : " + player.Hash);
-Console.WriteLine("Player name : " + player.NickName);
-
-player.NickName = "OMG";
-
-Console.WriteLine("Player name : " + player.NickName);
-
-player.Hue = 92;
-player.Value = 1;
-player.Saturation = 1;
-
-Console.WriteLine($"Color : H: {player.Hue}, S: {player.Saturation}, V: {player.Value}");
+        player.Hue = 200;
+        
+        ControllerData data = new ControllerData(player);
+        
+        ControllerRuntime runtime = new ControllerRuntime(data);
+        
+        runtime.SendTextMessage("Hello World! ");
+        Console.WriteLine(player.Hue + "!");
+        
+        // Console.WriteLine(player.Hash);
+    }
+}

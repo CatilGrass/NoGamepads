@@ -2,7 +2,7 @@ using NoGamepads_Sharp;
 
 namespace NoGamepads_Core.Data;
 
-public class Player
+public class Player : IRawData<FfiPlayer>
 {
     private readonly FfiPlayer _ffi;
 
@@ -42,7 +42,8 @@ public class Player
         {
             unsafe
             {
-                return PtrStringConverter.ToString(_ffi.Account.PlayerHash);
+                var get = _ffi.Account.PlayerHash;
+                return PtrStringConverter.ToString(get);
             }
         }
     }
@@ -85,7 +86,7 @@ public class Player
         return (float) (_ffi.Customize?.ColorSaturation ?? 1f);
     }
 
-    public FfiPlayer GetRawPlayer()
+    public FfiPlayer GetRawData()
     {
         return _ffi;
     }

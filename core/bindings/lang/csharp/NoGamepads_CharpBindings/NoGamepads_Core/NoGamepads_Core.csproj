@@ -11,8 +11,8 @@
         <Content Include="Native\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Folder Include="Runtime\" />
-        <Folder Include="Services\" />
+        <Folder Include="Services\Bluetooth\" />
+        <Folder Include="Services\Usb\" />
         
         <ProjectReference Include="..\NoGamepads_Bindings\NoGamepads_Bindings.csproj" />
     </ItemGroup>
