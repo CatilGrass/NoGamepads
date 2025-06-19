@@ -35,6 +35,7 @@
       <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Core/obj" />
       <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Example/bin" />
       <excludeFolder url="file://$MODULE_DIR$/core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Example/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/README.assets" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
