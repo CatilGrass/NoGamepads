@@ -15,6 +15,7 @@
         </Content>
         
         <PackageReference Include="CppSharp" Version="1.1.5.3168" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     </ItemGroup>
 
 </Project>

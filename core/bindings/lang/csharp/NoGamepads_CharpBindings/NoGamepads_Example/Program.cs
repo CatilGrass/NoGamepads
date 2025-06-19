@@ -1,7 +1,23 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using NoGamepads_Core.Data;
+using NoGamepads_Core.Runtime;
 
-using NoGamepads_Core.Data;
+namespace NoGamepads_Example;
 
-Player player = new Player();
+internal class Program
+{
+    public static void Main(string[] args)
+    {
+        Player player = new Player("CatilGrass", "Unknown Password");
 
-Console.WriteLine(player.name);
+        player.Hue = 200;
+        
+        ControllerData data = new ControllerData(player);
+        
+        ControllerRuntime runtime = new ControllerRuntime(data);
+        
+        runtime.SendTextMessage("Hello World! ");
+        Console.WriteLine(player.Hue + "!");
+        
+        // Console.WriteLine(player.Hash);
+    }
+}

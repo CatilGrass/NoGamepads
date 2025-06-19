@@ -1,16 +1,63 @@
 using CppSharp;
 using CppSharp.AST;
+using CppSharp.AST.Extensions;
 using CppSharp.Generators;
-using CppSharp.Generators.AST;
-using RecordArgABI = CppSharp.Parser.AST.RecordArgABI;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace NoGamepads_Bindings;
 
 internal static class Program
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
         ConsoleDriver.Run(new NoGamepadsLibrary());
+        FixRefProperties();
+    }
+    
+    private static void FixRefProperties()
+    {
+        var directory = "NoGamepads_Core/Generated";
+        var files = Directory.GetFiles(directory, "*.cs", SearchOption.AllDirectories);
+
+        foreach (var file in files)
+        {
+            var code = File.ReadAllText(file);
+            var tree = CSharpSyntaxTree.ParseText(code);
+            var root = tree.GetRoot();
+
+            var newRoot = root.ReplaceNodes(
+                root.DescendantNodes().OfType<PropertyDeclarationSyntax>(),
+                (prop, _) =>
+                {
+                    // internal ref FfiXXXUnion.__Internal __Instance => ref __instance;
+                    if (prop.Identifier.Text != "__Instance")
+                        return prop;
+
+                    if (prop.Type is RefTypeSyntax refType &&
+                        prop.ExpressionBody?.Expression is RefExpressionSyntax refExpr &&
+                        refType.Type.ToString().EndsWith(".__Internal", StringComparison.Ordinal) &&
+                        refExpr.Expression is IdentifierNameSyntax fieldRef &&
+                        fieldRef.Identifier.Text == "__instance")
+                    {
+                        var newType = refType.Type.WithTriviaFrom(refType);
+                        var newExpr = fieldRef.WithTriviaFrom(refExpr);
+
+                        return prop
+                            .WithType(newType)
+                            .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(newExpr))
+                            .WithSemicolonToken(prop.SemicolonToken);
+                    }
+
+                    return prop;
+                });
+
+            if (!newRoot.IsEquivalentTo(root))
+            {
+                File.WriteAllText(file, newRoot.ToFullString());
+            }
+        }
     }
 }
 
@@ -29,9 +76,10 @@ public class NoGamepadsLibrary : ILibrary
         options.OutputDir = "NoGamepads_Core/Generated";
         options.GenerateClassTemplates = false;
             
-        var module = options.AddModule("NoGamepads.Native");
+        var module = options.AddModule("nogamepads_c");
         module.OutputNamespace = "NoGamepads_Sharp";
         module.IncludeDirs.Add("NoGamepads_Bindings/Native");
         module.Headers.Add("nogamepads_data.h");
     }
 }
+
