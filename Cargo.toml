@@ -2,7 +2,7 @@
 name = "nogamepads"
 authors = [ "CatilGrass" ]
 description = "Connect everyone's phones to the game! A mobile device control solution for local multiplayer gaming, featuring an in-game interface, controller client, and support for universal devices."
-license = "LGPL-2"
+license = "MIT"
 
 homepage = "https://github.com/CatilGrass/NoGamepads"
 repository = "https://github.com/CatilGrass/NoGamepads"
