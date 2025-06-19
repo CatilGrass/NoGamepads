@@ -1,13 +1,13 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Example" type="DotNetProject" factoryName=".NET Project" folderName="Run">
-    <option name="EXE_PATH" value="$PROJECT_DIR$/NoGamepads_Example/bin/Debug/net6.0/NoGamepads_Example.exe" />
+  <configuration default="false" name="Generate Bindings" type="DotNetProject" factoryName=".NET Project" folderName="Run">
+    <option name="EXE_PATH" value="$PROJECT_DIR$/NoGamepads_Bindings/bin/Debug/net6.0/NoGamepads_Bindings.exe" />
     <option name="PROGRAM_PARAMETERS" value="" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../Working/" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <option name="USE_MONO" value="0" />
     <option name="RUNTIME_ARGUMENTS" value="" />
-    <option name="PROJECT_PATH" value="$PROJECT_DIR$/NoGamepads_Example/NoGamepads_Example.csproj" />
+    <option name="PROJECT_PATH" value="$PROJECT_DIR$/NoGamepads_Bindings/NoGamepads_Bindings.csproj" />
     <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
     <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
     <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="0" />

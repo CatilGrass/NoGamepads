@@ -57,3 +57,7 @@ c_binding_example_deps_win = { raw = "./", target = "./core/bindings/lang/clang/
 csharp_binding_deps_win = { raw = "./", target = "./core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Bindings/Native/", files = [
     "nogamepads_c.dll",
 ] }
+
+csharp_binding_libs_win = { raw = "./", target = "./core/bindings/lang/csharp/NoGamepads_CharpBindings/NoGamepads_Example/bin/Debug/net6.0/", files = [
+    "nogamepads_c.dll"
+] }

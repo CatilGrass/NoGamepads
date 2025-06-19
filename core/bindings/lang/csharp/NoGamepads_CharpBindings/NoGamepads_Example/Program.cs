@@ -1,7 +1,19 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using NoGamepads_Core.Data;
 
-using NoGamepads_Core.Data;
+Player player = new Player("Pzw", "123456")
+{
+    NickName = ""
+};
 
-Player player = new Player();
+Console.WriteLine("Player hash : " + player.Hash);
+Console.WriteLine("Player name : " + player.NickName);
 
-Console.WriteLine(player.name);
+player.NickName = "OMG";
+
+Console.WriteLine("Player name : " + player.NickName);
+
+player.Hue = 92;
+player.Value = 1;
+player.Saturation = 1;
+
+Console.WriteLine($"Color : H: {player.Hue}, S: {player.Saturation}, V: {player.Value}");
