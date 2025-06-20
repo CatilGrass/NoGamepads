@@ -69,14 +69,16 @@ cargo dev
 
 
 
-## The Plans
+## Apps
 
-​	1. ...
+1. Console App [[Goto]](https://github.com/CatilGrass/NoGamepads/tree/main/apps/console)
+2. Client App (Bevy) [[Goto]](https://github.com/CatilGrass/NoGamepads/tree/main/apps/client)
+
+
 
 ## Related Documentation
 
 ​	If you want to learn more about this, please refer to the following documentation:
 
-1. [How to compile project with Cargo](export/docs/How_to_export.md)
-2. [About bindings](./core/bindings/About_bindings.md)
+1. [NoGamepads Bindings](./core/bindings/About_bindings.md)
 
