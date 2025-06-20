@@ -101,4 +101,22 @@ public struct GameMessage
         }
         return Error();
     }
+
+    public override string ToString()
+    {
+        switch (_tag)
+        {
+            case Tag.EventTrigger:
+                return $"event: {_key}";
+            case Tag.Message:
+                return _content;
+            case Tag.LetExit:
+                return $"exit: {_exitReason.ToString()}";
+            case Tag.Error:
+                return "error";
+            case Tag.End:
+                return "end";
+        }
+        return "unknown";
+    }
 }
