@@ -2,9 +2,10 @@ using NoGamepads_Sharp;
 
 namespace NoGamepads_Core.Data;
 
-public class GameData : IRawData<FfiGameData>
+public class GameData : IRustDataBorrow<FfiGameData>, IRustDataUse<FfiGameData>
 {
-    private readonly FfiGameData _ffi = nogamepads_data.GameDataNew();
+    private readonly FfiGameData? _ffi = nogamepads_data.GameDataNew();
+    private bool _used;
 
     public string Name
     {
@@ -23,11 +24,23 @@ public class GameData : IRawData<FfiGameData>
     
     public void LoadArchive(GameArchiveData gameArchiveData)
     {
-        nogamepads_data.GameDataLoadArchive(_ffi, gameArchiveData.GetRawData());
+        nogamepads_data.GameDataLoadArchive(_ffi, gameArchiveData.Use());
     }
-    
-    public FfiGameData GetRawData()
+
+    public FfiGameData? Borrow()
     {
         return _ffi;
+    }
+
+    public bool IsUsed()
+    {
+        return _used;
+    }
+
+    public FfiGameData? Use()
+    {
+        var temp = IsUsed() ? null : _ffi;
+        _used = true;
+        return temp;
     }
 }

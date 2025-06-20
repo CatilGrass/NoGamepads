@@ -155,4 +155,29 @@ public struct ControlMessage
         }
         return Error();
     }
+
+    public override string ToString()
+    {
+        switch (_tag)
+        {
+            case Tag.Message:
+                return _content;
+            case Tag.Pressed:
+                return $"btn_{_key}: PRESSED";
+            case Tag.Released:
+                return $"btn_{_key}: RELEASED";
+            case Tag.Axis:
+                return $"ax_{_key}: {_x}";
+            case Tag.Direction:
+                return $"dir_{_key}: ({_x}, {_y})";
+            case Tag.Exit:
+                return "exit";
+            case Tag.Error:
+                return "error";
+            case Tag.End:
+                return "end (xD)";
+        }
+
+        return "unknown";
+    }
 }

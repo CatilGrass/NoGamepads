@@ -4,13 +4,14 @@ using NoGamepads_Sharp;
 
 namespace NoGamepads_Core.Runtime;
 
-public class ControllerRuntime : IRawData<FfiControllerRuntime>
+public class ControllerRuntime : IRustDataBorrow<FfiControllerRuntime>, IRustDataUse<FfiControllerRuntime>
 {
-    private readonly FfiControllerRuntime _ffi;
+    private readonly FfiControllerRuntime? _ffi;
+    private bool _used;
 
     public ControllerRuntime(ControllerData data)
     {
-        _ffi = nogamepads_data.ControllerDataBuildRuntime(data.GetRawData());
+        _ffi = nogamepads_data.ControllerDataBuildRuntime(data.Borrow());
     }
 
     public void Close()
@@ -53,9 +54,21 @@ public class ControllerRuntime : IRawData<FfiControllerRuntime>
         var result = nogamepads_data.ControllerRuntimePop(_ffi);
         return result == null ? GameMessage.Error() : GameMessage.From(result);
     }
-    
-    public FfiControllerRuntime GetRawData()
+
+    public FfiControllerRuntime? Borrow()
     {
         return _ffi;
+    }
+
+    public bool IsUsed()
+    {
+        return _used;
+    }
+
+    public FfiControllerRuntime? Use()
+    {
+        var temp = IsUsed() ? null : _ffi;
+        _used = true;
+        return temp;
     }
 }
