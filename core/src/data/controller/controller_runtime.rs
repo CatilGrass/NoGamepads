@@ -49,26 +49,37 @@ impl ControllerRuntime {
     }
 
     pub fn press_button(&mut self, key: u8) {
+        trace!("[Controller Runtime] Pressed button {}.", key);
         self.send_message(ControlMessage::Pressed(key));
     }
 
     pub fn release_button(&mut self, key: u8) {
+        trace!("[Controller Runtime] Released button {}.", key);
         self.send_message(ControlMessage::Released(key));
     }
 
     pub fn change_axis(&mut self, key: u8, ax_val: f64) {
+        trace!("[Controller Runtime] Change axis ax_{} to ({}).", key, ax_val);
         self.send_message(ControlMessage::Axis(key, ax_val));
     }
 
     pub fn change_direction(&mut self, key: u8, x: f64, y: f64) {
+        trace!("[Controller Runtime] Change direction dir_{} to ({}, {}).", key, x, y);
         self.send_message(ControlMessage::Dir(key, (x, y)));
     }
 
     pub fn pop(&mut self) -> Option<GameMessage> {
-        self.receive(0, self.service_type.clone())
+        let result = self.receive(0, self.service_type.clone());
+        if result.is_none() {
+            trace!("[Controller Runtime] Pop message failed.");
+        } else {
+            trace!("[Controller Runtime] Pop message.");
+        }
+        result
     }
 
     pub fn send_message (&mut self, msg: ControlMessage) {
+        trace!("[Controller Runtime] Message {:?} sent.", &msg);
         let service = self.service_type.clone();
         self.send(msg, 0, service);
     }

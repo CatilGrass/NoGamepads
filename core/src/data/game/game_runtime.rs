@@ -85,29 +85,42 @@ impl GameRuntime {
     pub fn let_account_exit(&mut self, account: &Account, reason: ExitReason, service_type: ServiceType) {
         // Send a leave message to the pad_client and wait for it to actively disconnect
         if self.data.is_account_online(account) {
+            trace!("[Game Runtime] Let account \"{}\" exited.", account.id);
             self.send((account.clone(), LetExit(reason)), account.clone(), service_type);
+        } else {
+            trace!("[Game Runtime] Let account \"{}\" exit failed: Account not online!", account.id);
         }
     }
 
     pub fn kick_player(&mut self, player: &Player, service_type: ServiceType) {
         // Send a leave message to the pad_client and wait for it to actively disconnect
         if self.data.is_account_online(&player.account) {
+            trace!("[Game Runtime] Player \"{}\" kicked!", player.account.id);
             self.send((player.account.clone(), LetExit(YouAreKicked)), player.account.clone(), service_type);
+        } else {
+            trace!("[Game Runtime] Kick player \"{}\" failed: Account not online!", player.account.id);
         }
     }
 
     pub fn ban_player(&mut self, player: &Player, service_type: ServiceType) {
         if self.data.is_account_online(&player.account) {
+            trace!("[Game Runtime] Player \"{}\" Banned!", player.account.id);
             self.send((player.account.clone(), LetExit(YouAreBanned)), player.account.clone(), service_type);
             entry_mutex!(self.data.players_banned, |guard| {
                 guard.insert(player.account.clone(), player.clone());
             });
+        } else {
+            trace!("[Game Runtime] Ban player \"{}\" failed: Account not online!", player.account.id);
         }
     }
 
     pub fn pardon_player(&mut self, player: &Player) {
         entry_mutex!(self.data.players_banned, |guard| {
-            guard.remove(&player.account);
+            if guard.remove(&player.account).is_some() {
+                trace!("[Game Runtime] Player \"{}\" pardoned!", player.account.id);
+            } else {
+                trace!("[Game Runtime] Pardon player \"{}\" failed: Account is not banned!", player.account.id);
+            }
         });
     }
 
@@ -142,6 +155,7 @@ impl GameRuntime {
 
     /// Send a GameMessage to account
     pub fn send_game_message(&mut self, account: &Account, message: GameMessage, service_type: ServiceType) {
+        trace!("[Game Runtime] Message {:?} sent to \"{}\" ({:?})", &message, account.id, &service_type);
         self.send((account.clone(), message), account.clone(), service_type);
     }
 
