@@ -85,8 +85,6 @@ impl PadClientNetwork {
 
     pub fn connect(self) {
         let runtime = build_tokio_runtime("padclient_tcp".to_string());
-
-        info!("[TCP Client] Connecting to {}:{}", self.addr.ip().to_string(), self.addr.port());
         runtime.block_on(self.build_entry());
     }
 }
@@ -94,6 +92,8 @@ impl PadClientNetwork {
 impl PadClientNetwork {
 
     async fn connection_thread(self: Arc<PadClientNetwork>) {
+        info!("[TCP Client] Connecting to {}:{}", self.addr.ip().to_string(), self.addr.port());
+
         let mut buffer = [0; 1024];
 
         // Requests game infos
