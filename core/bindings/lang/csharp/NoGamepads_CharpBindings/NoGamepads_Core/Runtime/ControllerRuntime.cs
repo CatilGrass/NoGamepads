@@ -14,17 +14,26 @@ public class ControllerRuntime : IRustDataBorrow<FfiControllerRuntime>, IRustDat
         _ffi = nogamepads_data.ControllerDataBuildRuntime(data.Use());
     }
 
+    public GameMessage RecentMessage
+    {
+        get
+        {
+            var result = nogamepads_data.ControllerRuntimePop(_ffi);
+            return result == null ? GameMessage.Error() : GameMessage.From(result);
+        }
+    }
+
     public void Close()
     {
         nogamepads_data.ControllerRuntimeClose(_ffi);
     }
 
-    public void Pressed(int key)
+    public void Press(int key)
     {
         nogamepads_data.ControllerRuntimePressAButton(_ffi, (byte)key);
     }
 
-    public void Released(int key)
+    public void Release(int key)
     {
         nogamepads_data.ControllerRuntimeReleaseAButton(_ffi, (byte)key);
     }
@@ -39,20 +48,14 @@ public class ControllerRuntime : IRustDataBorrow<FfiControllerRuntime>, IRustDat
         nogamepads_data.ControllerRuntimeChangeDirection(_ffi, (byte)key, x, y);
     }
 
-    public void SendTextMessage(string message)
+    public void SendText(string message)
     {
         nogamepads_data.ControllerRuntimeSendTextMessage(_ffi, message);
     }
 
-    public void SendMessage(ControlMessage message)
+    public void Send(ControlMessage message)
     {
-        nogamepads_data.ControllerRuntimeSendMessage(_ffi, message.Parse());
-    }
-
-    public GameMessage PopMessage()
-    {
-        var result = nogamepads_data.ControllerRuntimePop(_ffi);
-        return result == null ? GameMessage.Error() : GameMessage.From(result);
+        nogamepads_data.ControllerRuntimeSendMessage(_ffi, message.Convert());
     }
 
     public FfiControllerRuntime? Borrow()

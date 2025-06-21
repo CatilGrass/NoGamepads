@@ -63,7 +63,7 @@ public struct GameMessage
         };
     }
 
-    public FfiGameMessage Parse()
+    public FfiGameMessage Convert()
     {
         FfiGameMessage gameMessage = new FfiGameMessage();
         int index = (int) MessageTag;

@@ -19,10 +19,5 @@ internal class Program
         ControllerData data = new ControllerData(player);
         
         ControllerRuntime runtime = new ControllerRuntime(data);
-
-        nogamepads_data.EnableLogger(2);
-        
-        FfiTcpClientService client = nogamepads_data.TcpClientBuild(runtime.Use());
-        nogamepads_data.TcpClientConnect(client);
     }
 }

@@ -96,7 +96,7 @@ public struct ControlMessage
         };
     }
 
-    public FfiControlMessage Parse()
+    public FfiControlMessage Convert()
     {
         FfiControlMessage controlMessage = new FfiControlMessage();
         int index = (int) MessageTag;

@@ -11,6 +11,11 @@ public class Player : IRustDataBorrow<FfiPlayer>, IRustDataUse<FfiPlayer>
     {
         _ffi = nogamepads_data.PlayerRegister(account, password);
     }
+    
+    public Player(FfiPlayer ffi)
+    {
+        _ffi = ffi;
+    }
 
     public string NickName
     {
