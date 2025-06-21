@@ -8,26 +8,21 @@ internal class Program
 {
     public static void Main(string[] args)
     {
-        Player player = new Player("CatilGrass", "Unknown Password");
+        Player player = new Player("CatilGrass", "123456");
+
+        player.Hue = 250;
+        player.Value = 1;
+        player.Saturation = 0.5f;
         
-        player.Hue = 200;
+        Console.WriteLine($"player \"{player.Id}\" hsv: {player.Hue}, {player.Saturation}, {player.Value}");
         
         ControllerData data = new ControllerData(player);
         
         ControllerRuntime runtime = new ControllerRuntime(data);
-        
-        runtime.SendTextMessage("Hello World! ");
-        
-        Console.WriteLine(player.Hue + "!");
-        
-        Console.WriteLine(player.Hash);
 
-        var ffi = runtime.Use();
-        if (ffi != null)
-        {
-            nogamepads_data.EnableLogger(2);
-            var client = nogamepads_data.TcpClientBuild(ffi);
-            nogamepads_data.TcpClientConnect(client);
-        }
+        nogamepads_data.EnableLogger(2);
+        
+        FfiTcpClientService client = nogamepads_data.TcpClientBuild(runtime.Use());
+        nogamepads_data.TcpClientConnect(client);
     }
 }
