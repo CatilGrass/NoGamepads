@@ -11,7 +11,7 @@ public class ControllerRuntime : IRustDataBorrow<FfiControllerRuntime>, IRustDat
 
     public ControllerRuntime(ControllerData data)
     {
-        _ffi = nogamepads_data.ControllerDataBuildRuntime(data.Borrow());
+        _ffi = nogamepads_data.ControllerDataBuildRuntime(data.Use());
     }
 
     public void Close()

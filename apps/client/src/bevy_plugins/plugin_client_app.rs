@@ -28,7 +28,7 @@ impl Plugin for ClientAppPlugins {
     fn build(&self, app: &mut App) {
         app.add_systems(PreStartup, client_init);
         app.add_systems(Startup, client_start);
-        app.add_systems(OnEnter(Exiting), client_exit);
+        app.add_systems(OnEnter(Exiting), client_close);
     }
 }
 
@@ -67,7 +67,7 @@ fn client_start(
     }
 }
 
-fn client_exit(
+fn client_close(
     client_components: Query<&mut ClientComponent>
 ) {
     for client_component in client_components.iter() {
